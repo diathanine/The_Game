@@ -1,0 +1,1495 @@
+/** @file main.c
+ *
+ * Where most of the code is at,
+ * unfortunately.
+ */
+
+/* This is what I build with on Linux/Ubuntu. Since it's not a big program, I try to
+    fix all bugs as they turn up. */
+/* builds error free on linux/ubuntu, windows has tons of conversion warnings. */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <string.h>
+#include <ncurses.h> /* key constants can be found here. */
+
+#include "globals.c"  /* stuff that's used everwur */
+#include "status.h" /* status effects */
+#include "item.c" /* defines/item and crafting menus */
+#include "enemy.c" /* enemy killing/spawning and drawing */
+#include "magic.c" /* defines/magic menu */
+#include "formula.c" /* various formulas */
+#include "file.c" /* saving, loading, resetting */
+
+/* MISC */
+/**
+ * Rolls a die and returns the result.
+ * 
+ * To roll multiple dice, use a loop.
+ * 
+ * @param sides number of sides on die.
+ * 
+ * @returns A result between 1 and sides.
+ */
+int roll_die(int sides) {
+    int result;
+
+    /* +1 so that result = 1 thru # of sides */
+    if (sides > 1) result = (rand() % sides) + 1;
+    else return 1;
+
+    return result;
+}
+
+void init_skills() {
+    int i;
+    for (i = 0;i <= 12;++i) {
+        skill[i][0] = 0; /* lv */
+        skill[i][1] = 0; /* xp */
+        skill[i][2] = 100; /* next */
+    }
+}
+
+void clean_sidebar(WINDOW *w) {
+    int i,j;
+    
+    for (i = 0;i <= 36;++i) {
+        for (j = 0;j <= 65;++j) {
+            mvwprintw(w,i,j," ");
+        }
+    }
+}
+
+void draw_sk_bar(WINDOW *w, int xp, int xpn) {
+    int a,b;
+    
+    a = 10 * ((double)xp / (double)xpn);
+    b = 10;
+    while (a > 0) {
+        wprintw(w,"#");
+        --a;
+        --b;
+    }
+    while (b > 0) {
+        wprintw(w," ");
+        --b;
+    }
+    wprintw(w,"] % 9d/% 9d",xp,xpn);
+}
+
+void draw_con_bar(WINDOW *w, double con, double maxcon) {
+    int a,b;
+    
+    a = 10 * (con / maxcon);
+    b = 10;
+    while (a > 0) {
+        wprintw(w,"#");
+        --a;
+        --b;
+    }
+    while (b > 0) {
+        wprintw(w," ");
+        --b;
+    }
+    wprintw(w,"] %.0f/%.0f",con,maxcon);
+}
+
+/**
+ * A simple function to return the terminal to a usable state before crashing. 
+ * 
+ * @param str The error message to print.
+ */
+void early_termination(char str[]) {
+    echo();
+    printw("The_Game has crashed...\n%s",str);
+    refresh();
+    getch();
+    endwin();
+    exit(1);
+}
+
+/**
+ * Gives XP to skills.
+ * 
+ * @param id ID of the skill.
+ * @param amount Amount of XP to give.
+ */
+void award_sk_xp(int id,int amount) {
+    /* award xp */
+    skill[id][1] = skill[id][1] + amount;
+    while (skill[id][1] >= skill[id][2]) {
+        if (skill[id][0] < SKILL_MAX_LEVEL) {
+            ++skill[id][0];
+            skill[id][1] = skill[id][1] - skill[id][2];
+            if (skill[id][2] < SKILL_MAX_XP_NEEDED) skill[id][2] = skill[id][2] + 50;
+        }
+        else skill[id][1] = 0;
+    }
+}
+
+char *choices[]={
+    "Attack",
+    "Magic",
+    "Item",
+    "Craft",
+    "Stats",
+    "SAVE & QUIT",
+};
+
+#define MAX_CHOICES 6 /* Number of choices in above array. Start counting at 1! */
+
+int n_choices = sizeof(choices)/sizeof(char *);
+void print_menu(WINDOW *menu_win, int highlight, int x, int y);
+WINDOW *create_newwin(int height, int width, int starty, int startx);
+void destroy_win(WINDOW *local_win);
+
+int stat_win_startx = 0,stat_win_starty = 0;
+int choice_win_startx = 30,choice_win_starty = 0;
+int main_win_startx = 0,main_win_starty = 18;
+int sidebar_startx = 50,sidebar_starty = 0;
+
+/** @todo 
+ * Everything used to be defined outside functions; 
+ * this was changed, so these can be moved where they are 
+ * actually needed. 
+ */
+int a,b,c,d; /* ints for random use */
+double v,w,x,y,z; /* doubles for random use */
+int ii = 0,sizeofname = 0;
+
+int main(int argc, char *argv[]) {
+
+	WINDOW *stat_win,*choice_win,*main_win,*sidebar;
+	int highlight = 1,shl = 1,choice = 0,schoice = 0;
+	int ch,i,pg,stat_line = 1;
+
+	/* schoice: (sidebar choice)
+        -1: Cancel action without taking player's turn
+         0: Waiting for choice
+        >0: Choice made
+	*/
+
+	srand(time(NULL));
+
+    init_globals(); /* set global stuff to default values */
+    item_max = init_items(); /* create the items. */
+    init_magic(); /* create the spells. */
+    init_skills(); /* set the skills */
+    init_e_names(); /* set enemy names */
+
+	initscr(); /* Start curses mode */
+
+	cbreak();
+	noecho();
+	clear();
+	keypad(stdscr,TRUE);
+
+	stat_win = newwin(STAT_HEIGHT,STAT_WIDTH,stat_win_starty,stat_win_startx);
+	choice_win = newwin(CHOICE_HEIGHT,CHOICE_WIDTH,choice_win_starty,choice_win_startx);
+	main_win = newwin(MAIN_HEIGHT,MAIN_WIDTH,main_win_starty,main_win_startx);
+	sidebar = newwin(SIDEBAR_HEIGHT,SIDEBAR_WIDTH,sidebar_starty,sidebar_startx); /* y = statwin + mainwin, x = 120 - mainwin */
+
+	while (COLS <= (STAT_WIDTH + CHOICE_WIDTH + SIDEBAR_WIDTH)\
+            || LINES <= (STAT_HEIGHT + MAIN_HEIGHT)) {
+        mvprintw(0,0,"Window is not big enough! (Needs 36x115)");
+        mvprintw(1,0,"Current HeightxWidth: %dx%d",LINES,COLS);
+        refresh();
+        p.name[0] = getch(); /* Resizing the window creates input(?) */
+    }
+
+    p.name[0] = 32; /* gets rid of above input */
+
+	keypad(choice_win,TRUE);
+	keypad(sidebar,TRUE);
+
+	start_color();
+	init_pair(1,COLOR_RED,COLOR_BLACK);
+	init_pair(2,COLOR_CYAN,COLOR_BLACK);
+	init_pair(3,COLOR_GREEN,COLOR_BLACK);
+	init_pair(4,COLOR_YELLOW,COLOR_BLACK);
+	init_pair(5,COLOR_MAGENTA,COLOR_BLACK);
+	init_pair(6,COLOR_WHITE,COLOR_BLACK);
+	init_pair(7,COLOR_BLUE,COLOR_BLACK);
+
+	wattron(stat_win,COLOR_PAIR(2));
+	wattron(choice_win,COLOR_PAIR(4));
+	wattron(main_win,COLOR_PAIR(6));
+	wattron(sidebar,COLOR_PAIR(3));
+
+    load_game(); /* Always load the save game. New games have a default state. */
+
+    #ifdef DEBUG
+        inventory[9][INVEN_ID] = 1;
+        inventory[9][INVEN_STR] = 1337;
+        inventory[9][INVEN_MOD] = 9001;
+        inventory[9][INVEN_AMOUNT] = 777;
+        inventory[9][INVEN_TYP] = EFF_HEALHP;
+        inventory[9][INVEN_EFF] = 1;
+
+        if (argc > 1) {
+            if (argv[1] != NULL) {
+                p.xp = atof(argv[1]);
+            }
+        }
+    #endif
+
+    clear();
+
+    if (p_creation == 0) {
+        mvprintw(1,1,  "    ##### #   # #####        ####   ###  #   # #####"    );
+        mvprintw(2,1,  "      #   #   # #           #      #   # ## ## #      #" );
+        mvprintw(3,1,  "      #   ##### #####       #  ##  ##### # # # #####"    );
+        mvprintw(4,1,  "      #   #   # #           #    # #   # #   # #      #" );
+        mvprintw(5,1,  "      #   #   # ##### #####  ####  #   # #   # #####"    );
+        mvprintw(6,1,  "                 A Game For Munchkins!"                  );
+        mvprintw(7,1,  ""                                                        );
+        mvprintw(8,1,  "" );
+        mvprintw(9,1,  ",.;:=-''-=:;.,,.;:=-''-=:;.,,.;:=-''-=:;.,,.;:=-''-=:;.");
+
+        a = roll_die(13);
+        if (a == 1) mvprintw(10,1,"Don't believe what The_Game tells you. It's all lies.");
+        else if (a == 2) mvprintw(10,1,"If you hate grinding, you'll LOVE The_Game.");
+        else if (a == 3) mvprintw(10,1,"Wielding two weapons at once is for losers.");
+        else if (a == 4) mvprintw(10,1,"If you think leveling is easy, you are not Lv 1000 yet.");
+        else if (a == 5) mvprintw(10,1,"Have you maxed any stats today?");
+        else if (a == 6) mvprintw(10,1,"The Average adjectival is the only one with base stats!");
+        else if (a == 7) mvprintw(10,1,"Trying to cast a spell when you don't have the MP wastes a turn.");
+        else if (a == 8) mvprintw(10,1,"Always keep an inventory slot free for loot.");
+        else if (a == 9) mvprintw(10,1,"You can only delete entire item stacks at a time.");
+        else if (a == 10) mvprintw(10,1,"The XP you earn is adjusted; fighting higher level enemies grants a bonus.");
+        else if (a == 11) mvprintw(10,1,"Who has a name longer than 21 letters?");
+        else if (a == 12) mvprintw(10,1,"An item's adjectival is determined by the level difference between fighters.");
+        else if (a == 13) mvprintw(10,1,"Draconian draconian is draconian.");
+
+        mvprintw(11,1,"Enter a name (Max 21 letters):");
+
+        mvprintw(14,1,"The_Game Copyright (C) 2012,2013 William Patrick McFadden");
+        mvprintw(15,1,"This program comes with ABSOLUTELY NO WARRANTY!");
+
+        move(12,1);
+        refresh();
+    }
+
+    i = 0;
+
+    while (p_creation == 0 && i < 21) {
+        for (ii = 0;ii < 21;++ii) {
+            mvprintw(12,ii,"%c",p.name[ii]);
+        }
+        move(12,i);
+        refresh();
+        ch = getch();
+        /* resizing terminal win prints gibberish; this should fix. */
+        if (ch < 0x00 || ch > 0x14D) ch = 0x00;
+        switch (ch) {
+            case 0x00:
+                break;
+            case 0x0A: /* Enter */
+                if (i != 0) p_creation = 1;
+                break;
+            case 0x107: /* BS/DEL */
+            case 0x14D: /* BS/DEL */
+                if (i >= 0) {
+                    p.name[i - 1] = 0x20;
+                    if (i > 0) --i;
+                }
+                break;
+            default:
+                p.name[i] = ch;
+                ++i;
+                break;
+        }
+    }
+
+    a = 0;
+
+    /* Define the species */
+    
+    species[SPECIES_DRACONIAN][0] = SPECIES_DRACONIAN; /* Draconian */
+    species[SPECIES_DRACONIAN][1] = 22; /* HP */
+    species[SPECIES_DRACONIAN][2] = 3; /* MP */
+    species[SPECIES_DRACONIAN][3] = 15; /* STR */
+    species[SPECIES_DRACONIAN][4] = 12; /* DEF */
+    species[SPECIES_DRACONIAN][5] = 3; /* MAG */
+    species[SPECIES_DRACONIAN][6] = 550; /* WAI */
+    species[SPECIES_DRACONIAN][7] = 2.00; /* DAM */
+
+    species[SPECIES_KOBOLD][0] = SPECIES_KOBOLD; /* Kobold */
+    species[SPECIES_KOBOLD][1] = 5; /* HP */
+    species[SPECIES_KOBOLD][2] = 20; /* MP */
+    species[SPECIES_KOBOLD][3] = 7; /* STR */
+    species[SPECIES_KOBOLD][4] = 7; /* DEF */
+    species[SPECIES_KOBOLD][5] = 15; /* MAG */
+    species[SPECIES_KOBOLD][6] = 425; /* WAI */
+    species[SPECIES_KOBOLD][7] = 0.50; /* DAM */
+
+    species[SPECIES_HUMAN][0] = SPECIES_HUMAN; /* Human */
+    species[SPECIES_HUMAN][1] = 15; /* HP */
+    species[SPECIES_HUMAN][2] = 15; /* MP */
+    species[SPECIES_HUMAN][3] = 10; /* STR */
+    species[SPECIES_HUMAN][4] = 10; /* DEF */
+    species[SPECIES_HUMAN][5] = 10; /* MAG */
+    species[SPECIES_HUMAN][6] = 500; /* WAI */
+    species[SPECIES_HUMAN][7] = 0.00; /* DAM */
+
+    species[SPECIES_MINOTAUR][0] = SPECIES_MINOTAUR; /* Minotaur */
+    species[SPECIES_MINOTAUR][1] = 20; /* HP */
+    species[SPECIES_MINOTAUR][2] = 10; /* MP */
+    species[SPECIES_MINOTAUR][3] = 14; /* STR */
+    species[SPECIES_MINOTAUR][4] = 10; /* DEF */
+    species[SPECIES_MINOTAUR][5] = 6; /* MAG */
+    species[SPECIES_MINOTAUR][6] = 525; /* WAI */
+    species[SPECIES_MINOTAUR][7] = 1.20; /* DAM */
+
+    species[SPECIES_GOLEM][0] = SPECIES_GOLEM; /* Golem */
+    species[SPECIES_GOLEM][1] = 35; /* HP */
+    species[SPECIES_GOLEM][2] = 1; /* MP */
+    species[SPECIES_GOLEM][3] = 15; /* STR */
+    species[SPECIES_GOLEM][4] = 14; /* DEF */
+    species[SPECIES_GOLEM][5] = 1; /* MAG */
+    species[SPECIES_GOLEM][6] = 650; /* WAI */
+    species[SPECIES_GOLEM][7] = 1.50; /* DAM */
+
+    species[SPECIES_FAIRY][0] = SPECIES_FAIRY; /* Fairy */
+    species[SPECIES_FAIRY][1] = 3; /* HP */
+    species[SPECIES_FAIRY][2] = 35; /* MP */
+    species[SPECIES_FAIRY][3] = 1; /* STR */
+    species[SPECIES_FAIRY][4] = 1; /* DEF */
+    species[SPECIES_FAIRY][5] = 30; /* MAG */
+    species[SPECIES_FAIRY][6] = 250; /* WAI */
+    species[SPECIES_FAIRY][7] = 0.00; /* DAM */
+
+    while (p_creation == 1) {
+        for (i = 1;i <= 40;++i) {
+            mvprintw(i,0,"                                                                                ");
+        }
+
+        mvprintw(1,1,"Choose a species:");
+        mvprintw(SPECIES_DRACONIAN + 2,4,"Draconian");
+        mvprintw(SPECIES_KOBOLD + 2,4,"Kobold");
+        mvprintw(SPECIES_HUMAN + 2,4,"Human");
+        mvprintw(SPECIES_MINOTAUR + 2,4,"Minotaur");
+        mvprintw(SPECIES_GOLEM + 2,4,"Golem");
+        mvprintw(SPECIES_FAIRY + 2,4,"Fairy");
+
+        mvprintw(9,20,"Starting value (compared to human)");
+
+        if (species[a][1] - species[SPECIES_HUMAN][1] > 0) attron(COLOR_PAIR(3));
+        else if (species[a][1] - species[SPECIES_HUMAN][1] == 0) attron(COLOR_PAIR(6));
+        else attron(COLOR_PAIR(1));
+        mvprintw(10,20,"HP    : %.0f (%+.0f)",species[a][1],species[a][1] - species[SPECIES_HUMAN][1]);
+
+        if (species[a][2] - species[SPECIES_HUMAN][2] > 0) attron(COLOR_PAIR(3));
+        else if (species[a][2] - species[SPECIES_HUMAN][2] == 0) attron(COLOR_PAIR(6));
+        else attron(COLOR_PAIR(1));
+        mvprintw(11,20,"MP    : %.0f (%+.0f)",species[a][2],species[a][2] - species[SPECIES_HUMAN][2]);
+
+        if (species[a][3]-species[SPECIES_HUMAN][3] > 0) attron(COLOR_PAIR(3));
+        else if (species[a][3] - species[SPECIES_HUMAN][3] == 0) attron(COLOR_PAIR(6));
+        else attron(COLOR_PAIR(1));
+        mvprintw(12,20,"STR   : %.0f (%+.0f)",species[a][3],species[a][3] - species[SPECIES_HUMAN][3]);
+
+        if (species[a][4] - species[SPECIES_HUMAN][4] > 0) attron(COLOR_PAIR(3));
+        else if (species[a][4] - species[SPECIES_HUMAN][4] == 0) attron(COLOR_PAIR(6));
+        else attron(COLOR_PAIR(1));
+        mvprintw(13,20,"DEF   : %.0f (%+.0f)",species[a][4],species[a][4] - species[SPECIES_HUMAN][4]);
+
+        if (species[a][5] - species[SPECIES_HUMAN][5] > 0) attron(COLOR_PAIR(3));
+        else if (species[a][5] - species[SPECIES_HUMAN][5] == 0) attron(COLOR_PAIR(6));
+        else attron(COLOR_PAIR(1));
+        mvprintw(14,20,"MAG   : %.0f (%+.0f)",species[a][5],species[a][5] - species[SPECIES_HUMAN][5]);
+
+        if (species[a][6] - species[SPECIES_HUMAN][6] < 0) attron(COLOR_PAIR(3));
+        else if (species[a][6] - species[SPECIES_HUMAN][6] == 0) attron(COLOR_PAIR(6));
+        else attron(COLOR_PAIR(1));
+        mvprintw(15,20,"Wait  : %.0f (%+.0f)",species[a][6],species[a][6] - species[SPECIES_HUMAN][6]);
+
+        if (species[a][7] - species[SPECIES_HUMAN][7] > 0) attron(COLOR_PAIR(3));
+        else if (species[a][7] - species[SPECIES_HUMAN][7] == 0) attron(COLOR_PAIR(6));
+        else attron(COLOR_PAIR(1));
+        mvprintw(16,20,"Damage: %.0f (%+.0f)",species[a][7],species[a][7] - species[SPECIES_HUMAN][7]);
+
+        attron(COLOR_PAIR(6));
+        mvprintw(a + 2,1,"->");
+
+        if (a == species[SPECIES_DRACONIAN][0]) {
+            mvprintw(1,20,"Draconians use their big size to  ");
+            mvprintw(2,20,"pommel things into submission.    ");
+            mvprintw(3,20,"Thus, they tend to forego any     ");
+            mvprintw(4,20,"magic use.                        ");
+            mvprintw(5,20,"                                  ");
+        }
+        else if (a == species[SPECIES_KOBOLD][0]) {
+            mvprintw(1,20,"Kobolds are rather small, so their");
+            mvprintw(2,20,"ability to cause physical damage  ");
+            mvprintw(3,20,"suffers. They do have decent      ");
+            mvprintw(4,20,"control of magic, so they can     ");
+            mvprintw(5,20,"still wreck some havoc that way.  ");
+            mvprintw(6,20,"They are also pretty quick.       ");
+        }
+        else if (a == species[SPECIES_HUMAN][0]) {
+            mvprintw(1,20,"Humans are good at adapting to    ");
+            mvprintw(2,20,"whatever the current challenge    ");
+            mvprintw(3,20,"requires, but have no statistical ");
+            mvprintw(4,20,"advantage or disadvantage. From   ");
+            mvprintw(5,20,"fighter to Mage, and everything   ");
+            mvprintw(6,20,"inbetween.                        ");
+        }
+        else if (a == species[SPECIES_MINOTAUR][0]) {
+            mvprintw(1,20,"No                                ");
+            mvprintw(2,20,"description                       ");
+            mvprintw(3,20,"yet!                              ");
+            mvprintw(4,20,"                                  ");
+            mvprintw(5,20,"                                  ");
+            mvprintw(6,20,"                                  ");
+        }
+        else if (a == species[SPECIES_FAIRY][0]) {
+            mvprintw(1,20,"No                                ");
+            mvprintw(2,20,"description                       ");
+            mvprintw(3,20,"yet!                              ");
+            mvprintw(4,20,"                                  ");
+            mvprintw(5,20,"                                  ");
+            mvprintw(6,20,"                                  ");
+        }
+        else if (a == species[SPECIES_GOLEM][0]) {
+            mvprintw(1,20,"No                                ");
+            mvprintw(2,20,"description                       ");
+            mvprintw(3,20,"yet!                              ");
+            mvprintw(4,20,"                                  ");
+            mvprintw(5,20,"                                  ");
+            mvprintw(6,20,"                                  ");
+        }
+
+        ch = getch();
+        switch (ch) {
+            case KEY_DOWN:
+                if (a < 5) ++a;
+                else a=0;
+                break;
+            case KEY_UP:
+                if (a == 0) a = 5;
+                else --a;
+                break;
+            case 0x0A: /* Enter */
+                p_creation = 2;
+                break;
+            default:
+                break;
+        };
+        attron(COLOR_PAIR(6));
+        if (p_creation == 2) {
+            p.hp = species[a][1];
+            p.maxhp = species[a][1];
+            p.mp = species[a][2];
+            p.maxmp = species[a][2];
+            p.str = species[a][3];
+            p.def = species[a][4];
+            p.mag = species[a][5];
+            p.max_wait = species[a][6];
+            p.bonus_damage = species[a][7];
+            p.species = a;
+        }
+    }
+
+    a = 0;
+
+    /* Define the classes */
+    
+    classes[CLASS_FIGHTER][0] = CLASS_FIGHTER; /* Fighter */
+    classes[CLASS_FIGHTER][1] = 5; /* HP */
+    classes[CLASS_FIGHTER][2] = 2; /* MP */
+    classes[CLASS_FIGHTER][3] = 2; /* STR */
+    classes[CLASS_FIGHTER][4] = 2; /* DEF */
+    classes[CLASS_FIGHTER][5] = 1; /* MAG */
+    classes[CLASS_FIGHTER][6] = 5; /* WAI */
+    classes[CLASS_FIGHTER][7] = 0.05; /* DAM */
+
+    classes[CLASS_MAGE][0] = CLASS_MAGE; /* Mage */
+    classes[CLASS_MAGE][1] = 2; /* HP */
+    classes[CLASS_MAGE][2] = 5; /* MP */
+    classes[CLASS_MAGE][3] = 1; /* STR */
+    classes[CLASS_MAGE][4] = 1; /* DEF */
+    classes[CLASS_MAGE][5] = 3; /* MAG */
+    classes[CLASS_MAGE][6] = 3; /* WAI */
+    classes[CLASS_MAGE][7] = 0.01; /* DAM */
+
+    classes[CLASS_THIEF][0] = CLASS_THIEF; /* Thief */
+    classes[CLASS_THIEF][1] = 2; /* HP */
+    classes[CLASS_THIEF][2] = 2; /* MP */
+    classes[CLASS_THIEF][3] = 2; /* STR */
+    classes[CLASS_THIEF][4] = 1; /* DEF */
+    classes[CLASS_THIEF][5] = 2; /* MAG */
+    classes[CLASS_THIEF][6] = 1; /* WAI */
+    classes[CLASS_THIEF][7] = 0.03; /* DAM */
+
+    while (p_creation == 2) {
+        for (i = 1;i <= 40;++i) {
+            mvprintw(i,0,"                                                                                ");
+        }
+
+        attron(COLOR_PAIR(6));
+        mvprintw(1,1,"Choose a class:");
+        mvprintw(2,4,"Fighter");
+        mvprintw(3,4,"Mage");
+        mvprintw(4,4,"Thief");
+
+        mvprintw(a + 2,1,"->");
+
+        mvprintw(9,20,"Increase per level");
+        mvprintw(10,20,"HP    : %+.0f",classes[a][1]);
+        mvprintw(11,20,"MP    : %+.0f",classes[a][2]);
+        mvprintw(12,20,"STR   : %+.0f",classes[a][3]);
+        mvprintw(13,20,"DEF   : %+.0f",classes[a][4]);
+        mvprintw(14,20,"MAG   : %+.0f",classes[a][5]);
+        mvprintw(15,20,"Wait  : %+.0f",classes[a][6]);
+        mvprintw(16,20,"Damage: %+.0f",classes[a][7]);
+
+        if (a == classes[CLASS_FIGHTER][0]) {
+            mvprintw(1,20,"No                                ");
+            mvprintw(2,20,"description                       ");
+            mvprintw(3,20,"yet!                              ");
+            mvprintw(4,20,"                                  ");
+            mvprintw(5,20,"                                  ");
+        }
+        else if (a == classes[CLASS_MAGE][0]) {
+            mvprintw(1,20,"No                                ");
+            mvprintw(2,20,"description                       ");
+            mvprintw(3,20,"yet!                              ");
+            mvprintw(4,20,"                                  ");
+            mvprintw(5,20,"                                  ");
+        }
+        else if (a == classes[CLASS_THIEF][0]) {
+            mvprintw(1,20,"No                                ");
+            mvprintw(2,20,"description                       ");
+            mvprintw(3,20,"yet!                              ");
+            mvprintw(4,20,"                                  ");
+            mvprintw(5,20,"                                  ");
+        }
+
+        ch = getch();
+        switch (ch) {
+            case KEY_DOWN:
+                if (a < 2) ++a;
+                else a = 0;
+                break;
+            case KEY_UP:
+                if (a == 0) a = 2;
+                else --a;
+                break;
+            case 0x0A: /* Enter */
+                p_creation = 3;
+                break;
+            default:
+                break;
+        };
+        if (p_creation == 3) {
+            p.pclass = classes[a][0];
+        }
+    }
+
+    if (p.hp < 1) p.hp = 1;
+    if (p.maxhp < 1) p.maxhp = 1;
+    if (p.mp < 1) p.mp = 1;
+    if (p.maxmp < 1) p.maxmp = 1;
+    if (p.str < 1) p.str = 1;
+    if (p.def < 1) p.def = 1;
+    if (p.mag < 1) p.mag = 1;
+    if (p.max_wait < 100) p.max_wait = 100;
+
+    if (endgame != 1) {
+        sizeofname = 21;
+        for (a = 20;a > 0;--a) {
+            if (p.name[a] == 0x20) {
+                --sizeofname;
+            }
+            else break;
+        }
+
+        curs_set(0); /* No cursor */
+        refresh();
+    }
+
+	while (endgame != 1) {
+		/* Erase old text */
+		for (i = 1;i <= 14;++i) {
+            mvwprintw(stat_win,i,1,"                           ");
+        }
+        stat_line = 1;
+        wattron(stat_win,COLOR_PAIR(2));
+		mvwprintw(stat_win,stat_line,1,"Name :");
+		for (ii = 0;ii < 21;++ii) {
+            mvwprintw(stat_win,stat_line,ii + 8,"%c",p.name[ii]);
+        }
+
+        stat_line++;
+        if (p.hp < p.maxhp * .2) wattron(stat_win,COLOR_PAIR(1) | A_BOLD | A_BLINK);
+		mvwprintw(stat_win,stat_line++,1,"HP   : %.0f",p.hp);
+		wattron(stat_win,COLOR_PAIR(2));
+		wattroff(stat_win,A_BOLD | A_BLINK);
+
+		mvwprintw(stat_win,stat_line++,1,"MaxHP: %.0f",p.maxhp);
+
+		if (p.mp < p.maxmp * .2) wattron(stat_win,COLOR_PAIR(1) | A_BOLD);
+		mvwprintw(stat_win,stat_line++,1,"MP   : %.0f",p.mp);
+		wattron(stat_win,COLOR_PAIR(2));
+		wattroff(stat_win,A_BOLD | A_BLINK);
+
+		mvwprintw(stat_win,stat_line++,1,"MaxMP: %.0f",p.maxmp);
+		mvwprintw(stat_win,stat_line++,1,"STR  : %.0f",p.str);
+		mvwprintw(stat_win,stat_line++,1,"DEF  : %.0f",p.def);
+		mvwprintw(stat_win,stat_line++,1,"MAG  : %.0f",p.mag);
+
+		v = 0.0;
+		v = (p.status_id == HASTE_ID) ? p.status_str * -1 : 0;
+		v = v + p.equip_wait + p.head_wait + p.body_wait + p.legs_wait + p.feet_wait + p.hands_wait;
+
+		mvwprintw(stat_win,stat_line++,1,"Wait : %d/%d",p.wait,p.max_wait);
+		if (v > 0.0) wattron(stat_win,COLOR_PAIR(1));
+		else if (v < 0.0) wattron(stat_win,COLOR_PAIR(3));
+		wprintw(stat_win,"%+.0f",v);
+		wattron(stat_win,COLOR_PAIR(2));
+
+        /*
+         * A status effect will work if it's ID isn't regisered here,
+         * but won't display properly. */
+		if (p.status_id == FINE_ID) mvwprintw(stat_win,stat_line,1,"Staus: Fine");
+		else if (p.status_id == POISON_ID) {
+		    wattron(stat_win,COLOR_PAIR(5));
+		    mvwprintw(stat_win,stat_line,1,"Staus: Poisoned!");
+		}
+		else if (p.status_id == STUN_ID) {
+		    wattron(stat_win,COLOR_PAIR(6));
+		    mvwprintw(stat_win,stat_line,1,"Staus: Stunned!");
+		}
+		else if (p.status_id == SAP_ID) {
+		    wattron(stat_win,COLOR_PAIR(7));
+		    mvwprintw(stat_win,stat_line,1,"Staus: MP Sap!");
+		}
+		else if (p.status_id == WALL_ID) {
+		    wattron(stat_win,COLOR_PAIR(6) | A_REVERSE);
+		    mvwprintw(stat_win,stat_line,1,"Staus: Wall!");
+		    wattroff(stat_win,A_REVERSE);
+		}
+		else if (p.status_id == HASTE_ID) {
+			wattron(stat_win,COLOR_PAIR(3));
+			mvwprintw(stat_win,stat_line,1,"Staus: Haste!");
+		}
+		else mvwprintw(stat_win,stat_line,1,"Staus: ID:#%d:BUG",p.status_id);
+		if (p.status_id != FINE_ID) wprintw(stat_win," - %.0f turns",p.status_dur);
+        wattron(stat_win,COLOR_PAIR(2));
+
+        stat_line++;
+        x = p.equip_ap;
+        if (p.status_id == WALL_ID) x = x + p.status_str;
+        x = x + p.head_ap + p.body_ap + p.legs_ap + p.feet_ap + p.hands_ap;
+
+        if (x > 0.0) wattron(stat_win,COLOR_PAIR(3));
+        else if (x < 0.0) wattron(stat_win,COLOR_PAIR(1));
+        mvwprintw(stat_win,stat_line++,1,"AP   : %+.0f",x);
+        wattron(stat_win,COLOR_PAIR(2));
+
+		mvwprintw(stat_win,stat_line++,1,"LV   : %.0f",p.lv);
+		mvwprintw(stat_win,stat_line++,1,"XP   : %.0f",p.xp);
+		mvwprintw(stat_win,stat_line++,1,"NxtLv: %.0f",p.next_xp);
+
+        for (i=1;i<=24;++i) {
+            mvwprintw(main_win,i,1,"                                     ");
+        }
+
+        stat_line = 1;
+        mvwprintw(main_win,stat_line++,1,"Enemy: ");
+        get_e_name(main_win);
+
+        if (e.hp < e.maxhp * .2) wattron(main_win,COLOR_PAIR(1));
+        mvwprintw(main_win,stat_line++,1,"HP   : %.0f",e.hp);
+        wattron(main_win,COLOR_PAIR(6));
+
+        mvwprintw(main_win,stat_line++,1,"MaxHP: %.0f",e.maxhp);
+
+        if (e.mp < e.maxmp * .2) wattron(main_win,COLOR_PAIR(1));
+        mvwprintw(main_win,stat_line++,1,"MP   : %.0f",e.mp);
+        wattron(main_win,COLOR_PAIR(6));
+
+        mvwprintw(main_win,stat_line++,1,"MaxMP: %.0f",e.maxmp);
+        mvwprintw(main_win,stat_line++,1,"STR  : %.0f",e.str);
+        mvwprintw(main_win,stat_line++,1,"DEF  : %.0f",e.def);
+        mvwprintw(main_win,stat_line++,1,"MAG  : %.0f",e.mag);
+        mvwprintw(main_win,stat_line++,1,"Wait : %d/%d%+.0f",e.wait,e.max_wait,\
+                  (e.status_id == HASTE_ID) ? e.status_str : 0.0);
+        mvwprintw(main_win,stat_line++,1,"BaseD: %.0fd%.0f (%.0f-%.0f) (%.0f%%)",e.dice,e.dice_sides,\
+                  e.dice,(e.dice * e.dice_sides),max(1,min((e.str / p.def) * 100,10000)));
+
+        if (e.status_id == FINE_ID) mvwprintw(main_win,stat_line,1,"Staus: Fine");
+        else if (e.status_id == POISON_ID) {
+            wattron(main_win,COLOR_PAIR(5));
+            mvwprintw(main_win,stat_line,1,"Staus: Poisoned!");
+        }
+        else if (e.status_id == STUN_ID) mvwprintw(main_win,stat_line,1,"Staus: Stunned!");
+        else if (e.status_id == SAP_ID) {
+            wattron(main_win,COLOR_PAIR(7));
+            mvwprintw(main_win,stat_line,1,"Staus: MP Sap!");
+        }
+        else if (e.status_id == WALL_ID) {
+            wattron(main_win,COLOR_PAIR(6) || A_REVERSE);
+            mvwprintw(main_win,stat_line,1,"Staus: Wall!");
+            wattroff(main_win,A_REVERSE);
+        }
+        else if (e.status_id == HASTE_ID) {
+            wattron(main_win,COLOR_PAIR(3));
+            mvwprintw(main_win,stat_line,1,"Staus: Haste!");
+        }
+        else mvwprintw(main_win,stat_line,1,"Staus: ID:#%dBUG",e.status_id);
+        if (e.status_id != FINE_ID) wprintw(main_win," - %.0f turns",e.status_dur);
+        wattron(main_win,COLOR_PAIR(6));
+
+        stat_line++;
+        mvwprintw(main_win,stat_line++,1,"AP   : %.0f",e.ap);
+		mvwprintw(main_win,stat_line++,1,"LV   : %.0f",e.lv);
+
+        for (i = 0;i <= 36;++i) {
+            mvwprintw(sidebar,i,1,"                                                                               ");
+        }
+        wattron(sidebar,COLOR_PAIR(3));
+        mvwprintw(sidebar,1,1,"%s",VERSION);
+
+        mvwprintw(sidebar,3,1,"Turn: %.0f (%03d Wait left)",turn,500 - global_wait);
+
+        if (turns_since_load > 0) {
+            mvwprintw(sidebar,5,1,"---Turn %.0f Summary---",turn - 1);
+
+            wattron(sidebar,p_msg_one_color);
+            mvwprintw(sidebar,7,1,"%s",p_msg_one);
+            wattron(sidebar,COLOR_PAIR(3));
+
+            wattron(sidebar,e_msg_one_color);
+            mvwprintw(sidebar,8,1,"%s",e_msg_one);
+            wattron(sidebar,COLOR_PAIR(3));
+
+            wattron(sidebar,COLOR_PAIR(1));
+            mvwprintw(sidebar,9,1,"%s",e_kill_msg_one);
+            wattron(sidebar,COLOR_PAIR(3));
+        }
+        if (turns_since_load > 1) {
+            mvwprintw(sidebar,11,1,"---Turn %.0f Summary---",turn - 2);
+
+            wattron(sidebar,p_msg_two_color);
+            mvwprintw(sidebar,13,1,"%s",p_msg_two);
+            wattron(sidebar,COLOR_PAIR(3));
+
+            wattron(sidebar,e_msg_two_color);
+            mvwprintw(sidebar,14,1,"%s",e_msg_two);
+            wattron(sidebar,COLOR_PAIR(3));
+
+            wattron(sidebar,COLOR_PAIR(1));
+            mvwprintw(sidebar,15,1,"%s",e_kill_msg_two);
+            wattron(sidebar,COLOR_PAIR(3));
+        }
+        if (turns_since_load > 2) {
+            mvwprintw(sidebar,17,1,"---Turn %.0f Summary---",turn - 3);
+
+            wattron(sidebar,p_msg_three_color);
+            mvwprintw(sidebar,19,1,"%s",p_msg_three);
+            wattron(sidebar,COLOR_PAIR(3));
+
+            wattron(sidebar,e_msg_three_color);
+            mvwprintw(sidebar,20,1,"%s",e_msg_three);
+            wattron(sidebar,COLOR_PAIR(3));
+
+            wattron(sidebar,COLOR_PAIR(1));
+            mvwprintw(sidebar,21,1,"%s",e_kill_msg_three);
+            wattron(sidebar,COLOR_PAIR(3));
+        }
+
+        wattron(sidebar,COLOR_PAIR(3));
+
+        for (i = 0;i <= 39;++i) {
+            mvwprintw(choice_win,i,1,"               ");
+        }
+
+        /* Display Attack % */
+        if (max(min((p.str / e.def) * 100,200),10) > 100) attron(COLOR_PAIR(3));
+        else if (max(min((p.str / e.def) * 100,200),10) < 100) attron(COLOR_PAIR(1));
+
+        /** @todo
+         * Change 100,10000 to use constants, not
+         * just here but in the other spots in the
+         * code.
+         */
+        mvwprintw(choice_win,1,8,"(%.0f%%)",max(min((p.str / e.def) * 100,10000),1));
+        attron(COLOR_PAIR(4));
+
+        box(stat_win,0,0);
+        wrefresh(stat_win);
+        box(main_win,0,0);
+        wrefresh(main_win);
+        box(sidebar,0,0);
+        wrefresh(sidebar);
+        print_menu(choice_win,highlight,1,1);
+
+        if (p.wait == 0 && p.status_id != STUN_ID) { /* if player is stunned, they lose their turn */
+            ch = wgetch(choice_win);
+            switch (ch) {
+                case KEY_DOWN:
+                    if (highlight < MAX_CHOICES) highlight = highlight + 1;
+                    else highlight = 1;
+                    break;
+                case KEY_UP:
+                    if (highlight > 1) highlight = highlight - 1;
+                    else highlight = MAX_CHOICES;
+                    break;
+                case 0x0A: /* Enter */
+                    choice = highlight;
+                    break;
+                case 0x71: /* q */
+                    endgame = 1;
+                    break;
+                default:
+                    break;
+            };
+        }
+
+        switch (choice) {
+            case 1: /* Attack */
+                if (p.hp > 0) {
+                    attack_formula(2);
+                }
+                break;
+            case 2: /* Magic */
+                schoice = magic_main(sidebar);
+                break;
+            case 3: /* Item */
+                schoice = item_main(sidebar);
+                break;
+            case 4: /* Craft */
+                schoice = craft_main(sidebar);
+                break;
+            case 5: /* Stats */
+                pg = 1;
+                
+                while (schoice == 0) {
+                    clean_sidebar(sidebar);
+                    mvwprintw(sidebar,1,1,"Press c to go back, up/down changes page, # to unequip.");
+
+                    if (pg == 1) {
+                        mvwprintw(sidebar,3,1,"Enemies killed..% 12.0f",stat_kills);
+                        mvwprintw(sidebar,4,1,"Spells cast.....% 12.0f",stat_m_casts);
+                        mvwprintw(sidebar,5,1,"Items used......% 12.0f",stat_i_used);
+                        mvwprintw(sidebar,6,1,"Damage given....% 12.0f",stat_p_dam_dealt);
+                        mvwprintw(sidebar,7,1,"Damage recieved.% 12.0f",stat_p_dam_taken);
+                    }
+                    else if (pg == 2) {
+                        if (p.species == species[SPECIES_DRACONIAN][0]) mvwprintw(sidebar,3,1,"Lv, Species, Class: Lv.%.0f Draconian ",p.lv);
+                        else if (p.species == species[SPECIES_KOBOLD][0]) mvwprintw(sidebar,3,1,"Lv, Species, Class: Lv.%.0f Kobold ",p.lv);
+                        else if (p.species == species[SPECIES_HUMAN][0]) mvwprintw(sidebar,3,1,"Lv, Species, Class: Lv.%.0f Human ",p.lv);
+                        else if (p.species == species[SPECIES_MINOTAUR][0]) mvwprintw(sidebar,3,1,"Lv, Species, Class: Lv.%.0f Minotaur ",p.lv);
+                        else if (p.species == species[SPECIES_GOLEM][0]) mvwprintw(sidebar,3,1,"Lv, Species, Class: Lv.%.0f Golem ",p.lv);
+                        else if (p.species == species[SPECIES_FAIRY][0]) mvwprintw(sidebar,3,1,"Lv, Species, Class: Lv.%.0f Fairy ",p.lv);
+                        else mvwprintw(sidebar,3,1,"Lv, Species, Class: Lv.%.0f Unused id:%d ",p.lv,p.species);
+
+                        if (p.pclass == classes[CLASS_FIGHTER][0]) wprintw(sidebar,"Fighter");
+                        else if (p.pclass == classes[CLASS_MAGE][0]) wprintw(sidebar,"Mage");
+                        else if (p.pclass == classes[CLASS_THIEF][0]) wprintw(sidebar,"Thief");
+                        
+                        mvwprintw(sidebar,5,1,"HP Regen: %.0f every %.0f turns",p.hp_regen_amount,p.hp_regen_time);
+                        mvwprintw(sidebar,6,1,"MP Regen: %.0f every %.0f turns",p.mp_regen_amount,p.mp_regen_time);
+                    }
+                    else if (pg == 3) {
+                        a = 3; /* starting y-coord of equip list */
+
+                        if (p.equip_id > 0 && p.equip_id <= item_max) {
+                            sprintf(p_buffer,"%s",item_db[p.equip_id].iname);
+                        }
+                        else if (p.equip_id == 0) {
+                            strcpy(p_buffer,"Unarmed");
+                        }
+                        else {
+                            sprintf(p_buffer,"Unused id:%d",p.equip_id);
+                        }
+
+                        if (p.equip_id != 0) {
+                            mvwprintw(sidebar,a++,1,"1. Weapon: %s%+.0f; ",p_buffer,p.equip_mod);
+                            mvwprintw(sidebar,a++,3,"Condition: [");
+                            draw_con_bar(sidebar,p.equip_con,p.equip_maxcon);
+                        }
+                        else mvwprintw(sidebar,a++,1,"1. Weapon: %s",p_buffer);
+
+                        z = 0;
+                        if (p.head_id > 0 && p.head_id <= item_max) {
+                            sprintf(p_buffer,"%s",item_db[p.head_id].iname);
+                            z = item_db[p.head_id].ap;
+                        }
+                        else if (p.head_id == 0) {
+                            strcpy(p_buffer,"Nothing");
+                        }
+                        else {
+                            sprintf(p_buffer,"Unused ID: %d",p.head_id);
+                        }
+
+                        if (z != 0.0) {
+                            mvwprintw(sidebar,a++,1,"2. Head  : %s%+.0f; AP: %+.0f; Wait: %+.0f",p_buffer,p.head_ap - z,p.head_ap,p.head_wait);
+                            mvwprintw(sidebar,a++,3,"Condition: [");
+                            draw_con_bar(sidebar,p.head_con,p.head_maxcon);
+                        }
+                        else mvwprintw(sidebar,a++,1,"2. Head  : %s; AP: +0; Wait: +0",p_buffer);
+        
+                        z = 0;
+                        if (p.body_id > 0 && p.body_id <= item_max) {
+                            sprintf(p_buffer,"%s",item_db[p.body_id].iname);
+                            z = item_db[p.body_id].ap;
+                        }
+                        else if (p.body_id == 0) {
+                            strcpy(p_buffer,"Nothing");
+                        }
+                        else {
+                            sprintf(p_buffer,"Unused ID: %d",p.body_id);
+                        }
+        
+                        if (z != 0.0) {
+                            mvwprintw(sidebar,a++,1,"3. Body  : %s%+.0f; AP: %+.0f; Wait: %+.0f",p_buffer,p.body_ap - z,p.body_ap,p.body_wait);
+                            mvwprintw(sidebar,a++,3,"Condition: [");
+                            draw_con_bar(sidebar,p.body_con,p.body_maxcon);
+                        }
+                        else mvwprintw(sidebar,a++,1,"3. Body  : %s; AP: +0; Wait: +0",p_buffer);
+
+                        z = 0;
+                        if (p.legs_id > 0 && p.legs_id <= item_max) {
+                            sprintf(p_buffer,"%s",item_db[p.legs_id].iname);
+                            z = item_db[p.legs_id].ap;
+                        }
+                        else if (p.legs_id == 0) {
+                            strcpy(p_buffer,"Nothing");
+                        }
+                        else {
+                            sprintf(p_buffer,"Unused ID: %d",p.legs_id);
+                        }
+        
+                        if (z != 0.0) {
+                            mvwprintw(sidebar,a++,1,"4. Legs  : %s%+.0f; AP: %+.0f; Wait: %+.0f",p_buffer,p.legs_ap - z,p.legs_ap,p.legs_wait);
+                            mvwprintw(sidebar,a++,3,"Condition: [");
+                            draw_con_bar(sidebar,p.legs_con,p.legs_maxcon);
+                        }
+                        else mvwprintw(sidebar,a++,1,"4. Legs  : %s; AP: +0; Wait: +0",p_buffer);
+
+                        z = 0;
+                        if (p.feet_id > 0 && p.feet_id <= item_max) {
+                            sprintf(p_buffer,"%s",item_db[p.feet_id].iname);
+                            z = item_db[p.feet_id].ap;
+                        }
+                        else if (p.feet_id == 0) {
+                            strcpy(p_buffer,"Nothing");
+                        }
+                        else {
+                            sprintf(p_buffer,"Unused ID: %d",p.feet_id);
+                        }
+
+                        if (z != 0.0) {
+                            mvwprintw(sidebar,a++,1,"5. Feet  : %s%+.0f; AP: %+.0f; Wait: %+.0f",p_buffer,p.feet_ap - z,p.feet_ap,p.feet_wait);
+                            mvwprintw(sidebar,a++,3,"Condition: [");
+                            draw_con_bar(sidebar,p.feet_con,p.feet_maxcon);
+                        }
+                        else mvwprintw(sidebar,a++,1,"5. Feet  : %s; AP: +0; Wait: +0",p_buffer);
+
+                        z = 0;
+                        if (p.hands_id > 0 && p.hands_id <= item_max) {
+                            sprintf(p_buffer,"%s",item_db[p.hands_id].iname);
+                            z = item_db[p.hands_id].ap;
+                        }
+                        else if (p.hands_id == 0) {
+                            strcpy(p_buffer,"Nothing");
+                        }
+                        else {
+                            sprintf(p_buffer,"Unused ID: %d",p.hands_id);
+                        }
+
+                        if (z != 0.0) {
+                            mvwprintw(sidebar,a++,1,"6. Hands : %s%+.0f; AP: %+.0f; Wait: %+.0f",p_buffer,p.hands_ap - z,p.hands_ap,p.hands_wait);
+                            mvwprintw(sidebar,a++,3,"Condition: [");
+                            draw_con_bar(sidebar,p.hands_con,p.hands_maxcon);
+                        }
+                        else mvwprintw(sidebar,a++,1,"6. Hands : %s; AP: +0; Wait: +0",p_buffer);
+
+                        a++; /* blank line; hopefully makes it look less cultered */
+                        v = 0;
+                        v = p.bonus_damage + p.equip_mod;
+                        mvwprintw(sidebar,a++,1,"Base Damage: %.0f d %.0f %+.2f",p.dice,p.dice_sides,p.bonus_damage + p.equip_mod);
+                        mvwprintw(sidebar,a++,1,"Approx. Damage: %.0f - %.0f",\
+                                   max(1,p.dice + v),max(1,(p.dice * p.dice_sides) + v));
+                        a++; /* another blank line */
+                        mvwprintw(sidebar,a++,1,"Total AP : %+.0f; Total Wait: %+.0f",p.head_ap + p.body_ap + p.legs_ap +\
+                                p.feet_ap + p.hands_ap + p.equip_ap,p.head_wait + p.body_wait + p.feet_wait + p.legs_wait + p.hands_wait + p.equip_wait);
+                    
+                        /** @note
+                         * Check how much space the sidebar has when player
+                         * is wearing a full set of equipment.
+                         * There should be plenty...
+                         */
+                    }
+                    else if (pg == 4) {
+                        a = 3;
+                        wattron(sidebar,A_BOLD);
+                        mvwprintw(sidebar,a++,1,"Skills:");
+                        wattroff(sidebar,A_BOLD);
+
+                        wattron(sidebar,COLOR_PAIR(1));
+                        mvwprintw(sidebar,a++,3,"1. Fighting: Lv. % 9d [",skill[SKILL_FIGHTING][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_FIGHTING][1],skill[SKILL_FIGHTING][2]);
+
+                        wattron(sidebar,COLOR_PAIR(6));
+                        mvwprintw(sidebar,a++,3,"2. Crafting: Lv. % 9d [",skill[SKILL_CRAFTING_GEN][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CRAFTING_GEN][1],skill[SKILL_CRAFTING_GEN][2]);
+
+                        wattron(sidebar,COLOR_PAIR(6));
+                        mvwprintw(sidebar,a++,3," a. Healing: Lv. % 9d [",skill[SKILL_CRAFTING_HEA][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CRAFTING_HEA][1],skill[SKILL_CRAFTING_HEA][2]);
+
+                        wattron(sidebar,COLOR_PAIR(1));
+                        mvwprintw(sidebar,a++,3," b.  Attack: Lv. % 9d [",skill[SKILL_CRAFTING_ATT][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CRAFTING_ATT][1],skill[SKILL_CRAFTING_ATT][2]);
+
+                        wattron(sidebar,COLOR_PAIR(4));
+                        mvwprintw(sidebar,a++,3," c.  Wep&Ar: Lv. % 9d [",skill[SKILL_CRAFTING_WAA][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CRAFTING_WAA][1],skill[SKILL_CRAFTING_WAA][2]);
+
+                        wattron(sidebar,COLOR_PAIR(6));
+                        mvwprintw(sidebar,a++,3," d.   Other: Lv. % 9d [",skill[SKILL_CRAFTING_OTH][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CRAFTING_OTH][1],skill[SKILL_CRAFTING_OTH][2]);
+
+                        wattron(sidebar,COLOR_PAIR(2));
+                        mvwprintw(sidebar,a++,3,"3.  Casting: Lv. % 9d [",skill[SKILL_CASTING_GEN][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CASTING_GEN][1],skill[SKILL_CASTING_GEN][2]);
+
+                        wattron(sidebar,COLOR_PAIR(6));
+                        mvwprintw(sidebar,a++,3," a. Healing: Lv. % 9d [",skill[SKILL_CASTING_HEA][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CASTING_HEA][1],skill[SKILL_CASTING_HEA][2]);
+
+                        wattron(sidebar,COLOR_PAIR(1));
+                        mvwprintw(sidebar,a++,3," b.  Attack: Lv. % 9d [",skill[SKILL_CASTING_ATT][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CASTING_ATT][1],skill[SKILL_CASTING_ATT][2]);
+
+                        wattron(sidebar,COLOR_PAIR(4));
+                        mvwprintw(sidebar,a++,3," c.  Status: Lv. % 9d [",skill[SKILL_CASTING_STA][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CASTING_STA][1],skill[SKILL_CASTING_STA][2]);
+
+                        wattron(sidebar,COLOR_PAIR(1));
+                        mvwprintw(sidebar,a++,3," d.    Fire: Lv. % 9d [",skill[SKILL_CASTING_FIR][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CASTING_FIR][1],skill[SKILL_CASTING_FIR][2]);
+
+                        wattron(sidebar,COLOR_PAIR(7));
+                        mvwprintw(sidebar,a++,3," e.   Water: Lv. % 9d [",skill[SKILL_CASTING_WAT][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CASTING_WAT][1],skill[SKILL_CASTING_WAT][2]);
+
+                        wattron(sidebar,COLOR_PAIR(3));
+                        mvwprintw(sidebar,a++,3," f.   Earth: Lv. % 9d [",skill[SKILL_CASTING_EAR][0]);
+                        draw_sk_bar(sidebar,skill[SKILL_CASTING_EAR][1],skill[SKILL_CASTING_EAR][2]);
+                    }
+
+                    wattron(sidebar,COLOR_PAIR(3));
+                    box(sidebar,0,0);
+                    refresh();
+                    ch = wgetch(sidebar);
+                    switch (ch) {
+                        case KEY_UP:
+                            if (pg > 1) --pg;
+                            else pg = 4;
+                            break;
+                        case KEY_DOWN:
+                            if (pg < 4) ++pg;
+                            else pg = 1;
+                            break;
+                        case 0x63: /* c */
+                            schoice = -1;
+                            break;
+                        case 0x31: /* 1 */
+                            schoice = 1;
+                            unequip_item(1);
+                            break;
+                        case 0x32: /* 2 */
+                            schoice = 2;
+                            unequip_item(2);
+                            break;
+                        case 0x33: /* 3 */
+                            schoice = 3;
+                            unequip_item(3);
+                            break;
+                        case 0x34: /* 4 */
+                            schoice = 4;
+                            unequip_item(4);
+                            break;
+                        case 0x35: /* 5 */
+                            schoice = 5;
+                            unequip_item(5);
+                            break;
+                        case 0x36: /* 6 */
+                            schoice = 6;
+                            unequip_item(6);
+                            break;
+                        default:
+                            break;
+                    };
+                }
+                break;
+            case MAX_CHOICES: /* Save & Quit */
+                endgame = 1;
+                break;
+            default:
+                break;
+        };
+
+        enemy_turn();
+
+        if (p.wait == 0 && choice != 0 && schoice != -1 && choice != MAX_CHOICES) {
+            v = 0.0;
+            v = p.max_wait + p.equip_wait;
+            v = v + p.head_wait + p.body_wait + p.legs_wait + p.feet_wait + p.hands_wait;
+            if (p.status_id == HASTE_ID) v = v - p.status_str;
+            p.wait = v;
+        }
+        
+		if (e.hp <= 0) {
+		    e_killed = 1;
+			kill_enemy();
+
+			while (p.xp >= p.next_xp) {
+			    schoice = 0;
+                ++p.lv;
+                p.xp = p.xp - p.next_xp;
+                if (p.lv < STAT_MAX) {
+                    p.next_xp = ceil(p.next_xp * 1.10); /* 10% more xp needed, rounded up. */
+                    if (p.next_xp > STAT_MAX) p.next_xp = STAT_MAX;
+
+                    p.maxhp = p.maxhp + classes[p.pclass][1];
+                    p.hp = p.hp + classes[p.pclass][1];
+                    p.maxmp = p.maxmp + classes[p.pclass][2];
+                    p.mp = p.mp + classes[p.pclass][2];
+                    if (p.str < STAT_MAX) p.str = p.str + classes[p.pclass][3];
+                    if (p.def < STAT_MAX) p.def = p.def + classes[p.pclass][4];
+                    if (p.mag < STAT_MAX) p.mag = p.mag + classes[p.pclass][5];
+                    if (p.max_wait < 9999) p.max_wait = p.max_wait + classes[p.pclass][6];
+                    if (p.bonus_damage < STAT_MAX) p.bonus_damage = p.bonus_damage + classes[p.pclass][7];
+
+                    clean_sidebar(sidebar);
+
+                    wrefresh(stat_win);
+
+                    mvwprintw(sidebar,1,3," LV up! HP%+.0f, MP%+.0f, STR%+.0f, DEF%+.0f, MAG%+.0f,",\
+                              classes[p.pclass][1],classes[p.pclass][2],classes[p.pclass][3],classes[p.pclass][4],\
+                              classes[p.pclass][5]);
+                    mvwprintw(sidebar,2,3," Wait%+.0f, Damage%+.2f",classes[p.pclass][6],classes[p.pclass][7]);
+                    mvwprintw(sidebar,3,3," Pick something to improve:");
+                    mvwprintw(sidebar,4,4,"STR +2, DEF -1, MAG -1");
+                    mvwprintw(sidebar,5,4,"STR -1, DEF +2, MAG -1");
+                    mvwprintw(sidebar,6,4,"STR -1, DEF -1, MAG +2");
+                    mvwprintw(sidebar,7,4,"HP +3, MP -3");
+                    mvwprintw(sidebar,8,4,"HP -3, MP +3");
+                    mvwprintw(sidebar,9,4,"Wait -15 (Min 100)");
+                    mvwprintw(sidebar,10,4,"Damage +0.15");
+                    mvwprintw(sidebar,11,4,"HP regen +1, takes 5 turns longer");
+                    mvwprintw(sidebar,12,4,"MP regen +1, takes 5 turns longer");
+
+                    mvwprintw(sidebar,4,1,"-> ");
+
+                    box(sidebar,0,0);
+                    refresh();
+                    while (schoice == 0) {
+                        for (i = 1;i <= 20;++i) {
+                        mvwprintw(sidebar,i,1,"  ");
+                    }
+                        if (shl == 1) mvwprintw(sidebar,4,1,"-> ");
+                        else if (shl == 2) mvwprintw(sidebar,5,1,"-> ");
+                        else if (shl == 3) mvwprintw(sidebar,6,1,"-> ");
+                        else if (shl == 4) mvwprintw(sidebar,7,1,"-> ");
+                        else if (shl == 5) mvwprintw(sidebar,8,1,"-> ");
+                        else if (shl == 6) mvwprintw(sidebar,9,1,"-> ");
+                        else if (shl == 7) mvwprintw(sidebar,10,1,"-> ");
+                        else if (shl == 8) mvwprintw(sidebar,11,1,"-> ");
+                        else if (shl == 9) mvwprintw(sidebar,12,1,"-> ");
+
+                        ch = wgetch(sidebar);
+                        switch (ch) {
+                            case KEY_DOWN:
+                                if (shl < 9) shl = shl + 1;
+                                else shl = 1;
+                                break;
+                            case KEY_UP:
+                                if (shl > 1) shl = shl - 1;
+                                else shl = 9;
+                                break;
+                            case 0x0A: /* Enter */
+                                schoice = shl;
+                                break;
+                            default:
+                                break;
+                        };
+                    }
+                    if (schoice == 1 && p.str < STAT_MAX) {
+                        p.str = p.str + 2;
+                        p.def = p.def - 1;
+                        p.mag = p.mag - 1;
+                    }
+                    else if (schoice == 2 && p.def < STAT_MAX) {
+                        p.str = p.str - 1;
+                        p.def = p.def + 2;
+                        p.mag = p.mag - 1;
+                    }
+                    else if (schoice == 3 && p.mag < STAT_MAX) {
+                        p.str = p.str - 1;
+                        p.def = p.def - 1;
+                        p.mag = p.mag + 2;
+                    }
+                    else if (schoice == 4) {
+                        p.maxhp = p.maxhp + 3;
+                        p.hp = p.hp + 3;
+                        p.maxmp = p.maxmp - 3;
+                        p.mp = p.mp - 3;
+                    }
+                    else if (schoice == 5) {
+                        p.maxhp = p.maxhp - 3;
+                        p.hp = p.hp - 3;
+                        p.maxmp = p.maxmp + 3;
+                        p.mp = p.mp + 3;
+                    }
+                    else if (schoice == 6) {
+                        p.max_wait = p.max_wait - 15;
+                    }
+                    else if (schoice == 7) {
+                        p.bonus_damage = p.bonus_damage + 0.15;
+                    }
+                    else if (schoice == 8) {
+                        ++p.hp_regen_amount;
+                        p.hp_regen_time = p.hp_regen_time + 5;
+                    }
+                    else if (schoice == 9) {
+                        ++p.mp_regen_amount;
+                        p.mp_regen_time = p.mp_regen_time + 5;
+                    }
+
+                    if (p.max_wait < 100) p.max_wait = 100;
+                    if (p.max_wait > 9999) p.max_wait = 9999;
+
+                    if (p.maxhp > STAT_MAX) p.maxhp = STAT_MAX;
+                    if (p.hp > STAT_MAX) p.hp = STAT_MAX;
+                    if (p.maxmp > STAT_MAX) p.maxmp = STAT_MAX;
+                    if (p.mp > STAT_MAX) p.mp = STAT_MAX;
+                    if (p.str > STAT_MAX) p.str = STAT_MAX;
+                    if (p.def > STAT_MAX) p.def = STAT_MAX;
+                    if (p.mag > STAT_MAX) p.mag = STAT_MAX;
+                    if (p.bonus_damage > STAT_MAX) p.bonus_damage = STAT_MAX;
+                    if (p.maxhp < 1) p.maxhp = 1;
+                    if (p.hp < 1) p.hp = 1;
+                    if (p.maxmp < 1) p.maxmp = 1;
+                    if (p.mp < 1) p.mp = 1;
+                    if (p.str < 1) p.str = 1;
+                    if (p.def < 1) p.def = 1;
+                    if (p.mag < 1) p.mag = 1;
+                }
+            wrefresh(stat_win);
+            }
+		}
+
+		if (e.hp > e.maxhp) e.hp = e.maxhp;
+
+		if (choice != MAX_CHOICES) choice = 0; /* if the player didn't choose SAVE & QUIT, reset their choice */
+
+		/*if (p_status==STUN_ID) choice=99; Forces the player to skip their turn. Needed for the
+                                           if statements above. Or not?*/
+
+		if (p.hp <= 0) {
+            endgame = 1;
+		}
+
+		if (p.hp > p.maxhp) p.hp = p.maxhp;
+		if (p.mp > p.maxmp) p.mp = p.maxmp;
+
+		schoice = 0;
+		shl = 1;
+
+		if (p.wait > 0 && p.status_id != STUN_ID) {
+		    --p.wait;
+		    ++global_wait;
+		    p_waiting = 1;
+		}
+		if (p.status_id == STUN_ID) {
+            ++global_wait;
+            p_waiting = 1;
+		}
+		if (e.wait > 0 && p_waiting == 1) {
+		    if (e.status_id != STUN_ID) --e.wait;
+		    /* reset it in case it isn't true next time round. */
+		    p_waiting = 0;
+		}
+		/* global end of turn stuff */
+
+		if (global_wait == 500) {
+		    ++turn;
+		    ++turns_since_load;
+
+            if (p.hp_regen_cur > 0) --p.hp_regen_cur;
+            if (p.mp_regen_cur > 0) --p.mp_regen_cur;
+            if (p.status_dur > 0) --p.status_dur;
+            if (e.status_dur > 0) --e.status_dur;
+
+            if (p.hp_regen_cur <= 0) {
+                p.hp_regen_cur = p.hp_regen_time;
+                p.hp = p.hp + p.hp_regen_amount;
+            }
+            if (p.mp_regen_cur <= 0) {
+                p.mp_regen_cur = p.mp_regen_time;
+                p.mp = p.mp + p.mp_regen_amount;
+            }
+
+            /* turn based statuses */
+            /* -1 means dispel was used, and effect should be skipped */
+            if (p.status_id == POISON_ID && p.status_dur > -1) {
+                p.hp = p.hp - p.status_str;
+            }
+
+            if (p.status_id == SAP_ID && p.status_dur > -1) {
+                p.mp = p.mp - p.status_str;
+                if (p.mp <= 0) p.mp = 0;
+            }
+
+            if (p.status_dur <= 0) {
+                p.status_id = FINE_ID;
+                p.status_str = 0;
+            }
+
+            /* enemy status checks */
+            if (e.status_id == POISON_ID && e.status_dur > -1) {
+                e.hp = e.hp - e.status_str;
+            }
+
+            if (e.status_id == SAP_ID && e.status_dur > -1) {
+                e.mp = e.mp - e.status_str;
+                if (e.mp <= 0) e.mp = 0;
+            }
+
+            if (e.status_dur <= 0) {
+                e.status_id = FINE_ID;
+                e.status_str = 0;
+            }
+ 
+            p_msg_three_color = p_msg_two_color;
+            e_msg_three_color = e_msg_two_color;
+            p_msg_two_color = p_msg_one_color;
+            e_msg_two_color = e_msg_one_color;
+
+            strcpy(p_buffer,"");
+
+            sprintf(p_buffer,"Dealt %.0f damage, healed %.0f/%.0f HP/MP.",p_dmg_dealt,p_dmg_healed,p_mp_healed);
+            if (p_dmg_healed < e_dmg_dealt) e_msg_one_color = COLOR_PAIR(1);
+            else if (p_dmg_healed == e_dmg_dealt) e_msg_one_color = COLOR_PAIR(4);
+            else e_msg_one_color = COLOR_PAIR(3);
+
+            sprintf(e_buffer,"Received %.0f damage, enemy healed %.0f.",e_dmg_dealt,e_dmg_healed);
+            if (e_dmg_healed < p_dmg_dealt) p_msg_one_color = COLOR_PAIR(3);
+            else if (e_dmg_healed == p_dmg_dealt) p_msg_one_color = COLOR_PAIR(4);
+            else p_msg_one_color = COLOR_PAIR(1);
+
+            if (e_killed == 1) {
+                wattron(sidebar,COLOR_PAIR(1));
+                sprintf(e_kill_msg,"Enemy killed!");
+            }
+            wattron(sidebar,COLOR_PAIR(3));
+
+            strcpy(p_msg_three,p_msg_two); /* start at the "bottom"; */
+            strcpy(e_msg_three,e_msg_two);
+            strcpy(e_kill_msg_three,e_kill_msg_two);
+
+            strcpy(p_msg_two,p_msg_one); /* now that two has been copied, move one down; */
+            strcpy(e_msg_two,e_msg_one);
+            strcpy(e_kill_msg_two,e_kill_msg_one);
+
+            strcpy(p_msg_one,p_buffer); /* bring the buffer in. */
+            strcpy(e_msg_one,e_buffer);
+            strcpy(e_kill_msg_one,e_kill_msg);
+
+            strcpy(e_buffer,"");
+            strcpy(p_buffer,"");
+            strcpy(e_kill_msg,"");
+
+            e_killed = 0;
+
+            e_dmg_dealt = 0;
+            e_dmg_healed = 0;
+            p_dmg_dealt = 0;
+            p_dmg_healed = 0;
+            p_mp_healed = 0;
+
+            global_wait = 0;
+		}
+		else if (global_wait > 500) {
+            /** @bug
+             * global_wait can display as negative;
+             * needs looking into.
+             */
+            global_wait = 0;
+        }
+	}
+	/* Main game loop has ended */
+	clear();
+	clrtoeol();
+	refresh();
+
+	if (p.hp <= 0) {
+	    attron(COLOR_PAIR(1));
+	    mvprintw(0,0,"R.I.P. ");
+	    for (ii=0;ii<sizeofname;++ii) {
+            mvprintw(0,ii+7,"%c",p.name[ii]);
+        }
+        mvprintw(0,sizeofname+7,", killed by "); /* +7 because of earlier chars */
+        get_e_name(stdscr);
+        if (e.name[0] == 0) wprintw(stdscr," (how sad...)");
+
+        reset_save(); /* reset the save so that when the game is next loaded, it acts like "New Game" */
+	}
+	else {
+	    attron(COLOR_PAIR(6));
+	    mvprintw(0,0,(p.hp > p.maxhp * .2) ? "See Ya!" : "!!!");
+	}
+
+	getch();
+
+	wattroff(stat_win,COLOR_PAIR(2));
+	wattroff(choice_win,COLOR_PAIR(4));
+	wattroff(main_win,COLOR_PAIR(6));
+	wattroff(sidebar,COLOR_PAIR(3));
+
+    if (p.hp > 0) save_game(); /* only save if player isn't dead. It resets in that case. */
+
+	endwin();
+    delwin(main_win);
+    delwin(stat_win);
+    delwin(choice_win);
+    delwin(sidebar);
+
+	return 0; /* The game didn't crash! */
+}
+
+void print_menu(WINDOW *win, int hl, int x, int y) {
+	int i;
+
+	box(win, 0, 0);
+	for(i = 0; i < n_choices; ++i) {
+		if (hl == i + 1) {
+			wattron(win, A_REVERSE);
+			mvwprintw(win, y, x, "%s", choices[i]);
+			wattroff(win, A_REVERSE);
+		}
+		else
+			mvwprintw(win, y, x, "%s", choices[i]);
+		++y;
+	}
+	wrefresh(win);
+}
+
+WINDOW *create_newwin(int h, int w, int starty, int startx) {
+	WINDOW *win;
+
+	win = newwin(h, w, starty, startx);
+	box(win, 0 , 0);		
+	wrefresh(win);		
+
+	return win;
+}
