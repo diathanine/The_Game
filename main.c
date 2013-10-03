@@ -147,7 +147,7 @@ void destroy_win(WINDOW *local_win);
 
 int stat_win_startx = 0,stat_win_starty = 0;
 int choice_win_startx = 30,choice_win_starty = 0;
-int main_win_startx = 0,main_win_starty = 18;
+int enemy_win_startx = 0,enemy_win_starty = 18;
 int sidebar_startx = 50,sidebar_starty = 0;
 
 /** @todo 
@@ -161,7 +161,7 @@ int ii = 0,sizeofname = 0;
 
 int main(int argc, char *argv[]) {
 
-	WINDOW *stat_win,*choice_win,*main_win,*sidebar;
+	WINDOW *stat_win,*choice_win,*enemy_win,*sidebar;
 	int highlight = 1,shl = 1,choice = 0,schoice = 0;
 	int ch,i,pg,stat_line = 1;
 
@@ -188,7 +188,7 @@ int main(int argc, char *argv[]) {
 
 	stat_win = newwin(STAT_HEIGHT,STAT_WIDTH,stat_win_starty,stat_win_startx);
 	choice_win = newwin(CHOICE_HEIGHT,CHOICE_WIDTH,choice_win_starty,choice_win_startx);
-	main_win = newwin(MAIN_HEIGHT,MAIN_WIDTH,main_win_starty,main_win_startx);
+	enemy_win = newwin(MAIN_HEIGHT,MAIN_WIDTH,enemy_win_starty,enemy_win_startx);
 	sidebar = newwin(SIDEBAR_HEIGHT,SIDEBAR_WIDTH,sidebar_starty,sidebar_startx); /* y = statwin + mainwin, x = 120 - mainwin */
 
 	while (COLS <= (STAT_WIDTH + CHOICE_WIDTH + SIDEBAR_WIDTH)\
@@ -215,7 +215,7 @@ int main(int argc, char *argv[]) {
 
 	wattron(stat_win,COLOR_PAIR(2));
 	wattron(choice_win,COLOR_PAIR(4));
-	wattron(main_win,COLOR_PAIR(6));
+	wattron(enemy_win,COLOR_PAIR(6));
 	wattron(sidebar,COLOR_PAIR(3));
 
     load_game(); /* Always load the save game. New games have a default state. */
@@ -694,59 +694,59 @@ int main(int argc, char *argv[]) {
 		mvwprintw(stat_win,stat_line++,1,"XP   : %.0f",p.xp);
 		mvwprintw(stat_win,stat_line++,1,"NxtLv: %.0f",p.next_xp);
 
-        for (i=1;i<=24;++i) {
-            mvwprintw(main_win,i,1,"                                     ");
+        for (i = 1;i <= 24;++i) {
+            mvwprintw(enemy_win,i,1,"                                     ");
         }
 
         stat_line = 1;
-        mvwprintw(main_win,stat_line++,1,"Enemy: ");
-        get_e_name(main_win);
+        mvwprintw(enemy_win,stat_line++,1,"Enemy: ");
+        get_e_name(enemy_win);
 
-        if (e.hp < e.maxhp * .2) wattron(main_win,COLOR_PAIR(1));
-        mvwprintw(main_win,stat_line++,1,"HP   : %.0f",e.hp);
-        wattron(main_win,COLOR_PAIR(6));
+        if (e.hp < e.maxhp * .2) wattron(enemy_win,COLOR_PAIR(1));
+        mvwprintw(enemy_win,stat_line++,1,"HP   : %.0f",e.hp);
+        wattron(enemy_win,COLOR_PAIR(6));
 
-        mvwprintw(main_win,stat_line++,1,"MaxHP: %.0f",e.maxhp);
+        mvwprintw(enemy_win,stat_line++,1,"MaxHP: %.0f",e.maxhp);
 
-        if (e.mp < e.maxmp * .2) wattron(main_win,COLOR_PAIR(1));
-        mvwprintw(main_win,stat_line++,1,"MP   : %.0f",e.mp);
-        wattron(main_win,COLOR_PAIR(6));
+        if (e.mp < e.maxmp * .2) wattron(enemy_win,COLOR_PAIR(1));
+        mvwprintw(enemy_win,stat_line++,1,"MP   : %.0f",e.mp);
+        wattron(enemy_win,COLOR_PAIR(6));
 
-        mvwprintw(main_win,stat_line++,1,"MaxMP: %.0f",e.maxmp);
-        mvwprintw(main_win,stat_line++,1,"STR  : %.0f",e.str);
-        mvwprintw(main_win,stat_line++,1,"DEF  : %.0f",e.def);
-        mvwprintw(main_win,stat_line++,1,"MAG  : %.0f",e.mag);
-        mvwprintw(main_win,stat_line++,1,"Wait : %d/%d%+.0f",e.wait,e.max_wait,\
+        mvwprintw(enemy_win,stat_line++,1,"MaxMP: %.0f",e.maxmp);
+        mvwprintw(enemy_win,stat_line++,1,"STR  : %.0f",e.str);
+        mvwprintw(enemy_win,stat_line++,1,"DEF  : %.0f",e.def);
+        mvwprintw(enemy_win,stat_line++,1,"MAG  : %.0f",e.mag);
+        mvwprintw(enemy_win,stat_line++,1,"Wait : %d/%d%+.0f",e.wait,e.max_wait,\
                   (e.status_id == HASTE_ID) ? e.status_str : 0.0);
-        mvwprintw(main_win,stat_line++,1,"BaseD: %.0fd%.0f (%.0f-%.0f) (%.0f%%)",e.dice,e.dice_sides,\
+        mvwprintw(enemy_win,stat_line++,1,"BaseD: %.0fd%.0f (%.0f-%.0f) (%.0f%%)",e.dice,e.dice_sides,\
                   e.dice,(e.dice * e.dice_sides),max(1,min((e.str / p.def) * 100,10000)));
 
-        if (e.status_id == FINE_ID) mvwprintw(main_win,stat_line,1,"Staus: Fine");
+        if (e.status_id == FINE_ID) mvwprintw(enemy_win,stat_line,1,"Staus: Fine");
         else if (e.status_id == POISON_ID) {
-            wattron(main_win,COLOR_PAIR(5));
-            mvwprintw(main_win,stat_line,1,"Staus: Poisoned!");
+            wattron(enemy_win,COLOR_PAIR(5));
+            mvwprintw(enemy_win,stat_line,1,"Staus: Poisoned!");
         }
-        else if (e.status_id == STUN_ID) mvwprintw(main_win,stat_line,1,"Staus: Stunned!");
+        else if (e.status_id == STUN_ID) mvwprintw(enemy_win,stat_line,1,"Staus: Stunned!");
         else if (e.status_id == SAP_ID) {
-            wattron(main_win,COLOR_PAIR(7));
-            mvwprintw(main_win,stat_line,1,"Staus: MP Sap!");
+            wattron(enemy_win,COLOR_PAIR(7));
+            mvwprintw(enemy_win,stat_line,1,"Staus: MP Sap!");
         }
         else if (e.status_id == WALL_ID) {
-            wattron(main_win,COLOR_PAIR(6) || A_REVERSE);
-            mvwprintw(main_win,stat_line,1,"Staus: Wall!");
-            wattroff(main_win,A_REVERSE);
+            wattron(enemy_win,COLOR_PAIR(6) || A_REVERSE);
+            mvwprintw(enemy_win,stat_line,1,"Staus: Wall!");
+            wattroff(enemy_win,A_REVERSE);
         }
         else if (e.status_id == HASTE_ID) {
-            wattron(main_win,COLOR_PAIR(3));
-            mvwprintw(main_win,stat_line,1,"Staus: Haste!");
+            wattron(enemy_win,COLOR_PAIR(3));
+            mvwprintw(enemy_win,stat_line,1,"Staus: Haste!");
         }
-        else mvwprintw(main_win,stat_line,1,"Staus: ID:#%dBUG",e.status_id);
-        if (e.status_id != FINE_ID) wprintw(main_win," - %.0f turns",e.status_dur);
-        wattron(main_win,COLOR_PAIR(6));
+        else mvwprintw(enemy_win,stat_line,1,"Staus: ID:#%dBUG",e.status_id);
+        if (e.status_id != FINE_ID) wprintw(enemy_win," - %.0f turns",e.status_dur);
+        wattron(enemy_win,COLOR_PAIR(6));
 
         stat_line++;
-        mvwprintw(main_win,stat_line++,1,"AP   : %.0f",e.ap);
-		mvwprintw(main_win,stat_line++,1,"LV   : %.0f",e.lv);
+        mvwprintw(enemy_win,stat_line++,1,"AP   : %.0f",e.ap);
+		mvwprintw(enemy_win,stat_line++,1,"LV   : %.0f",e.lv);
 
         for (i = 0;i <= 36;++i) {
             mvwprintw(sidebar,i,1,"                                                                               ");
@@ -822,8 +822,8 @@ int main(int argc, char *argv[]) {
 
         box(stat_win,0,0);
         wrefresh(stat_win);
-        box(main_win,0,0);
-        wrefresh(main_win);
+        box(enemy_win,0,0);
+        wrefresh(enemy_win);
         box(sidebar,0,0);
         wrefresh(sidebar);
         print_menu(choice_win,highlight,1,1);
@@ -1435,10 +1435,10 @@ int main(int argc, char *argv[]) {
 	if (p.hp <= 0) {
 	    attron(COLOR_PAIR(1));
 	    mvprintw(0,0,"R.I.P. ");
-	    for (ii=0;ii<sizeofname;++ii) {
-            mvprintw(0,ii+7,"%c",p.name[ii]);
+	    for (ii = 0;ii < sizeofname;++ii) {
+            mvprintw(0,ii + 7,"%c",p.name[ii]);
         }
-        mvprintw(0,sizeofname+7,", killed by "); /* +7 because of earlier chars */
+        mvprintw(0,sizeofname + 7,", killed by "); /* +7 because of earlier chars */
         get_e_name(stdscr);
         if (e.name[0] == 0) wprintw(stdscr," (how sad...)");
 
@@ -1453,13 +1453,13 @@ int main(int argc, char *argv[]) {
 
 	wattroff(stat_win,COLOR_PAIR(2));
 	wattroff(choice_win,COLOR_PAIR(4));
-	wattroff(main_win,COLOR_PAIR(6));
+	wattroff(enemy_win,COLOR_PAIR(6));
 	wattroff(sidebar,COLOR_PAIR(3));
 
     if (p.hp > 0) save_game(); /* only save if player isn't dead. It resets in that case. */
 
 	endwin();
-    delwin(main_win);
+    delwin(enemy_win);
     delwin(stat_win);
     delwin(choice_win);
     delwin(sidebar);
