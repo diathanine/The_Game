@@ -200,7 +200,9 @@ void generate_name() {
      Anything from inanimate objects to abstract thoughts
      later on, more "realistic" enemies will start to show up.
 
-    enemy name ideas
+    enemy name ideas - I have terrible memory, so I made a list
+    of names I think of when I'm doing something else, and have
+    been to lazy to actually implement.
 
     Stale/Regular/Fresh Muffin
     (Land) Shark

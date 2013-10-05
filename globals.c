@@ -83,7 +83,8 @@ void print_desc(WINDOW *w, char desc[], int y, int x) {
      * Will wrap based on letters, not whole words.
      * space has "-2" because of the border around the window.
      */
-    int space = SIDEBAR_WIDTH - 2, cur = 0, len = 0;
+    int space = SIDEBAR_WIDTH - 2, cur = 0;
+    size_t len = 0;
     
     len = strlen(desc);
     
