@@ -17,3 +17,5 @@ Item descs wrap, but only on a letter by letter basis.
 Status effects that temp reduce stats. STR,DEF,MAG...?
 
 Inventory[][] still needs to be turned into a struct
+
+Use game version to check savefile version.
