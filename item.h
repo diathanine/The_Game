@@ -46,22 +46,6 @@
 #define ITEM_STAT_MAX 2147000000
 
 #define INVEN_MAX 9
-#define INVEN_MAXB 13
-
-#define INVEN_ID 0 /* ID of item */
-#define INVEN_AMOUNT 1 /* How many in stack */
-#define INVEN_MOD 2 /* Modifier */
-#define INVEN_ADJ 3 /* adjectival */
-#define INVEN_DICE 4 /* number of dice for weapon */
-#define INVEN_DICESIDES 5 /* number of sides per die for weapon */
-#define INVEN_AP 6 /* AP for armor */
-#define INVEN_WAIT 7 /* wait added to base. Weapon/armor */
-#define INVEN_MAXCON 8 /* Max condition */
-#define INVEN_CON 9 /* current condition */
-#define INVEN_STR 10 /* STR of regular items */
-#define INVEN_TYP 11 /* for storing what type of item it is */
-#define INVEN_PAR 12 /* body part for armor */
-#define INVEN_EFF 13 /* effect of regular items. */
 
 /* item effects */
 #define EFF_HEALHP 1
@@ -87,8 +71,8 @@ void craft_menu(WINDOW *s, int p);
 int item_info(WINDOW *win, int ycor, int hb, char idesc[]);
 void draw_item(WINDOW *s, int h);
 int get_craft_mod(double diff);
-void equip_armor(int part, double armap, double armcon, int armid, double armwait);
-void equip_weapon(double weadice, double weadisi, double weacon, double weaap, double weawait, double weabdam, int weaid);
+void equip_armor(int part, double armap, double armcon, int armid, int armwait);
+void equip_weapon(double weadice, double weadisi, double weacon, double weaap, int weawait, double weabdam, int weaid);
 void item_effect(int ti, int effect, int istr);
 void use_item(int b, int toss);
 void give_item(int id, int typ, double mod, int adj, double dice, double dicesides,\

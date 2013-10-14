@@ -221,13 +221,17 @@ int main(int argc, char *argv[]) {
     load_game(); /* Always load the save game. New games have a default state. */
 
     #ifdef DEBUG
-        inventory[9][INVEN_ID] = 1;
-        inventory[9][INVEN_STR] = 1337;
-        inventory[9][INVEN_MOD] = 9001;
-        inventory[9][INVEN_AMOUNT] = 777;
-        inventory[9][INVEN_TYP] = EFF_HEALHP;
-        inventory[9][INVEN_EFF] = 1;
+        /* Give super healing item so tester can live more easily. */
+        inv[9].id = 1;
+        inv[9].str = 1337;
+        inv[9].mod = 9001;
+        inv[9].amount = 777;
+        inv[9].type = EFF_HEALHP;
+        inv[9].effect = 1;
 
+        /* Allow test to give xp at command line:
+         * ./The_Game [xp]
+         */
         if (argc > 1) {
             if (argv[1] != NULL) {
                 p.xp = atof(argv[1]);

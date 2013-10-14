@@ -146,13 +146,30 @@ struct Character {
     double status_str;
 };
 
+struct Inventory {
+    int id;
+    double amount;
+    double mod;
+    double adj;
+    double dice;
+    double dicesides;
+    double ap;
+    int wait;
+    double maxcon;
+    double con;
+    double str;
+    double type;
+    double part;
+    double effect;
+};
+
 struct Character p,e;
+struct Inventory inv[10];
 
 int p_creation; /**< if player has entered name/species */
 int p_waiting; /**< if player is waiting */
 int endgame; /**< end game */
 
-double inventory[10][14]; /**< inventory array; [0][..] = NULL */
 int skill[13][3]; /**< skill levels and xp */
 double species[7][8]; /**< species base values */
 double classes[4][8]; /**< classes base values */

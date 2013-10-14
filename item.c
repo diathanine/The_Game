@@ -886,15 +886,15 @@ void item_menu(WINDOW *sb) {
         /* o = current slot,lo = last o
         i isn't immediately reset because the next item slot might be a match
         anyway. */
-        if (inventory[o][INVEN_ID] == i && i == 0) {
+        if (inv[o].id == i && i == 0) {
             mvwprintw(sb,o + 2,4,"Nothing    ");
             mvwprintw(sb,o + 2,DESC_X,"                    ");
             ++o;
         }
-        else if (inventory[o][INVEN_ID] == i) {
+        else if (inv[o].id == i) {
             mvwprintw(sb,o + 2,4,"%s",item_db[i].iname);
-            mvwprintw(sb,o + 2,30,"%+.0f",inventory[o][INVEN_MOD]);
-            mvwprintw(sb,o + 2,38,"x%03.0f",inventory[o][INVEN_AMOUNT]);
+            mvwprintw(sb,o + 2,30,"%+.0f",inv[o].mod);
+            mvwprintw(sb,o + 2,38,"x%03.0f",inv[o].amount);
             ++o;
         }
 
@@ -972,52 +972,52 @@ void craft_menu(WINDOW *s, int pg) {
  * @param idesc The description of the current item.
  */
 int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
-    if (inventory[h][INVEN_ADJ] != 0) {
-        get_adjname(inventory[h][INVEN_ADJ]);
+    if (inv[h].adj != 0) {
+        get_adjname(inv[h].adj);
         mvwprintw(win,ycor++,1,"Adjectival: %s",p_buffer);
     }
     
-    if (inventory[h][INVEN_TYP] == 1) {
-        if (inventory[h][INVEN_EFF] == EFF_HEALHP)
-         mvwprintw(win,ycor++,1,"Restores HP: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_HEALMP)
-         mvwprintw(win,ycor++,1,"Restores MP: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_DAMAGE)
-         mvwprintw(win,ycor++,1,"Causes damage: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_HPUP)
-         mvwprintw(win,ycor++,1,"Permanent HP boost: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_MPUP)
-         mvwprintw(win,ycor++,1,"Permanent MP boost: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_STRUP)
-         mvwprintw(win,ycor++,1,"Permanent STR boost: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_DEFUP)
-         mvwprintw(win,ycor++,1,"Permanent DEF boost: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_MAGUP)
-         mvwprintw(win,ycor++,1,"Permanent MAG boost: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_WTDOWN)
-         mvwprintw(win,ycor++,1,"Permanently lowers Wait: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_HPREG)
-         mvwprintw(win,ycor++,1,"Permanently boosts HP regen: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_MPREG)
-         mvwprintw(win,ycor++,1,"Permanently boosts MP regen: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_ELV)
-         mvwprintw(win,ycor++,1,"Changes enemy's level: %.0f",inventory[h][INVEN_STR]);
-        else if (inventory[h][INVEN_EFF] == EFF_ELVBAL)
-         mvwprintw(win,ycor++,1,"Draws enemy level towards yours: %.0f",inventory[h][INVEN_STR]);
-        else mvwprintw(win,ycor++,1,"Unknown effect %d",inventory[h][INVEN_EFF]);
+    if (inv[h].type == 1) {
+        if (inv[h].effect == EFF_HEALHP)
+         mvwprintw(win,ycor++,1,"Restores HP: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_HEALMP)
+         mvwprintw(win,ycor++,1,"Restores MP: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_DAMAGE)
+         mvwprintw(win,ycor++,1,"Causes damage: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_HPUP)
+         mvwprintw(win,ycor++,1,"Permanent HP boost: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_MPUP)
+         mvwprintw(win,ycor++,1,"Permanent MP boost: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_STRUP)
+         mvwprintw(win,ycor++,1,"Permanent STR boost: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_DEFUP)
+         mvwprintw(win,ycor++,1,"Permanent DEF boost: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_MAGUP)
+         mvwprintw(win,ycor++,1,"Permanent MAG boost: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_WTDOWN)
+         mvwprintw(win,ycor++,1,"Permanently lowers Wait: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_HPREG)
+         mvwprintw(win,ycor++,1,"Permanently boosts HP regen: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_MPREG)
+         mvwprintw(win,ycor++,1,"Permanently boosts MP regen: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_ELV)
+         mvwprintw(win,ycor++,1,"Changes enemy's level: %.0f",inv[h].str);
+        else if (inv[h].effect == EFF_ELVBAL)
+         mvwprintw(win,ycor++,1,"Draws enemy level towards yours: %.0f",inv[h].str);
+        else mvwprintw(win,ycor++,1,"Unknown effect %d",inv[h].effect);
     }
     
-    if (inventory[h][INVEN_MAXCON] != 0)
-     mvwprintw(win,ycor++,1,"Condition: %.0f/%.0f",inventory[h][INVEN_CON],inventory[h][INVEN_MAXCON]);
+    if (inv[h].maxcon != 0)
+     mvwprintw(win,ycor++,1,"Condition: %.0f/%.0f",inv[h].con,inv[h].maxcon);
 
-    if (inventory[h][INVEN_DICE] != 0 || inventory[h][INVEN_DICESIDES] != 0)
-     mvwprintw(win,ycor++,1,"Damage: %.0fd%.0f%+.0f",inventory[h][INVEN_DICE],inventory[h][INVEN_DICESIDES],inventory[h][INVEN_MOD]);
+    if (inv[h].dice != 0 || inv[h].dicesides != 0)
+     mvwprintw(win,ycor++,1,"Damage: %.0fd%.0f%+.0f",inv[h].dice,inv[h].dicesides,inv[h].mod);
 
-    if (inventory[h][INVEN_AP] != 0)
-     mvwprintw(win,ycor++,1,"AP: %.0f",inventory[h][INVEN_AP] + inventory[h][INVEN_MOD]);
+    if (inv[h].ap != 0)
+     mvwprintw(win,ycor++,1,"AP: %.0f",inv[h].ap + inv[h].mod);
 
-    if (inventory[h][INVEN_WAIT] != 0)
-     mvwprintw(win,ycor++,1,"Wait: %+d",inventory[h][INVEN_WAIT]);
+    if (inv[h].wait != 0)
+     mvwprintw(win,ycor++,1,"Wait: %+d",inv[h].wait);
 
     print_desc(win,(char *)idesc,ycor++,1);
 
@@ -1025,7 +1025,7 @@ int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
 }
 
 void draw_item(WINDOW *s,int h) {
-    int id = inventory[h][INVEN_ID];
+    int id = inv[h].id;
     if (id != 0) item_info(s,15,h,item_db[id].desc);
 }
 
@@ -1059,7 +1059,7 @@ int get_craft_mod(double diff) {
  * @param armid ID of the armor.
  * @param armwait The Wait of the armor.
  */
-void equip_armor(int part, double armap, double armcon, int armid, double armwait) {
+void equip_armor(int part, double armap, double armcon, int armid, int armwait) {
     if (part == 1) {
         p.head_ap = armap;
         p.head_maxcon = armcon;
@@ -1109,7 +1109,7 @@ void equip_armor(int part, double armap, double armcon, int armid, double armwai
  * @param weabdam Weapon's bonus damage.
  * @param weaid ID of weapon.
  */
-void equip_weapon(double weadice, double weadisi, double weacon, double weaap, double weawait, double weabdam, int weaid) {
+void equip_weapon(double weadice, double weadisi, double weacon, double weaap, int weawait, double weabdam, int weaid) {
     p.dice = weadice;
     p.dice_sides = weadisi;
     p.equip_maxcon = weacon;
@@ -1229,19 +1229,19 @@ void item_effect(int ti, int effect, int istr) {
  * and finally removes one of the item.
  */
 void use_item(int b, int toss) {
-    if (inventory[b][INVEN_TYP] == 1) {
-        item_effect(toss,inventory[b][INVEN_EFF],inventory[b][INVEN_STR]+inventory[b][INVEN_MOD]);
+    if (inv[b].type == 1) {
+        item_effect(toss,inv[b].effect,inv[b].str+inv[b].mod);
     }
-    else if (inventory[b][INVEN_TYP] == 2) {
-        if (toss == 0) equip_weapon(inventory[b][INVEN_DICE], inventory[b][INVEN_DICESIDES],\
-         inventory[b][INVEN_CON], inventory[b][INVEN_AP], inventory[b][INVEN_WAIT],\
-         inventory[b][INVEN_MOD], inventory[b][INVEN_ID]);
-        else item_effect(toss,EFF_DAMAGE,(inventory[b][INVEN_DICE] * inventory[b][INVEN_DICESIDES])+inventory[b][INVEN_MOD]);
+    else if (inv[b].type == 2) {
+        if (toss == 0) equip_weapon(inv[b].dice, inv[b].dicesides,\
+         inv[b].con, inv[b].ap, inv[b].wait,\
+         inv[b].mod, inv[b].id);
+        else item_effect(toss,EFF_DAMAGE,(inv[b].dice * inv[b].dicesides)+inv[b].mod);
     }
-    else if (inventory[b][INVEN_TYP] == 3) {
-        if (toss == 0) equip_armor(inventory[b][INVEN_PAR],inventory[b][INVEN_AP]+inventory[b][INVEN_MOD],\
-         inventory[b][INVEN_CON],inventory[b][INVEN_ID],inventory[b][INVEN_WAIT]);
-        else item_effect(toss,EFF_DAMAGE,inventory[b][INVEN_AP] + inventory[b][INVEN_WAIT]+inventory[b][INVEN_MOD]);
+    else if (inv[b].type == 3) {
+        if (toss == 0) equip_armor(inv[b].part,inv[b].ap+inv[b].mod,\
+         inv[b].con,inv[b].id,inv[b].wait);
+        else item_effect(toss,EFF_DAMAGE,inv[b].ap + inv[b].wait+inv[b].mod);
     }
 
     if (p.hp > p.maxhp) p.hp = p.maxhp;
@@ -1256,22 +1256,22 @@ void use_item(int b, int toss) {
     if (e.lv < 1) e.lv = 1;
     if (e.lv > STAT_MAX) e.lv = STAT_MAX;
 
-    inventory[b][INVEN_AMOUNT] = inventory[b][INVEN_AMOUNT] - 1;
-    if (inventory[b][INVEN_AMOUNT] <= 0) {
-        inventory[b][INVEN_ID] = 0;
-        inventory[b][INVEN_AMOUNT] = 0;
-        inventory[b][INVEN_MOD] = 0;
-        inventory[b][INVEN_ADJ] = 0;
-        inventory[b][INVEN_DICE] = 0;
-        inventory[b][INVEN_DICESIDES] = 0;
-        inventory[b][INVEN_AP] = 0;
-        inventory[b][INVEN_WAIT] = 0;
-        inventory[b][INVEN_MAXCON] = 0;
-        inventory[b][INVEN_CON] = 0;
-        inventory[b][INVEN_STR] = 0;
-        inventory[b][INVEN_TYP] = 0;
-        inventory[b][INVEN_PAR] = 0;
-        inventory[b][INVEN_EFF] = 0;
+    inv[b].amount = inv[b].amount - 1;
+    if (inv[b].amount <= 0) {
+        inv[b].id = 0;
+        inv[b].amount = 0;
+        inv[b].mod = 0;
+        inv[b].adj = 0;
+        inv[b].dice = 0;
+        inv[b].dicesides = 0;
+        inv[b].ap = 0;
+        inv[b].wait = 0;
+        inv[b].maxcon = 0;
+        inv[b].con = 0;
+        inv[b].str = 0;
+        inv[b].type = 0;
+        inv[b].part = 0;
+        inv[b].effect = 0;
     }
 }
 
@@ -1308,47 +1308,47 @@ void give_item(int id, int typ, double mod, int adj, double dice, double dicesid
     if (con > ITEM_STAT_MAX) con = ITEM_STAT_MAX;
 
     for (a = 0;a <= INVEN_MAX;++a) {
-        if (inventory[a][INVEN_ID] == id && inventory[a][INVEN_AMOUNT] < 999 &&\
-            inventory[a][INVEN_MOD] == mod && inventory[a][INVEN_ADJ] == adj &&\
-            inventory[a][INVEN_DICE] == dice && inventory[a][INVEN_DICESIDES] == dicesides &&\
-            inventory[a][INVEN_AP] == ap && inventory[a][INVEN_WAIT] == iwait && \
-            inventory[a][INVEN_MAXCON] == maxcon && inventory[a][INVEN_CON] == con && item_given == 0) {
+        if (inv[a].id == id && inv[a].amount < 999 &&\
+            inv[a].mod == mod && inv[a].adj == adj &&\
+            inv[a].dice == dice && inv[a].dicesides == dicesides &&\
+            inv[a].ap == ap && inv[a].wait == iwait && \
+            inv[a].maxcon == maxcon && inv[a].con == con && item_given == 0) {
                 /* most of this is unnecessary? */
-                inventory[a][INVEN_ID] = id;
-                inventory[a][INVEN_AMOUNT] = inventory[a][INVEN_AMOUNT] + 1;
-                inventory[a][INVEN_MOD] = mod;
-                inventory[a][INVEN_ADJ] = adj;
-                inventory[a][INVEN_DICE] = dice;
-                inventory[a][INVEN_DICESIDES] = dicesides;
-                inventory[a][INVEN_AP] = ap;
-                inventory[a][INVEN_WAIT] = iwait;
-                inventory[a][INVEN_MAXCON] = maxcon;
-                inventory[a][INVEN_CON] = con;
-                inventory[a][INVEN_STR] = str;
-                inventory[a][INVEN_EFF] = eff;
-                inventory[a][INVEN_TYP] = typ;
-                inventory[a][INVEN_PAR] = part;
+                inv[a].id = id;
+                inv[a].amount = inv[a].amount + 1;
+                inv[a].mod = mod;
+                inv[a].adj = adj;
+                inv[a].dice = dice;
+                inv[a].dicesides = dicesides;
+                inv[a].ap = ap;
+                inv[a].wait = iwait;
+                inv[a].maxcon = maxcon;
+                inv[a].con = con;
+                inv[a].str = str;
+                inv[a].effect = eff;
+                inv[a].type = typ;
+                inv[a].part = part;
                 item_given = 1;
                 break;
         }
     } /* No existing stacks of this item, check for empty slot to create one. */
     if (item_given == 0) {
         for (a = 0;a <= INVEN_MAX;++a) {
-            if (inventory[a][INVEN_ID] == 0 && inventory[a][INVEN_AMOUNT] == 0) {
-                inventory[a][INVEN_ID] = id;
-                inventory[a][INVEN_AMOUNT] = 1;
-                inventory[a][INVEN_MOD] = mod;
-                inventory[a][INVEN_ADJ] = adj;
-                inventory[a][INVEN_DICE] = dice;
-                inventory[a][INVEN_DICESIDES] = dicesides;
-                inventory[a][INVEN_AP] = ap;
-                inventory[a][INVEN_WAIT] = iwait;
-                inventory[a][INVEN_MAXCON] = maxcon;
-                inventory[a][INVEN_CON] = con;
-                inventory[a][INVEN_STR] = str;
-                inventory[a][INVEN_EFF] = eff;
-                inventory[a][INVEN_TYP] = typ;
-                inventory[a][INVEN_PAR] = part;
+            if (inv[a].id == 0 && inv[a].amount == 0) {
+                inv[a].id = id;
+                inv[a].amount = 1;
+                inv[a].mod = mod;
+                inv[a].adj = adj;
+                inv[a].dice = dice;
+                inv[a].dicesides = dicesides;
+                inv[a].ap = ap;
+                inv[a].wait = iwait;
+                inv[a].maxcon = maxcon;
+                inv[a].con = con;
+                inv[a].str = str;
+                inv[a].effect = eff;
+                inv[a].type = typ;
+                inv[a].part = part;
                 break;
             }
         }
@@ -1460,28 +1460,28 @@ int item_main(WINDOW *w) {
     }
     
     if (cho > 1 && di == 0) {
-        if (inventory[cho - 2][0] == 0) cho = -1; /* if the slot chosen is empty. */
+        if (inv[cho - 2].id == 0) cho = -1; /* if the slot chosen is empty. */
         else {
             use_item(cho - 2,ti);
         }
     }
     else if (cho > 1 && di == 1) {
-        if (inventory[cho - 2][0] == 0) cho =- 1;
+        if (inv[cho - 2].id == 0) cho =- 1;
         else {
-            inventory[cho - 2][INVEN_ID] = 0;
-            inventory[cho - 2][INVEN_AMOUNT] = 0;
-            inventory[cho - 2][INVEN_MOD] = 0;
-            inventory[cho - 2][INVEN_ADJ] = 0;
-            inventory[cho - 2][INVEN_DICE] = 0;
-            inventory[cho - 2][INVEN_DICESIDES] = 0;
-            inventory[cho - 2][INVEN_AP] = 0;
-            inventory[cho - 2][INVEN_WAIT] = 0;
-            inventory[cho - 2][INVEN_MAXCON] = 0;
-            inventory[cho - 2][INVEN_CON] = 0;
-            inventory[cho - 2][INVEN_STR] = 0;
-            inventory[cho - 2][INVEN_TYP] = 0;
-            inventory[cho - 2][INVEN_PAR] = 0;
-            inventory[cho - 2][INVEN_EFF] = 0;
+            inv[cho - 2].id = 0;
+            inv[cho - 2].amount = 0;
+            inv[cho - 2].mod = 0;
+            inv[cho - 2].adj = 0;
+            inv[cho - 2].dice = 0;
+            inv[cho - 2].dicesides = 0;
+            inv[cho - 2].ap = 0;
+            inv[cho - 2].wait = 0;
+            inv[cho - 2].maxcon = 0;
+            inv[cho - 2].con = 0;
+            inv[cho - 2].str = 0;
+            inv[cho - 2].type = 0;
+            inv[cho - 2].part = 0;
+            inv[cho - 2].effect = 0;
         }
     }
     if (cho == 1) cho = -1;
@@ -1500,8 +1500,8 @@ int craft_main(WINDOW *w) {
     while (cho == 0) {
         clean_sidebar(w);
         j = 0;
-        for (i = 0;i <= INVEN_MAX;++i) {
-            if (inventory[i][INVEN_ID] == 0) ++j;
+        for (i = 0;i <= INVEN_MAX;++i) { // count empty inv slots
+            if (inv[i].id == 0) ++j;
         }
         mvwprintw(w,1,4,"NUMBER OF EMPTY");
         mvwprintw(w,2,4,"INVENTORY SLOTS: %d; Page %d/%d",j,pg,CRAFT_PAGES);

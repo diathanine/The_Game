@@ -16,9 +16,21 @@ void init_globals() {
     p_waiting = 0;
     endgame = 0;
     for (i = 0;i <= INVEN_MAX;++i) {
-        for (j = 0; j <= INVEN_MAXB;++j) {
-            inventory[i][j] = 0;
-        }
+        inv[i].id = 0;
+        inv[i].amount = 0;
+        inv[i].mod = 0;
+        inv[i].adj = 0;
+        inv[i].dice = 0;
+        inv[i].dicesides = 0;
+        inv[i].ap = 0;
+        inv[i].wait = 0;
+        inv[i].maxcon = 0;
+        inv[i].con = 0;
+        inv[i].str = 0;
+        inv[i].type = 0;
+        inv[i].part = 0;
+        inv[i].effect = 0;
+        
     }
     for (i = 0;i <= 13;++i) {
         for (j = 0;j <= 3;++j) {

@@ -6,7 +6,7 @@
 #include "globals.h"
 
 void load_game() {
-    int a,invslot = 0,invslotb = 0;
+    int a,invslot = 0;
     FILE *save;
 
     printw("Looking for savefile...\n");
@@ -225,14 +225,49 @@ void load_game() {
 
     if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
     else p.pclass = atoi(p_buffer);
-
+    
     while (invslot <= INVEN_MAX) {
-        while (invslotb <= INVEN_MAXB) {
-            if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
-            else inventory[invslot][invslotb] = strtod(p_buffer,NULL);
-            ++invslotb;
-        }
-        invslotb = 0;
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].id = atoi(p_buffer);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].amount = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].mod = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].adj = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].dice = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].dicesides = strtod(p_buffer,NULL);
+        
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].ap = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].wait = atoi(p_buffer);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].maxcon = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].con = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].str = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].type = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].part = strtod(p_buffer,NULL);
+    
+        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+        else inv[invslot].effect = strtod(p_buffer,NULL);
         ++invslot;
     }
 
@@ -303,7 +338,7 @@ void load_game() {
 }
 
 void save_game() {
-    int a,invslot = 0,invslotb = 0;
+    int a,invslot = 0;
 
     FILE *save;
 
@@ -516,14 +551,50 @@ void save_game() {
 
     sprintf(p_buffer,"%d",p.pclass);
     fprintf(save,"%s\n",p_buffer);
-
+    
     while (invslot <= INVEN_MAX) {
-        while (invslotb <= INVEN_MAXB) {
-            sprintf(p_buffer,"%.0f",inventory[invslot][invslotb]);
-            fprintf(save,"%s\n",p_buffer);
-            ++invslotb;
-        }
-        invslotb = 0;
+        sprintf(p_buffer,"%d",inv[invslot].id);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].amount);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].mod);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].adj);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].dice);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].dicesides);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].ap);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%d",inv[invslot].wait);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].maxcon);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].con);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].str);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].type);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].part);
+        fprintf(save,"%s\n",p_buffer);
+        
+        sprintf(p_buffer,"%.0f",inv[invslot].effect);
+        fprintf(save,"%s\n",p_buffer);
+        
         ++invslot;
     }
     
@@ -596,7 +667,7 @@ void save_game() {
 }
 
 void reset_save() {
-    int a,invslot = 3,invslotb = 0;
+    int i,invslot = 3;
 
     FILE *save;
 
@@ -608,7 +679,7 @@ void reset_save() {
     fprintf(save,"%d\n",SAVE_VERSION);
     
     /* player */
-    for (a = 0;a < 21;++a) {
+    for (i = 0;i < 21;++i) {
         fprintf(save,"32\n");
     }
 
@@ -671,7 +742,7 @@ void reset_save() {
     fprintf(save,"0\n"); /* items used */
     fprintf(save,"0\n"); /* damage dealt */
     fprintf(save,"0\n"); /* damage taken */
-    for (a = 0;a <= 12;++a) { /* skills */
+    for (i = 0;i <= 12;++i) { /* skills */
         fprintf(save,"0\n");
         fprintf(save,"0\n");
         fprintf(save,"100\n");
@@ -724,11 +795,7 @@ void reset_save() {
     fprintf(save,"%.0f\n",item_db[1].effect); /* eff */
     /* The other slots are empty!*/
     while (invslot <= INVEN_MAX) {
-        while (invslotb <= INVEN_MAXB) {
-            fprintf(save,"0\n");
-            ++invslotb;
-        }
-        invslotb = 0;
+        for (i = 1;i <= 14;++i) fprintf(save,"0\n");
         ++invslot;
     }
 
