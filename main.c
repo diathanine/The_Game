@@ -305,6 +305,7 @@ int main(int argc, char *argv[]) {
             default:
                 p.name[i] = ch;
                 ++i;
+                if (i == 21) p_creation = 1;
                 break;
         }
     }
