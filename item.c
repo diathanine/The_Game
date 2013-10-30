@@ -1318,13 +1318,11 @@ void give_item(int id, int typ, double mod, int adj, double dice, double dicesid
         part = 0;
     }
     else if (typ == 2) { /* weapon */
-        part = 0;
-        eff = 0;
+        part = -1; /* weapons can't be worn */
     }
     else if (typ == 3) { /* armor */
-        dice = 0;
+        dice = 0; /* armor does not modify damage */
         dicesides = 0;
-        eff = 0;
     }
 
     if (maxcon > ITEM_STAT_MAX) maxcon = ITEM_STAT_MAX;
