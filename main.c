@@ -293,8 +293,10 @@ int main(int argc, char *argv[]) {
             case 0x0A: /* Enter */
                 if (i != 0) p_creation = 1;
                 break;
-            case 0x107: /* BS/DEL */
-            case 0x14D: /* BS/DEL */
+            case 0x08: /* ASCII Backspace */
+            case 0x7F: /* ASCII Delete */
+            case 0x0107: /* BS/DEL */
+            case 0x014D: /* BS/DEL */
                 if (i >= 0) {
                     p.name[i - 1] = 0x20;
                     if (i > 0) --i;
@@ -825,12 +827,21 @@ int main(int argc, char *argv[]) {
         attron(COLOR_PAIR(4));
 
         box(stat_win,0,0);
+        mvwprintw(stat_win,0,2,"Status");
         wrefresh(stat_win);
+        
         box(enemy_win,0,0);
+        mvwprintw(enemy_win,0,2,"Enemy");
         wrefresh(enemy_win);
+        
         box(sidebar,0,0);
+        mvwprintw(sidebar,0,2,"Sidebar");
         wrefresh(sidebar);
+        
+        box(choice_win,0,0);
+        mvwprintw(choice_win,0,2,"Action");
         print_menu(choice_win,highlight,1,1);
+        wrefresh(choice_win);
 
         if (p.wait == 0 && p.status_id != STUN_ID) { /* if player is stunned, they lose their turn */
             ch = wgetch(choice_win);
@@ -1474,7 +1485,6 @@ int main(int argc, char *argv[]) {
 void print_menu(WINDOW *win, int hl, int x, int y) {
 	int i;
 
-	box(win, 0, 0);
 	for(i = 0; i < n_choices; ++i) {
 		if (hl == i + 1) {
 			wattron(win, A_REVERSE);
@@ -1485,7 +1495,6 @@ void print_menu(WINDOW *win, int hl, int x, int y) {
 			mvwprintw(win, y, x, "%s", choices[i]);
 		++y;
 	}
-	wrefresh(win);
 }
 
 WINDOW *create_newwin(int h, int w, int starty, int startx) {
