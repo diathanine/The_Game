@@ -214,7 +214,6 @@ void generate_name() {
     scum
     (newb/leet/uber) hacker/cracker
     (crunchy) foobar
-    tomato
     (chocolate) kludge
     (paper) airplane
     reticulated spline
@@ -232,7 +231,6 @@ void generate_name() {
     MC
     tax collector
     killer
-    windaux
     */
 
     /** @note

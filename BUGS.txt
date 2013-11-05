@@ -1,1 +1,3 @@
 The number of turns that regeneration takes decreases.
+
+The number of lines written to the savefile varies.
