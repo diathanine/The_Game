@@ -1002,31 +1002,31 @@ int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
     
     if (inv[h].type == 1) {
         if (inv[h].effect == EFF_HEALHP)
-         mvwprintw(win,ycor++,1,"Restores HP: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Restores HP: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_HEALMP)
-         mvwprintw(win,ycor++,1,"Restores MP: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Restores MP: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_DAMAGE)
-         mvwprintw(win,ycor++,1,"Causes damage: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Causes damage: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_HPUP)
-         mvwprintw(win,ycor++,1,"Permanent HP boost: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Permanent HP boost: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_MPUP)
-         mvwprintw(win,ycor++,1,"Permanent MP boost: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Permanent MP boost: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_STRUP)
-         mvwprintw(win,ycor++,1,"Permanent STR boost: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Permanent STR boost: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_DEFUP)
-         mvwprintw(win,ycor++,1,"Permanent DEF boost: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Permanent DEF boost: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_MAGUP)
-         mvwprintw(win,ycor++,1,"Permanent MAG boost: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Permanent MAG boost: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_WTDOWN)
-         mvwprintw(win,ycor++,1,"Permanently lowers Wait: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Permanently lowers Wait: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_HPREG)
-         mvwprintw(win,ycor++,1,"Permanently boosts HP regen: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Permanently boosts HP regen: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_MPREG)
-         mvwprintw(win,ycor++,1,"Permanently boosts MP regen: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Permanently boosts MP regen: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_ELV)
-         mvwprintw(win,ycor++,1,"Changes enemy's level: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Changes enemy's level: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_ELVBAL)
-         mvwprintw(win,ycor++,1,"Draws enemy level towards yours: %.0f",inv[h].str);
+         mvwprintw(win,ycor++,1,"Draws enemy level towards yours: %.0f",inv[h].str + inv[h].mod);
         else mvwprintw(win,ycor++,1,"Unknown effect %d",inv[h].effect);
     }
     
