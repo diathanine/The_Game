@@ -9,19 +9,19 @@ void load_game() {
     int a,invslot = 0;
     FILE *save;
 
-    printw("Looking for savefile...\n");
     refresh();
-    save = fopen("./savefile","r+");
+    save = fopen("./savefile","r");
     if (save == NULL) {
-        early_termination("Savefile not found.");
+        reset_save();
+        save = fopen("./savefile","r");
     }
-    printw("Savefile found! Loading...\n");
+    printw("Loading...\n");
     refresh();
 
     if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
     else if (atoi(p_buffer) != SAVE_VERSION) {
         reset_save();
-        early_termination("Save is from an old version; It will be reset.\nPlease restart The_Game.");
+        early_termination("Save is no longer compatible; it will be reset.\nPlease restart The_Game.");
     }
     
     for (a = 0;a < 21;++a) {
@@ -342,7 +342,7 @@ void save_game() {
 
     FILE *save;
 
-    save = fopen("savefile","r+");
+    save = fopen("./savefile","w");
     if (save == NULL) {
         early_termination("Could not open savefile.");
     }
@@ -671,10 +671,7 @@ void reset_save() {
 
     FILE *save;
 
-    save = fopen("savefile","r+");
-    if (save == NULL) {
-        early_termination("Could not open savefile.");
-    }
+    save = fopen("./savefile","w");
 
     fprintf(save,"%d\n",SAVE_VERSION);
     

@@ -8,8 +8,6 @@ To play:
 Note:
 	Where <path> is the path to the code. You'll need ncurses.
 
-IMPORTANT: Do NOT delete the file "savefile"! The game will crash if you do!
-
 The_Game is horribly unbalanced. Don't expect any fairness.
 
 After naming your character, you will get to choose a species. This
