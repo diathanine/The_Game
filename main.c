@@ -3,11 +3,6 @@
  * Where most of the code is at,
  * unfortunately.
  */
-
-/* This is what I build with on Linux/Ubuntu. Since it's not a big program, I try to
-    fix all bugs as they turn up. */
-/* builds error free on linux/ubuntu, windows has tons of conversion warnings. */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -122,6 +117,78 @@ void award_sk_xp(int id,int amount) {
     while (skill[id][1] >= skill[id][2]) {
         if (skill[id][0] < SKILL_MAX_LEVEL) {
             ++skill[id][0];
+            if (id == SKILL_FIGHTING) {
+                ++p.maxhp;
+                ++p.str;
+                ++p.def;
+                ++p.bonus_damage;
+            }
+            else if (id == SKILL_CRAFTING_GEN) {
+                ++p.maxhp;
+                ++p.maxmp;
+                ++p.mag;
+            }
+            else if (id == SKILL_CRAFTING_HEA) {
+                ++p.maxmp;
+                ++p.mag;
+                --p.wait;
+            }
+            else if (id == SKILL_CRAFTING_ATT) {
+                ++p.maxhp;
+                ++p.maxmp;
+                ++p.str;
+            }
+            else if (id == SKILL_CRAFTING_WAA) {
+                ++p.maxhp;
+                ++p.str;
+                ++p.def;
+                ++p.bonus_damage;
+            }
+            else if (id == SKILL_CRAFTING_OTH) {
+                ++p.maxhp;
+                ++p.maxmp;
+                ++p.mag;
+            }
+            else if (id == SKILL_CASTING_GEN) {
+                ++p.maxmp;
+                ++p.mag;
+            }
+            else if (id == SKILL_CASTING_HEA) {
+                ++p.maxhp;
+                ++p.maxmp;
+                ++p.mag;
+            }
+            else if (id == SKILL_CASTING_ATT) {
+                ++p.maxhp;
+                ++p.mag;
+            }
+            else if (id == SKILL_CASTING_STA) {
+                ++p.maxmp;
+                ++p.def;
+                ++p.mag;
+            }
+            else if (id == SKILL_CASTING_FIR) {
+                ++p.maxmp;
+                ++p.mag;
+                ++p.bonus_damage;
+            }
+            else if (id == SKILL_CASTING_WAT) {
+                ++p.maxmp;
+                ++p.mag;
+            }
+            else if (id == SKILL_CASTING_EAR) {
+                ++p.maxmp;
+                ++p.mag;
+                ++p.def;
+            }
+            else {
+                ++p.maxhp;
+                ++p.maxmp;
+                ++p.str;
+                ++p.def;
+                ++p.mag;
+                ++p.bonus_damage;
+            }
             skill[id][1] = skill[id][1] - skill[id][2];
             if (skill[id][2] < SKILL_MAX_XP_NEEDED) skill[id][2] = skill[id][2] + 50;
         }
