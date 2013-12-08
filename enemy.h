@@ -3,8 +3,8 @@
 
 /* stuff relating to the enemy */
 
-#define LV_UP_CHANCE 35
-#define ITEM_DROP_CHANCE 25
+#define LV_UP_CHANCE 25
+#define ITEM_DROP_CHANCE 15
 
 void generate_name();
 void get_e_name(WINDOW *w);
@@ -13,9 +13,9 @@ void kill_enemy();
 void generate_name();
 void get_e_name(WINDOW *w);
 void init_e_names();
-void set_enemy(double new_hp, double new_mp, double new_STR, double new_DEF, double new_MAG,
- double new_dice, double new_dice_sides, double new_bonus_damage, double new_lv, double new_AP,
- double new_maxwait);
+/*void set_enemy(double new_hp, double new_mp, double new_STR, double new_DEF, double new_MAG,\
+ double new_dice, double new_dice_sides, double new_bonus_damage, double new_lv, double new_AP,\
+ double new_maxwait);*/
 void enemy_turn();
 
 struct EnemyName {
