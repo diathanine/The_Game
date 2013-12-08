@@ -343,8 +343,8 @@ void init_e_names() {
 /**
  * Gets mod value of looted item.
  *
- * This the value after an item name,
- * for example potion+5.
+ * This is the value after an item name,
+ * for example potion +5.
  *
  * @param i_lv level of item
  * @returns final mod value
@@ -431,8 +431,8 @@ void enemy_turn() {
     }
 }
 /*
-void set_enemy(double new_hp, double new_mp, double new_STR, double new_DEF, double new_MAG,
- double new_dice, double new_dice_sides, double new_bonus_damage, double new_lv, double new_AP,
+void set_enemy(double new_hp, double new_mp, double new_STR, double new_DEF, double new_MAG,\
+ double new_dice, double new_dice_sides, double new_bonus_damage, double new_lv, double new_AP,\
  double new_maxwait) {
     e.hp=new_hp;
     e.maxhp=new_hp;
