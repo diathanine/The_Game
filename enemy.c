@@ -332,6 +332,12 @@ void init_e_names() {
     e_namedb[cur_id].color = 1;
 
     ++cur_id;
+    
+    while (cur_id < 20) {
+    	strcpy(e_namedb[cur_id].name,"Unnamed");
+    	e_namedb[cur_id].color = 2;
+    	++cur_id;
+    }
 }
 
 /**
