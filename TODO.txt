@@ -6,8 +6,6 @@ XP gain needs balancing.
 
 savefile should be converted to an .ini file, which should make
     future edits and reorganizing it easier.
-    
-a default savefile should be created if one isn't found.
 
 Content and balancing! Very low priority for now.
 
@@ -17,3 +15,5 @@ Item descs wrap, but only on a letter by letter basis.
 Status effects that temp reduce stats. STR,DEF,MAG...?
 
 Use game version to check savefile version.
+
+

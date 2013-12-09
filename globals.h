@@ -1,11 +1,6 @@
 #ifndef H_GLOBAL
 #define H_GLOBAL
 
-/*
- This max is for 32-bit systems, which most people still
- use, so I went with it. 64-bit can go much higher though...
- Multiply this by 10 to get ~max of 32-bit double.
- Also "long double" would allow even bigger numbers...*/
 /** @def STAT_MAX
  * Where pretty much everything caps at.
  * 
@@ -47,12 +42,12 @@
 
 #define NUM_SPECIES 6
 
-#define SPECIES_DRACONIAN 0
-#define SPECIES_MINOTAUR 1
-#define SPECIES_HUMAN 2
-#define SPECIES_FAIRY 3
+#define SPECIES_DRACONIAN 1
+#define SPECIES_MINOTAUR 2
+#define SPECIES_HUMAN 0
+#define SPECIES_FAIRY 5
 #define SPECIES_GOLEM 4
-#define SPECIES_KOBOLD 5
+#define SPECIES_KOBOLD 3
 
 #define NUM_CLASSES 3
 
@@ -61,7 +56,7 @@
 #define CLASS_THIEF 2
 
 #define MAIN_WIDTH 50
-#define MAIN_HEIGHT 18
+#define MAIN_HEIGHT 17
 #define STAT_WIDTH 30
 #define STAT_HEIGHT 18
 #define CHOICE_WIDTH 20
