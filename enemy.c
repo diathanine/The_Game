@@ -51,8 +51,8 @@ void kill_enemy() {
     ++stat_kills; /* increase kills by 1. */
     e.name[0] = 0;
 
-    /*roll = roll_die(100);*/
-    if (1 <= ITEM_DROP_CHANCE) {
+    roll = roll_die(100);
+    if (roll <= ITEM_DROP_CHANCE) {
         loot_req = ITEM_STAT_MAX;
         loot_lootable = 0;
         loot = roll_die(item_max); /* Equal chance for all items. */
@@ -258,7 +258,7 @@ void generate_name() {
         else if (roll == 17 && e.lv >= 45) e.name[0] = 17;
         else if (roll == 18 && e.lv >= 47) e.name[0] = 18;
         else if (roll == 19 && e.lv >= 50) e.name[0] = 19;
-        else if (roll == 20 && e.lv >= 51) e.name[0] = 20;
+        //else if (roll == 20 && e.lv >= 51) e.name[0] = 20;
     }
 }
 
