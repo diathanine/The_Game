@@ -119,75 +119,75 @@ void award_sk_xp(int id,int amount) {
             ++skill[id][0];
             if (id == SKILL_FIGHTING) {
                 ++p.maxhp;
-                ++p.str;
-                ++p.def;
-                ++p.bonus_damage;
+                if (skill[id][0] % 3 == 0) ++p.str;
+                if (skill[id][0] % 3 == 0) ++p.def;
+                if (skill[id][0] % 5 == 0) ++p.bonus_damage;
             }
             else if (id == SKILL_CRAFTING_GEN) {
                 ++p.maxhp;
                 ++p.maxmp;
-                ++p.mag;
+                if (skill[id][0] % 3 == 0) ++p.mag;
             }
             else if (id == SKILL_CRAFTING_HEA) {
                 ++p.maxmp;
-                ++p.mag;
-                --p.wait;
+                if (skill[id][0] % 3 == 0) ++p.mag;
+                if (skill[id][0] % 2 == 0) --p.wait;
             }
             else if (id == SKILL_CRAFTING_ATT) {
                 ++p.maxhp;
                 ++p.maxmp;
-                ++p.str;
+                if (skill[id][0] % 3 == 0) ++p.str;
             }
             else if (id == SKILL_CRAFTING_WAA) {
                 ++p.maxhp;
-                ++p.str;
-                ++p.def;
-                ++p.bonus_damage;
+                if (skill[id][0] % 3 == 0) ++p.str;
+                if (skill[id][0] % 3 == 0) ++p.def;
+                if (skill[id][0] % 5 == 0) ++p.bonus_damage;
             }
             else if (id == SKILL_CRAFTING_OTH) {
                 ++p.maxhp;
                 ++p.maxmp;
-                ++p.mag;
+                if (skill[id][0] % 3 == 0) ++p.mag;
             }
             else if (id == SKILL_CASTING_GEN) {
                 ++p.maxmp;
-                ++p.mag;
+                if (skill[id][0] % 3 == 0) ++p.mag;
             }
             else if (id == SKILL_CASTING_HEA) {
                 ++p.maxhp;
                 ++p.maxmp;
-                ++p.mag;
+                if (skill[id][0] % 3 == 0) ++p.mag;
             }
             else if (id == SKILL_CASTING_ATT) {
                 ++p.maxhp;
-                ++p.mag;
+                if (skill[id][0] % 3 == 0) ++p.mag;
             }
             else if (id == SKILL_CASTING_STA) {
                 ++p.maxmp;
-                ++p.def;
-                ++p.mag;
+                if (skill[id][0] % 3 == 0) ++p.def;
+                if (skill[id][0] % 3 == 0) ++p.mag;
             }
             else if (id == SKILL_CASTING_FIR) {
                 ++p.maxmp;
-                ++p.mag;
-                ++p.bonus_damage;
+                if (skill[id][0] % 3 == 0) ++p.mag;
+                if (skill[id][0] % 5 == 0) ++p.bonus_damage;
             }
             else if (id == SKILL_CASTING_WAT) {
                 ++p.maxmp;
-                ++p.mag;
+                if (skill[id][0] % 3 == 0) ++p.mag;
             }
             else if (id == SKILL_CASTING_EAR) {
                 ++p.maxmp;
-                ++p.mag;
-                ++p.def;
+                if (skill[id][0] % 3 == 0) ++p.mag;
+                if (skill[id][0] % 3 == 0) ++p.def;
             }
             else {
                 ++p.maxhp;
                 ++p.maxmp;
-                ++p.str;
-                ++p.def;
-                ++p.mag;
-                ++p.bonus_damage;
+                if (skill[id][0] % 3 == 0) ++p.str;
+                if (skill[id][0] % 3 == 0) ++p.def;
+                if (skill[id][0] % 3 == 0) ++p.mag;
+                if (skill[id][0] % 5 == 0) ++p.bonus_damage;
             }
             skill[id][1] = skill[id][1] - skill[id][2];
             if (skill[id][2] < SKILL_MAX_XP_NEEDED) skill[id][2] = skill[id][2] + 50;
