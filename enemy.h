@@ -25,8 +25,7 @@ struct EnemyName {
 
 struct EnemyName e_namedb[20];
 
-double loot_req,loot_ap,loot_dice,loot_dicesides,loot_maxcon,\
-    loot_con,loot_str,loot_eff;
+double loot_req,loot_ap,loot_atk,loot_maxcon,loot_con,loot_str,loot_eff;
     
 int loot,loot_type,loot_lootable,loot_wait,loot_part;
 

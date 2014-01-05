@@ -16,4 +16,8 @@ Status effects that temp reduce stats. STR,DEF,MAG...?
 
 Use game version to check savefile version.
 
+Add random variance to damage.
 
+Give the enemy an actual inventory.
+ * Add an effect for displaying enemy inventoy, with stats.
+ * Remove some info from the enemy's window, viewable when scanned. (AP, ATK, etc.)

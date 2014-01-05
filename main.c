@@ -120,7 +120,7 @@ void award_sk_xp(int id,int amount) {
             if (id == SKILL_FIGHTING) {
                 ++p.maxhp;
                 if (skill[id][0] % 3 == 0) ++p.str;
-                if (skill[id][0] % 3 == 0) ++p.def;
+                if (skill[id][0] % 3 == 0) ++p.tou;
                 if (skill[id][0] % 5 == 0) ++p.bonus_damage;
             }
             else if (id == SKILL_CRAFTING_GEN) {
@@ -141,7 +141,7 @@ void award_sk_xp(int id,int amount) {
             else if (id == SKILL_CRAFTING_WAA) {
                 ++p.maxhp;
                 if (skill[id][0] % 3 == 0) ++p.str;
-                if (skill[id][0] % 3 == 0) ++p.def;
+                if (skill[id][0] % 3 == 0) ++p.tou;
                 if (skill[id][0] % 5 == 0) ++p.bonus_damage;
             }
             else if (id == SKILL_CRAFTING_OTH) {
@@ -164,7 +164,7 @@ void award_sk_xp(int id,int amount) {
             }
             else if (id == SKILL_CASTING_STA) {
                 ++p.maxmp;
-                if (skill[id][0] % 3 == 0) ++p.def;
+                if (skill[id][0] % 3 == 0) ++p.tou;
                 if (skill[id][0] % 3 == 0) ++p.mag;
             }
             else if (id == SKILL_CASTING_FIR) {
@@ -179,13 +179,13 @@ void award_sk_xp(int id,int amount) {
             else if (id == SKILL_CASTING_EAR) {
                 ++p.maxmp;
                 if (skill[id][0] % 3 == 0) ++p.mag;
-                if (skill[id][0] % 3 == 0) ++p.def;
+                if (skill[id][0] % 3 == 0) ++p.tou;
             }
             else {
                 ++p.maxhp;
                 ++p.maxmp;
                 if (skill[id][0] % 3 == 0) ++p.str;
-                if (skill[id][0] % 3 == 0) ++p.def;
+                if (skill[id][0] % 3 == 0) ++p.tou;
                 if (skill[id][0] % 3 == 0) ++p.mag;
                 if (skill[id][0] % 5 == 0) ++p.bonus_damage;
             }
@@ -385,7 +385,7 @@ int main(int argc, char *argv[]) {
     species[SPECIES_DRACONIAN][1] = 22; /* HP */
     species[SPECIES_DRACONIAN][2] = 3; /* MP */
     species[SPECIES_DRACONIAN][3] = 15; /* STR */
-    species[SPECIES_DRACONIAN][4] = 12; /* DEF */
+    species[SPECIES_DRACONIAN][4] = 12; /* TOU */
     species[SPECIES_DRACONIAN][5] = 3; /* MAG */
     species[SPECIES_DRACONIAN][6] = 550; /* WAI */
     species[SPECIES_DRACONIAN][7] = 2.00; /* DAM */
@@ -394,7 +394,7 @@ int main(int argc, char *argv[]) {
     species[SPECIES_KOBOLD][1] = 5; /* HP */
     species[SPECIES_KOBOLD][2] = 20; /* MP */
     species[SPECIES_KOBOLD][3] = 7; /* STR */
-    species[SPECIES_KOBOLD][4] = 7; /* DEF */
+    species[SPECIES_KOBOLD][4] = 7; /* TOU */
     species[SPECIES_KOBOLD][5] = 15; /* MAG */
     species[SPECIES_KOBOLD][6] = 425; /* WAI */
     species[SPECIES_KOBOLD][7] = 0.50; /* DAM */
@@ -403,7 +403,7 @@ int main(int argc, char *argv[]) {
     species[SPECIES_HUMAN][1] = 15; /* HP */
     species[SPECIES_HUMAN][2] = 15; /* MP */
     species[SPECIES_HUMAN][3] = 10; /* STR */
-    species[SPECIES_HUMAN][4] = 10; /* DEF */
+    species[SPECIES_HUMAN][4] = 10; /* TOU */
     species[SPECIES_HUMAN][5] = 10; /* MAG */
     species[SPECIES_HUMAN][6] = 500; /* WAI */
     species[SPECIES_HUMAN][7] = 0.00; /* DAM */
@@ -412,7 +412,7 @@ int main(int argc, char *argv[]) {
     species[SPECIES_MINOTAUR][1] = 20; /* HP */
     species[SPECIES_MINOTAUR][2] = 10; /* MP */
     species[SPECIES_MINOTAUR][3] = 14; /* STR */
-    species[SPECIES_MINOTAUR][4] = 10; /* DEF */
+    species[SPECIES_MINOTAUR][4] = 10; /* TOU */
     species[SPECIES_MINOTAUR][5] = 6; /* MAG */
     species[SPECIES_MINOTAUR][6] = 525; /* WAI */
     species[SPECIES_MINOTAUR][7] = 1.20; /* DAM */
@@ -421,7 +421,7 @@ int main(int argc, char *argv[]) {
     species[SPECIES_GOLEM][1] = 35; /* HP */
     species[SPECIES_GOLEM][2] = 1; /* MP */
     species[SPECIES_GOLEM][3] = 15; /* STR */
-    species[SPECIES_GOLEM][4] = 14; /* DEF */
+    species[SPECIES_GOLEM][4] = 14; /* TOU */
     species[SPECIES_GOLEM][5] = 1; /* MAG */
     species[SPECIES_GOLEM][6] = 650; /* WAI */
     species[SPECIES_GOLEM][7] = 1.50; /* DAM */
@@ -430,7 +430,7 @@ int main(int argc, char *argv[]) {
     species[SPECIES_FAIRY][1] = 3; /* HP */
     species[SPECIES_FAIRY][2] = 35; /* MP */
     species[SPECIES_FAIRY][3] = 1; /* STR */
-    species[SPECIES_FAIRY][4] = 1; /* DEF */
+    species[SPECIES_FAIRY][4] = 1; /* TOU */
     species[SPECIES_FAIRY][5] = 30; /* MAG */
     species[SPECIES_FAIRY][6] = 250; /* WAI */
     species[SPECIES_FAIRY][7] = 0.00; /* DAM */
@@ -468,7 +468,7 @@ int main(int argc, char *argv[]) {
         if (species[a][4] - species[SPECIES_HUMAN][4] > 0) attron(COLOR_PAIR(3));
         else if (species[a][4] - species[SPECIES_HUMAN][4] == 0) attron(COLOR_PAIR(6));
         else attron(COLOR_PAIR(1));
-        mvprintw(13,20,"DEF   : %.0f (%+.0f)",species[a][4],species[a][4] - species[SPECIES_HUMAN][4]);
+        mvprintw(13,20,"TOU   : %.0f (%+.0f)",species[a][4],species[a][4] - species[SPECIES_HUMAN][4]);
 
         if (species[a][5] - species[SPECIES_HUMAN][5] > 0) attron(COLOR_PAIR(3));
         else if (species[a][5] - species[SPECIES_HUMAN][5] == 0) attron(COLOR_PAIR(6));
@@ -559,7 +559,7 @@ int main(int argc, char *argv[]) {
             p.mp = species[a][2];
             p.maxmp = species[a][2];
             p.str = species[a][3];
-            p.def = species[a][4];
+            p.tou = species[a][4];
             p.mag = species[a][5];
             p.max_wait = species[a][6];
             p.bonus_damage = species[a][7];
@@ -575,7 +575,7 @@ int main(int argc, char *argv[]) {
     classes[CLASS_FIGHTER][1] = 5; /* HP */
     classes[CLASS_FIGHTER][2] = 2; /* MP */
     classes[CLASS_FIGHTER][3] = 2; /* STR */
-    classes[CLASS_FIGHTER][4] = 2; /* DEF */
+    classes[CLASS_FIGHTER][4] = 2; /* TOU */
     classes[CLASS_FIGHTER][5] = 1; /* MAG */
     classes[CLASS_FIGHTER][6] = 5; /* WAI */
     classes[CLASS_FIGHTER][7] = 0.05; /* DAM */
@@ -584,7 +584,7 @@ int main(int argc, char *argv[]) {
     classes[CLASS_MAGE][1] = 2; /* HP */
     classes[CLASS_MAGE][2] = 5; /* MP */
     classes[CLASS_MAGE][3] = 1; /* STR */
-    classes[CLASS_MAGE][4] = 1; /* DEF */
+    classes[CLASS_MAGE][4] = 1; /* TOU */
     classes[CLASS_MAGE][5] = 3; /* MAG */
     classes[CLASS_MAGE][6] = 3; /* WAI */
     classes[CLASS_MAGE][7] = 0.01; /* DAM */
@@ -593,7 +593,7 @@ int main(int argc, char *argv[]) {
     classes[CLASS_THIEF][1] = 2; /* HP */
     classes[CLASS_THIEF][2] = 2; /* MP */
     classes[CLASS_THIEF][3] = 2; /* STR */
-    classes[CLASS_THIEF][4] = 1; /* DEF */
+    classes[CLASS_THIEF][4] = 1; /* TOU */
     classes[CLASS_THIEF][5] = 2; /* MAG */
     classes[CLASS_THIEF][6] = 1; /* WAI */
     classes[CLASS_THIEF][7] = 0.03; /* DAM */
@@ -615,7 +615,7 @@ int main(int argc, char *argv[]) {
         mvprintw(10,20,"HP    : %+.0f",classes[a][1]);
         mvprintw(11,20,"MP    : %+.0f",classes[a][2]);
         mvprintw(12,20,"STR   : %+.0f",classes[a][3]);
-        mvprintw(13,20,"DEF   : %+.0f",classes[a][4]);
+        mvprintw(13,20,"TOU   : %+.0f",classes[a][4]);
         mvprintw(14,20,"MAG   : %+.0f",classes[a][5]);
         mvprintw(15,20,"Wait  : %+.0f",classes[a][6]);
         mvprintw(16,20,"Damage: %+.0f",classes[a][7]);
@@ -668,7 +668,7 @@ int main(int argc, char *argv[]) {
     if (p.mp < 1) p.mp = 1;
     if (p.maxmp < 1) p.maxmp = 1;
     if (p.str < 1) p.str = 1;
-    if (p.def < 1) p.def = 1;
+    if (p.tou < 1) p.tou = 1;
     if (p.mag < 1) p.mag = 1;
     if (p.max_wait < 100) p.max_wait = 100;
 
@@ -712,7 +712,7 @@ int main(int argc, char *argv[]) {
 
 		mvwprintw(stat_win,stat_line++,1,"MaxMP: %.0f",p.maxmp);
 		mvwprintw(stat_win,stat_line++,1,"STR  : %.0f",p.str);
-		mvwprintw(stat_win,stat_line++,1,"DEF  : %.0f",p.def);
+		mvwprintw(stat_win,stat_line++,1,"TOU  : %.0f",p.tou);
 		mvwprintw(stat_win,stat_line++,1,"MAG  : %.0f",p.mag);
 
 		v = 0.0;
@@ -788,12 +788,10 @@ int main(int argc, char *argv[]) {
 
         mvwprintw(enemy_win,stat_line++,1,"MaxMP: %.0f",e.maxmp);
         mvwprintw(enemy_win,stat_line++,1,"STR  : %.0f",e.str);
-        mvwprintw(enemy_win,stat_line++,1,"DEF  : %.0f",e.def);
+        mvwprintw(enemy_win,stat_line++,1,"TOU  : %.0f",e.tou);
         mvwprintw(enemy_win,stat_line++,1,"MAG  : %.0f",e.mag);
         mvwprintw(enemy_win,stat_line++,1,"Wait : %d/%d%+.0f",e.wait,e.max_wait,\
                   (e.status_id == HASTE_ID) ? e.status_str : 0.0);
-        mvwprintw(enemy_win,stat_line++,1,"BaseD: %.0fd%.0f (%.0f-%.0f) (%.0f%%)",e.dice,e.dice_sides,\
-                  e.dice,(e.dice * e.dice_sides),max(1,min((e.str / p.def) * 100,10000)));
 
         if (e.status_id == FINE_ID) mvwprintw(enemy_win,stat_line,1,"Staus: Fine");
         else if (e.status_id == POISON_ID) {
@@ -882,16 +880,6 @@ int main(int argc, char *argv[]) {
             mvwprintw(choice_win,i,1,"               ");
         }
 
-        /* Display Attack % */
-        if (max(min((p.str / e.def) * 100,200),10) > 100) attron(COLOR_PAIR(3));
-        else if (max(min((p.str / e.def) * 100,200),10) < 100) attron(COLOR_PAIR(1));
-
-        /** @todo
-         * Change 100,10000 to use constants, not
-         * just here but in the other spots in the
-         * code.
-         */
-        mvwprintw(choice_win,1,8,"(%.0f%%)",max(min((p.str / e.def) * 100,10000),1));
         attron(COLOR_PAIR(4));
 
         box(stat_win,0,0);
@@ -1093,12 +1081,10 @@ int main(int argc, char *argv[]) {
                         }
                         else mvwprintw(sidebar,a++,1,"6. Hands : %s; AP: +0; Wait: +0",p_buffer);
 
-                        a++; /* blank line; hopefully makes it look less cultered */
-                        v = 0;
-                        v = p.bonus_damage + p.equip_mod;
-                        mvwprintw(sidebar,a++,1,"Base Damage: %.0f d %.0f %+.2f",p.dice,p.dice_sides,p.bonus_damage + p.equip_mod);
+                        a++; /* blank line; hopefully makes it look less clutered */
+                        mvwprintw(sidebar,a++,1,"Base Damage: %.0f%+.2f",p.str + p.equip_atk,p.bonus_damage + p.equip_mod);
                         mvwprintw(sidebar,a++,1,"Approx. Damage: %.0f - %.0f",\
-                                   max(1,p.dice + v),max(1,(p.dice * p.dice_sides) + v));
+                                   max(1,(p.str + p.equip_atk) * .8),max(1,(p.str + p.equip_atk) * 1.2));
                         a++; /* another blank line */
                         mvwprintw(sidebar,a++,1,"Total AP : %+.0f; Total Wait: %+.0f",p.head_ap + p.body_ap + p.legs_ap +\
                                 p.feet_ap + p.hands_ap + p.equip_ap,p.head_wait + p.body_wait + p.feet_wait + p.legs_wait + p.hands_wait + p.equip_wait);
@@ -1247,7 +1233,7 @@ int main(int argc, char *argv[]) {
                     p.maxmp = p.maxmp + classes[p.pclass][2];
                     p.mp = p.mp + classes[p.pclass][2];
                     if (p.str < STAT_MAX) p.str = p.str + classes[p.pclass][3];
-                    if (p.def < STAT_MAX) p.def = p.def + classes[p.pclass][4];
+                    if (p.tou < STAT_MAX) p.tou = p.tou + classes[p.pclass][4];
                     if (p.mag < STAT_MAX) p.mag = p.mag + classes[p.pclass][5];
                     if (p.max_wait < 9999) p.max_wait = p.max_wait + classes[p.pclass][6];
                     if (p.bonus_damage < STAT_MAX) p.bonus_damage = p.bonus_damage + classes[p.pclass][7];
@@ -1256,14 +1242,14 @@ int main(int argc, char *argv[]) {
 
                     wrefresh(stat_win);
 
-                    mvwprintw(sidebar,1,3," LV up! HP%+.0f, MP%+.0f, STR%+.0f, DEF%+.0f, MAG%+.0f,",\
+                    mvwprintw(sidebar,1,3," LV up! HP%+.0f, MP%+.0f, STR%+.0f, TOU%+.0f, MAG%+.0f,",\
                               classes[p.pclass][1],classes[p.pclass][2],classes[p.pclass][3],classes[p.pclass][4],\
                               classes[p.pclass][5]);
                     mvwprintw(sidebar,2,3," Wait%+.0f, Damage%+.2f",classes[p.pclass][6],classes[p.pclass][7]);
                     mvwprintw(sidebar,3,3," Pick something to improve:");
-                    mvwprintw(sidebar,4,4,"STR +2, DEF -1, MAG -1");
-                    mvwprintw(sidebar,5,4,"STR -1, DEF +2, MAG -1");
-                    mvwprintw(sidebar,6,4,"STR -1, DEF -1, MAG +2");
+                    mvwprintw(sidebar,4,4,"STR +2, TOU -1, MAG -1");
+                    mvwprintw(sidebar,5,4,"STR -1, TOU +2, MAG -1");
+                    mvwprintw(sidebar,6,4,"STR -1, TOU -1, MAG +2");
                     mvwprintw(sidebar,7,4,"HP +3, MP -3");
                     mvwprintw(sidebar,8,4,"HP -3, MP +3");
                     mvwprintw(sidebar,9,4,"Wait -15 (Min 100)");
@@ -1308,17 +1294,17 @@ int main(int argc, char *argv[]) {
                     }
                     if (schoice == 1 && p.str < STAT_MAX) {
                         p.str = p.str + 2;
-                        p.def = p.def - 1;
+                        p.tou = p.tou - 1;
                         p.mag = p.mag - 1;
                     }
-                    else if (schoice == 2 && p.def < STAT_MAX) {
+                    else if (schoice == 2 && p.tou < STAT_MAX) {
                         p.str = p.str - 1;
-                        p.def = p.def + 2;
+                        p.tou = p.tou + 2;
                         p.mag = p.mag - 1;
                     }
                     else if (schoice == 3 && p.mag < STAT_MAX) {
                         p.str = p.str - 1;
-                        p.def = p.def - 1;
+                        p.tou = p.tou - 1;
                         p.mag = p.mag + 2;
                     }
                     else if (schoice == 4) {
@@ -1356,7 +1342,7 @@ int main(int argc, char *argv[]) {
                     if (p.maxmp > STAT_MAX) p.maxmp = STAT_MAX;
                     if (p.mp > STAT_MAX) p.mp = STAT_MAX;
                     if (p.str > STAT_MAX) p.str = STAT_MAX;
-                    if (p.def > STAT_MAX) p.def = STAT_MAX;
+                    if (p.tou > STAT_MAX) p.tou = STAT_MAX;
                     if (p.mag > STAT_MAX) p.mag = STAT_MAX;
                     if (p.bonus_damage > STAT_MAX) p.bonus_damage = STAT_MAX;
                     if (p.maxhp < 1) p.maxhp = 1;
@@ -1364,7 +1350,7 @@ int main(int argc, char *argv[]) {
                     if (p.maxmp < 1) p.maxmp = 1;
                     if (p.mp < 1) p.mp = 1;
                     if (p.str < 1) p.str = 1;
-                    if (p.def < 1) p.def = 1;
+                    if (p.tou < 1) p.tou = 1;
                     if (p.mag < 1) p.mag = 1;
                 }
             wrefresh(stat_win);

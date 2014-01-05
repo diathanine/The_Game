@@ -7,18 +7,6 @@
  */
 
 /* defines all items
- defines:
-  id
-  strength (if item)
-  dice (if weapon)
-  dice sides (if weapon)
-  condition (if equip)
-  AP (if armor)
-  crafting cost
-  crafting difficulty
-  level requirement to get as a drop/crafting
-  long description
-
  Body part ids:
   1. head
   2. body
@@ -54,7 +42,7 @@
 #define EFF_HPUP 4
 #define EFF_MPUP 5
 #define EFF_STRUP 6
-#define EFF_DEFUP 7
+#define EFF_TOUUP 7
 #define EFF_MAGUP 8
 #define EFF_WTDOWN 9
 #define EFF_HPREG 10
@@ -72,12 +60,11 @@ int item_info(WINDOW *win, int ycor, int hb, char idesc[]);
 void draw_item(WINDOW *s, int h);
 int get_craft_mod(double diff);
 void equip_armor(int part, double armap, double armcon, int armid, int armwait);
-void equip_weapon(double weadice, double weadisi, double weacon, double weaap, int weawait, double weabdam, int weaid);
+void equip_weapon(double weaatk, double weacon, double weaap, int weawait, double weabdam, int weaid);
 void item_effect(int ti, int effect, int istr);
 void use_item(int b, int toss);
-void give_item(int id, int typ, double mod, int adj, double dice, double dicesides,\
-                double ap, int iwait, double maxcon, double con, double str, double eff,\
-                int part);
+void give_item(int id, int typ, double mod, int adj, double atk, double ap,\
+                int iwait, double maxcon, double con, double str, double eff, int part);
 void unequip_item(int slot);
 int item_main(WINDOW *w);
 int craft_main(WINDOW *w);
@@ -102,8 +89,7 @@ struct Item {
     double diff;
     double lv;
     int lootable;
-    double dice;
-    double dice_sides;
+    double atk;
     double ap;
     int body_part;
     double condition;
@@ -114,7 +100,7 @@ struct Item {
 struct Item item_db[50]; /**< Contains values for all items */
 
 /* used when an item is given. */
-double item_adj,item_dice,item_dicesides,item_ap,item_wait,item_str,item_part,item_eff;
+double item_adj,item_atk,item_ap,item_wait,item_str,item_part,item_eff;
 double item_adjval;
 double item_con,item_maxcon;
 

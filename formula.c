@@ -35,51 +35,24 @@ int roll_sk_bonus(int old_r, int chances) {
 }
 
 void attack_formula(int target) {
-    /* target=1 if player being attacked, enemy otherwise */
-    double D=0; /* Final damage */
-    double R=0; /* Modifier */
-    double i=0; /* dice */
-    int roll=0,has_armor=0;
-    /* Find % difference between STR and DEF */
-    if (target==1) {
-        R=e.str / p.def;
-        /* MIN_PER < R < MAX_PER; check if R is higher then MIN with max(),
-        then check if it's lower than MAX with min().*/
-        R = max(R,MIN_ATTACK_PER);
-        R = min(R,MAX_ATTACK_PER);
-    }
-    else {
-        R = p.str / e.def;
-        R = max(R,MIN_ATTACK_PER);
-        R = min(R,MAX_ATTACK_PER);
-    }
-
+    /* target = 1 if player being attacked, enemy otherwise */
+    double dmg = 0; /* damage */
+    double ap = p.head_ap + p.body_ap + p.legs_ap + p.feet_ap + p.hands_ap + p.equip_ap;
+    int roll = 0,has_armor = 0;
+    
+    /* Find damage */
     if (target == 1) {
-        i = e.dice;
-        while (i > 0) {
-            D = D +(rand() % (unsigned int)e.dice_sides) + 1;
-            --i;
-        }
-        D = D + e.bonus_damage;
+        dmg = round((e.str + 0) - ((p.tou + ap) / 2));
     }
     else {
-        i = p.dice;
-        while (i > 0) { /* roll for each die player has */
-            D = D + (rand() % (unsigned int)p.dice_sides) + 1; /* die has no "0" side, so add 1 */
-            --i;
-        }
-        D = D +p.bonus_damage;
-        D = roll_sk_bonus(D,get_sk_chances(skill[SKILL_FIGHTING][0],0));
+        dmg = round((p.str + p.equip_atk) - ((e.tou + e.ap) / 2));
     }
 
-    D = max(1,round(D * R));
-
+    if (dmg < 1) dmg = 1;
+    
     if (target == 1) {        
-        double ap = p.head_ap + p.body_ap + p.legs_ap + p.feet_ap + p.hands_ap + p.equip_ap;
         int hit = 0;
-        D = D - ap;
-        D = max(1,D);
-        p.hp = p.hp - D; /* Final damage, D. */
+        p.hp = p.hp - dmg;
 
         if (p.body_id != 0 || p.head_id != 0 || p.feet_id != 0 || p.hands_id != 0 || p.legs_id != 0) has_armor = 1;
         if (has_armor == 1) {
@@ -107,27 +80,27 @@ void attack_formula(int target) {
 
 
                 if (roll == 1 && p.head_id != 0) {
-                    p.head_con = p.head_con - D;
+                    p.head_con = p.head_con - dmg;
                     if (p.head_con <= 0) unequip_item(2);
                     break;
                 }
                 else if (roll == 2 && p.body_id != 0) {
-                    p.body_con = p.body_con - D;
+                    p.body_con = p.body_con - dmg;
                     if (p.body_con <= 0) unequip_item(3);
                     break;
                 }
                 else if (roll == 3 && p.hands_id != 0) {
-                    p.hands_con = p.hands_con - D;
+                    p.hands_con = p.hands_con - dmg;
                     if (p.hands_con <= 0) unequip_item(6);
                     break;
                 }
                 else if (roll == 4 && p.legs_id != 0) {
-                    p.legs_con = p.legs_con - D;
+                    p.legs_con = p.legs_con - dmg;
                     if (p.legs_con <= 0) unequip_item(4);
                     break;
                 }
                 else if (roll == 5 && p.feet_id != 0) {
-                    p.feet_con = p.feet_con - D;
+                    p.feet_con = p.feet_con - dmg;
                     if (p.feet_con <= 0) unequip_item(5);
                     break;
                 }
@@ -135,10 +108,9 @@ void attack_formula(int target) {
         }
     }
     else {
-        D = max(1,D - e.ap);
-        e.hp = e.hp - D;
+        e.hp = e.hp - dmg;
         if (p.equip_id != 0) {
-            p.equip_con = p.equip_con - ceil(D / 10);
+            p.equip_con = p.equip_con - ceil(dmg / 10);
             if (p.equip_con <= 0) {
                 unequip_item(1);
             }
@@ -146,13 +118,13 @@ void attack_formula(int target) {
     }
 
     if (target == 1) {
-        stat_p_dam_taken = stat_p_dam_taken + D; /* stat */
-        e_dmg_dealt = e_dmg_dealt + D; /* this turn */
+        stat_p_dam_taken = stat_p_dam_taken + dmg; /* stat */
+        e_dmg_dealt = e_dmg_dealt + dmg; /* this turn */
     }
     else {
-        stat_p_dam_dealt = stat_p_dam_dealt + D;
-        p_dmg_dealt = p_dmg_dealt + D;
-        award_sk_xp(SKILL_FIGHTING,max(1,D / 10));
+        stat_p_dam_dealt = stat_p_dam_dealt + dmg;
+        p_dmg_dealt = p_dmg_dealt + dmg;
+        award_sk_xp(SKILL_FIGHTING,max(1,dmg / 10));
     }
 }
 

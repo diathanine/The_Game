@@ -45,7 +45,7 @@ void load_game() {
     else p.str = strtod(p_buffer,NULL);
 
     if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
-    else p.def = strtod(p_buffer,NULL);
+    else p.tou = strtod(p_buffer,NULL);
 
     if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
     else p.mag = strtod(p_buffer,NULL);
@@ -55,12 +55,6 @@ void load_game() {
 
     if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
     else p.max_wait = atoi(p_buffer);
-
-    if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
-    else p.dice = strtod(p_buffer,NULL);
-
-    if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
-    else p.dice_sides = strtod(p_buffer,NULL);
 
     if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
     else p.bonus_damage = strtod(p_buffer,NULL);
@@ -79,6 +73,9 @@ void load_game() {
 
     if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
     else p.equip_con = strtod(p_buffer,NULL);
+    
+    if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
+    else p.equip_atk = strtod(p_buffer,NULL);
 
     if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
     else p.head_ap = strtod(p_buffer,NULL);
@@ -240,10 +237,7 @@ void load_game() {
         else inv[invslot].adj = strtod(p_buffer,NULL);
     
         if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
-        else inv[invslot].dice = strtod(p_buffer,NULL);
-    
-        if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
-        else inv[invslot].dicesides = strtod(p_buffer,NULL);
+        else inv[invslot].atk = strtod(p_buffer,NULL);
         
         if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
         else inv[invslot].ap = strtod(p_buffer,NULL);
@@ -290,7 +284,7 @@ void load_game() {
     else e.str = strtod(e_buffer,NULL);
 
     if (fscanf(save,"%s",e_buffer) == 0) early_termination("Error reading savefile.");
-    else e.def = strtod(e_buffer,NULL);
+    else e.tou = strtod(e_buffer,NULL);
 
     if (fscanf(save,"%s",e_buffer) == 0) early_termination("Error reading savefile.");
     else e.mag = strtod(e_buffer,NULL);
@@ -304,11 +298,8 @@ void load_game() {
     if (fscanf(save,"%s",p_buffer) == 0) early_termination("Error reading savefile.");
     else e.max_wait = atoi(p_buffer);
 
-    if (fscanf(save,"%s",e_buffer) == 0) early_termination("Error reading savefile.");
-    else e.dice = strtod(e_buffer,NULL);
-
-    if (fscanf(save,"%s",e_buffer) == 0) early_termination("Error reading savefile.");
-    else e.dice_sides = strtod(e_buffer,NULL);
+    //if (fscanf(save,"%s",e_buffer) == 0) early_termination("Error reading savefile.");
+    //else e.atk = strtod(e_buffer,NULL);
 
     if (fscanf(save,"%s",e_buffer) == 0) early_termination("Error reading savefile.");
     else e.bonus_damage = strtod(e_buffer,NULL);
@@ -370,7 +361,7 @@ void save_game() {
     sprintf(p_buffer,"%.0f",p.str);
     fprintf(save,"%s\n",p_buffer);
 
-    sprintf(p_buffer,"%.0f",p.def);
+    sprintf(p_buffer,"%.0f",p.tou);
     fprintf(save,"%s\n",p_buffer);
 
     sprintf(p_buffer,"%.0f",p.mag);
@@ -380,12 +371,6 @@ void save_game() {
     fprintf(save,"%s\n",p_buffer);
 
     sprintf(p_buffer,"%d",p.max_wait);
-    fprintf(save,"%s\n",p_buffer);
-
-    sprintf(p_buffer,"%.0f",p.dice);
-    fprintf(save,"%s\n",p_buffer);
-
-    sprintf(p_buffer,"%.0f",p.dice_sides);
     fprintf(save,"%s\n",p_buffer);
 
     sprintf(p_buffer,"%.2f",p.bonus_damage);
@@ -404,6 +389,9 @@ void save_game() {
     fprintf(save,"%s\n",p_buffer);
 
     sprintf(p_buffer,"%.0f",p.equip_con);
+    fprintf(save,"%s\n",p_buffer);
+    
+    sprintf(p_buffer,"%.0f",p.equip_atk);
     fprintf(save,"%s\n",p_buffer);
 
     sprintf(p_buffer,"%.0f",p.head_ap);
@@ -565,10 +553,7 @@ void save_game() {
         sprintf(p_buffer,"%.0f",inv[invslot].adj);
         fprintf(save,"%s\n",p_buffer);
         
-        sprintf(p_buffer,"%.0f",inv[invslot].dice);
-        fprintf(save,"%s\n",p_buffer);
-        
-        sprintf(p_buffer,"%.0f",inv[invslot].dicesides);
+        sprintf(p_buffer,"%.0f",inv[invslot].atk);
         fprintf(save,"%s\n",p_buffer);
         
         sprintf(p_buffer,"%.0f",inv[invslot].ap);
@@ -616,7 +601,7 @@ void save_game() {
     sprintf(e_buffer,"%.0f",e.str);
     fprintf(save,"%s\n",e_buffer);
 
-    sprintf(e_buffer,"%.0f",e.def);
+    sprintf(e_buffer,"%.0f",e.tou);
     fprintf(save,"%s\n",e_buffer);
 
     sprintf(e_buffer,"%.0f",e.mag);
@@ -624,17 +609,14 @@ void save_game() {
 
     sprintf(e_buffer,"%.0f",e.ap);
     fprintf(save,"%s\n",e_buffer);
+    
+    //sprintf(e_buffer,"%.0f",e.atk);
+    //fprintf(save,"%s\n",e_buffer);
 
     sprintf(e_buffer,"%d",e.wait);
     fprintf(save,"%s\n",e_buffer);
 
     sprintf(e_buffer,"%d",e.max_wait);
-    fprintf(save,"%s\n",e_buffer);
-
-    sprintf(e_buffer,"%.0f",e.dice);
-    fprintf(save,"%s\n",e_buffer);
-
-    sprintf(e_buffer,"%.0f",e.dice_sides);
     fprintf(save,"%s\n",e_buffer);
 
     sprintf(e_buffer,"%.0f",e.bonus_damage);
@@ -685,18 +667,17 @@ void reset_save() {
     fprintf(save,"20\n"); /* mp */
     fprintf(save,"20\n"); /* maxmp */
     fprintf(save,"5\n"); /* str */
-    fprintf(save,"5\n"); /* def */
+    fprintf(save,"5\n"); /* tou */
     fprintf(save,"5\n"); /* mag */
     fprintf(save,"0\n"); /* wait */
     fprintf(save,"500\n"); /* maxwait */
-    fprintf(save,"1\n"); /* dice */
-    fprintf(save,"5\n"); /* dice sides */
     fprintf(save,"0.00\n"); /* bonus damage */
     fprintf(save,"0\n"); /* equip ID */
     fprintf(save,"0\n"); /* equip wait */
     fprintf(save,"0\n"); /* equip ap */
     fprintf(save,"0\n"); /* equip maxcon */
     fprintf(save,"0\n"); /* equip con */
+    fprintf(save,"0\n"); /* equip atk */
     fprintf(save,"0\n"); /* Head AP */
     fprintf(save,"0\n"); /* Body AP */
     fprintf(save,"0\n"); /* Legs AP */
@@ -752,8 +733,7 @@ void reset_save() {
     fprintf(save,"5\n"); /* amount */
     fprintf(save,"0\n"); /* mod */
     fprintf(save,"0\n"); /* adj */
-    fprintf(save,"0\n"); /* dice */
-    fprintf(save,"0\n"); /* dicesides */
+    fprintf(save,"0\n"); /* atk */
     fprintf(save,"0\n"); /* ap */
     fprintf(save,"0\n"); /* wait */
     fprintf(save,"0\n"); /* maxcon */
@@ -766,8 +746,7 @@ void reset_save() {
     fprintf(save,"5\n"); /* amount */
     fprintf(save,"0\n"); /* mod */
     fprintf(save,"0\n"); /* adj */
-    fprintf(save,"0\n"); /* dice */
-    fprintf(save,"0\n"); /* dicesides */
+    fprintf(save,"0\n"); /* atk */
     fprintf(save,"0\n"); /* ap */
     fprintf(save,"0\n"); /* wait */
     fprintf(save,"0\n"); /* maxcon */
@@ -780,8 +759,7 @@ void reset_save() {
     fprintf(save,"3\n"); /* amount */
     fprintf(save,"20\n"); /* mod */
     fprintf(save,"0\n"); /* adj */
-    fprintf(save,"0\n"); /* dice */
-    fprintf(save,"0\n"); /* dicesides */
+    fprintf(save,"0\n"); /* atk */
     fprintf(save,"0\n"); /* ap */
     fprintf(save,"0\n"); /* wait */
     fprintf(save,"0\n"); /* maxcon */
@@ -792,7 +770,7 @@ void reset_save() {
     fprintf(save,"%.0f\n",item_db[1].effect); /* eff */
     /* The other slots are empty!*/
     while (invslot <= INVEN_MAX) {
-        for (i = 1;i <= 14;++i) fprintf(save,"0\n");
+        for (i = 1;i <= 13;++i) fprintf(save,"0\n");
         ++invslot;
     }
 
@@ -803,14 +781,13 @@ void reset_save() {
     fprintf(save,"0\n"); /* mp */
     fprintf(save,"0\n"); /* maxmp */
     fprintf(save,"10\n"); /* str */
-    fprintf(save,"10\n"); /* def */
+    fprintf(save,"10\n"); /* tou */
     fprintf(save,"10\n"); /* mag */
     fprintf(save,"0\n"); /* ap */
+    //fprintf(save,"0\n"); /* atk */
     fprintf(save,"500\n"); /* wait */
     fprintf(save,"500\n"); /* maxwait */
-    fprintf(save,"1\n"); /* dice */
-    fprintf(save,"2\n"); /* dice sides */
-    fprintf(save,"0\n"); /* bonus damage */
+    fprintf(save,"0.00\n"); /* bonus damage */
     fprintf(save,"0\n"); /* status */
     fprintf(save,"0\n"); /* status dur */
     fprintf(save,"0\n"); /* status str */

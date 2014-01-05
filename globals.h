@@ -94,10 +94,8 @@ struct Character {
     double mp_regen_cur;
     double mp_regen_amount;
     double str;
-    double def;
+    double tou;
     double mag;
-    double dice;
-    double dice_sides;
     double bonus_damage;
     double lv;
     double xp;
@@ -132,6 +130,7 @@ struct Character {
     double hands_maxcon;
     int equip_id;
     double equip_wait;
+    double equip_atk;
     double equip_ap;
     double equip_mod;
     double equip_con;
@@ -146,8 +145,7 @@ struct Inventory {
     double amount;
     double mod;
     double adj;
-    double dice;
-    double dicesides;
+    double atk;
     double ap;
     int wait;
     double maxcon;

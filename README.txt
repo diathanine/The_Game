@@ -23,9 +23,9 @@ Except Wait, which has a range of 100-9999.
 Every level, your stats will improve based on your class. You also get
 to choose a bonus.
 
-Damage formula: (A + B) - (C + D) = DMG
-(A + B) = STR + ATK.
-(C + D) = TOU + AP.
+Damage formula: (STR + ATK) - ((TOU + AP) / 2) = DMG
+ATK = All weapons have an attack stat, which is added to your STR.
+AP  = All armor has AP, which is added to your TOU, then divided by 2.
 You can always do at least 1 damage.
 
 Death is permanent!
@@ -37,7 +37,7 @@ Stat display (blue/white window) :
     MP: current MP
  MaxMP: maximum MP
    STR: Strength
-   DEF: Defense
+   TOU: Toughness
    MAG: Magic
   Wait: current wait/max wait
  Staus: current status effect, if any

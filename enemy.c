@@ -32,7 +32,7 @@ void kill_enemy() {
     /*e_xp=e_xp + round((e_STR+e_DEF + e_MAG) / 3);*/ /* average of stats */
     /*e_xp=e_xp + round(max(0,500 - e_maxwait));*/ /* +1 per wait below 500 */
     /*e_xp=e_xp + ((e_dice * 2) + e_dice_sides);*/ /* +2 per die, +1 per side */
-    e.xp = e.xp + e.lv; /* +1 per level */
+    e.xp = e.xp + (e.lv * 10); /* +10 per level */
     lv_diff = e.lv - p.lv;
 
     while (lv_diff > 0) {
@@ -62,8 +62,7 @@ void kill_enemy() {
         loot_lootable = item_db[loot].lootable;
         loot_ap = item_db[loot].ap;
         loot_wait = item_db[loot].wait;
-        loot_dice = item_db[loot].dice;
-        loot_dicesides = item_db[loot].dice_sides;
+        loot_atk = item_db[loot].atk;
         loot_maxcon = item_db[loot].condition;
         loot_con = item_db[loot].condition;
         loot_str = item_db[loot].str;
@@ -73,9 +72,9 @@ void kill_enemy() {
         get_adjval();
 
         if (p.lv >= loot_req && loot_lootable == 1) {
-            give_item(loot,loot_type,get_loot_mod(loot_req),item_adjval,loot_dice + item_dice,\
-            loot_dicesides + item_dicesides,loot_ap + item_ap,loot_wait + item_wait,\
-            loot_maxcon * item_con,loot_con * item_con,loot_str,loot_eff,loot_part);
+            give_item(loot,loot_type,get_loot_mod(loot_req),item_adjval,loot_atk,\
+            loot_ap + item_ap,loot_wait + item_wait,loot_maxcon * item_con,\
+            loot_con * item_con,loot_str,loot_eff,loot_part);
         }
     }
 
@@ -101,19 +100,18 @@ void kill_enemy() {
     generate_name();
 
     /* reset to base stats */
-    e.hp = species[SPECIES_HUMAN][1];
-    e.maxhp = species[SPECIES_HUMAN][1];
-    e.mp = species[SPECIES_HUMAN][2];
-    e.maxmp = species[SPECIES_HUMAN][2];
-    e.str = species[SPECIES_HUMAN][3];
-    e.def = species[SPECIES_HUMAN][4];
-    e.mag = species[SPECIES_HUMAN][5];
-    e.wait = species[SPECIES_HUMAN][6];
-    e.max_wait = species[SPECIES_HUMAN][6];
-    e.dice = 1;
-    e.dice_sides = 2;
+    e.hp = round(species[SPECIES_HUMAN][1] / 3);
+    e.maxhp = round(species[SPECIES_HUMAN][1] / 3);
+    e.mp = round(species[SPECIES_HUMAN][2] / 5);
+    e.maxmp = round(species[SPECIES_HUMAN][2] / 5);
+    e.str = round(species[SPECIES_HUMAN][3] / 4);
+    e.tou = round(species[SPECIES_HUMAN][4] / 4);
+    e.mag = round(species[SPECIES_HUMAN][5] / 4);
+    e.wait = species[SPECIES_HUMAN][6] + 150;
+    e.max_wait = species[SPECIES_HUMAN][6] + 150;
     e.bonus_damage = species[SPECIES_HUMAN][7];
     e.ap = 0;
+    //e.atk = 0;
     e.status_id = 0;
     e.status_str = 0;
     e.status_dur = 0;
@@ -126,48 +124,45 @@ void kill_enemy() {
         if (e.maxhp < STAT_MAX) e.maxhp = e.maxhp + 2;
         if (e.maxmp < STAT_MAX) e.maxmp = e.maxmp + 2;
         if (e.str < STAT_MAX) ++e.str;
-        if (e.def < STAT_MAX) ++e.def;
+        if (e.tou < STAT_MAX) ++e.tou;
         if (e.mag < STAT_MAX) ++e.mag;
         if (e.max_wait < 9999) e.max_wait = e.max_wait + 5;
         if (e.max_wait > 9999) e.max_wait = 9999;
 
-        roll = roll_die(10);
+        roll = roll_die(9);
         if (roll == 1) {
             ++e.str;
-            e.def = e.def - 2;
+            e.tou = e.tou - 2;
             e.mag = e.mag - 2;
         }
         else if (roll == 2) {
             e.str = e.str - 2;
-            ++e.def;
+            ++e.tou;
             e.mag = e.mag - 2;
         }
         else if (roll == 3) {
             e.str = e.str - 2;
-            e.def = e.def - 2;
+            e.tou = e.tou - 2;
             ++e.mag;
         }
         else if (roll == 4) {
-            ++e.dice;
-            e.dice_sides = round(e.dice_sides / 2.0);
-            if (e.dice_sides < 1) e.dice_sides = 1;
+            /// @todo increase atk.
         }
-        else if (roll == 5) ++e.dice_sides;
-        else if (roll == 6) {
+        else if (roll == 5) {
             ++e.maxhp;
             e.maxmp = e.maxmp - 3;
         }
-        else if (roll == 7) {
+        else if (roll == 6) {
             ++e.maxmp;
             e.maxhp = e.maxhp - 3;
         }
-        else if (roll == 8) {
+        else if (roll == 7) {
             e.max_wait = e.max_wait - 20;
         }
-        else if (roll == 9) {
+        else if (roll == 8) {
             e.bonus_damage = e.bonus_damage + 0.15;
         }
-        else if (roll == 10) {
+        else if (roll == 9) {
             ++e.ap;
         }
         --e_SP;
@@ -175,16 +170,15 @@ void kill_enemy() {
         if (e.maxhp > STAT_MAX) e.maxhp = STAT_MAX;
         if (e.maxmp > STAT_MAX) e.maxmp = STAT_MAX;
         if (e.str > STAT_MAX) e.str = STAT_MAX;
-        if (e.def > STAT_MAX) e.def = STAT_MAX;
+        if (e.tou > STAT_MAX) e.tou = STAT_MAX;
         if (e.mag > STAT_MAX) e.mag = STAT_MAX;
-        if (e.dice > STAT_MAX) e.dice = STAT_MAX;
-        if (e.dice_sides > STAT_MAX) e.dice_sides = STAT_MAX;
+        //if (e.atk > STAT_MAX) e.atk = STAT_MAX;
         if (e.max_wait > 9999) e.max_wait = 9999;
         if (e.bonus_damage > STAT_MAX) e.bonus_damage = STAT_MAX;
         if (e.ap > STAT_MAX) e.ap = STAT_MAX;
 
         if (e.str < 1) e.str = 1;
-        if (e.def < 1) e.def = 1;
+        if (e.tou < 1) e.tou = 1;
         if (e.mag < 1) e.mag = 1;
         if (e.max_wait < 100) e.max_wait = 100;
     }

@@ -33,8 +33,7 @@ int init_items() {
         item_db[i].diff = STAT_MAX;
         item_db[i].lv = STAT_MAX;
         item_db[i].lootable = 0;
-        item_db[i].dice = 0;
-        item_db[i].dice_sides = 0;
+        item_db[i].atk = 0;
         item_db[i].ap = 0;
         item_db[i].body_part = 0;
         item_db[i].condition = 0;
@@ -52,8 +51,7 @@ int init_items() {
     item_db[0].diff = 1;
     item_db[0].lv = 1;
     item_db[0].lootable = 0;
-    item_db[0].dice = 0;
-    item_db[0].dice_sides = 0;
+    item_db[0].atk = 0;
     item_db[0].ap = 0;
     item_db[0].body_part = 0;
     item_db[0].condition = 0;
@@ -70,8 +68,7 @@ int init_items() {
     item_db[cur_id].diff = 5;
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -90,8 +87,7 @@ int init_items() {
     item_db[cur_id].diff = 5;
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -109,8 +105,7 @@ int init_items() {
     item_db[cur_id].diff = 25;
     item_db[cur_id].lv = 20;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -129,8 +124,7 @@ int init_items() {
     item_db[cur_id].diff = 10;
     item_db[cur_id].lv = 20;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -149,8 +143,7 @@ int init_items() {
     item_db[cur_id].diff = 15;
     item_db[cur_id].lv = 5;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -169,8 +162,7 @@ int init_items() {
     item_db[cur_id].diff = 3;
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 2;
-    item_db[cur_id].dice_sides = 4;
+    item_db[cur_id].atk = 2;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 5000;
@@ -189,8 +181,7 @@ int init_items() {
     item_db[cur_id].diff = 25;
     item_db[cur_id].lv = 5;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 2;
-    item_db[cur_id].dice_sides = 5;
+    item_db[cur_id].atk = 2;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 20000;
@@ -209,8 +200,7 @@ int init_items() {
     item_db[cur_id].diff = 30;
     item_db[cur_id].lv = 7;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 1;
-    item_db[cur_id].dice_sides = 8;
+    item_db[cur_id].atk = 1;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 22000;
@@ -224,13 +214,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 1;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 5;
     item_db[cur_id].diff = 2;
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 1;
     item_db[cur_id].body_part = 1;
     item_db[cur_id].condition = 300;
@@ -244,13 +233,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 1;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 8;
     item_db[cur_id].diff = 4;
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 3;
     item_db[cur_id].body_part = 2;
     item_db[cur_id].condition = 425;
@@ -264,13 +252,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 1;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 1;
     item_db[cur_id].diff = 1;
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 1;
     item_db[cur_id].body_part = 5;
     item_db[cur_id].condition = 120;
@@ -284,13 +271,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 1;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 2;
     item_db[cur_id].diff = 3;
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 2;
     item_db[cur_id].body_part = 3;
     item_db[cur_id].condition = 200;
@@ -304,13 +290,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 1;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 1;
     item_db[cur_id].diff = 1;
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 1;
     item_db[cur_id].body_part = 4;
     item_db[cur_id].condition = 110;
@@ -324,13 +309,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 1;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 3;
     item_db[cur_id].diff = 2;
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 1;
     item_db[cur_id].body_part = 1;
     item_db[cur_id].condition = 2500;
@@ -344,13 +328,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 12;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 100;
     item_db[cur_id].diff = 100;
     item_db[cur_id].lv = 30;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 10;
     item_db[cur_id].body_part = 2;
     item_db[cur_id].condition = 1200;
@@ -364,13 +347,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 16;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 60;
     item_db[cur_id].diff = 60;
     item_db[cur_id].lv = 20;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 7;
     item_db[cur_id].body_part = 5;
     item_db[cur_id].condition = 800;
@@ -384,13 +366,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 19;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 100;
     item_db[cur_id].diff = 150;
     item_db[cur_id].lv = 45;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 9;
     item_db[cur_id].body_part = 3;
     item_db[cur_id].condition = 1050;
@@ -404,13 +385,12 @@ int init_items() {
     item_db[cur_id].type = 3;
     item_db[cur_id].skl = SKILL_CRAFTING_WAA;
     item_db[cur_id].str = 12;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 35;
     item_db[cur_id].diff = 25;
     item_db[cur_id].lv = 15;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 7;
     item_db[cur_id].body_part = 4;
     item_db[cur_id].condition = 600;
@@ -429,8 +409,7 @@ int init_items() {
     item_db[cur_id].diff = 2000;
     item_db[cur_id].lv = 100;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -449,8 +428,7 @@ int init_items() {
     item_db[cur_id].diff = 2000;
     item_db[cur_id].lv = 1000;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -469,8 +447,7 @@ int init_items() {
     item_db[cur_id].diff = 2000;
     item_db[cur_id].lv = 1000;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -484,13 +461,12 @@ int init_items() {
     item_db[cur_id].type = 1;
     item_db[cur_id].skl = SKILL_CRAFTING_OTH;
     item_db[cur_id].str = 1;
-    item_db[cur_id].effect = EFF_DEFUP;
+    item_db[cur_id].effect = EFF_TOUUP;
     item_db[cur_id].cost = 2000;
     item_db[cur_id].diff = 2000;
     item_db[cur_id].lv = 1000;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -509,8 +485,7 @@ int init_items() {
     item_db[cur_id].diff = 2000;
     item_db[cur_id].lv = 1000;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -529,8 +504,7 @@ int init_items() {
     item_db[cur_id].diff = 2000;
     item_db[cur_id].lv = 1000;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -549,8 +523,7 @@ int init_items() {
     item_db[cur_id].diff = 2000;
     item_db[cur_id].lv = 1000;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -569,8 +542,7 @@ int init_items() {
     item_db[cur_id].diff = 2000;
     item_db[cur_id].lv = 1000;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -589,8 +561,7 @@ int init_items() {
     item_db[cur_id].diff = 80;
     item_db[cur_id].lv = 35;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -609,8 +580,7 @@ int init_items() {
     item_db[cur_id].diff = 80;
     item_db[cur_id].lv = 35;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -629,8 +599,7 @@ int init_items() {
     item_db[cur_id].diff = 110;
     item_db[cur_id].lv = 45;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].dice = 0;
-    item_db[cur_id].dice_sides = 0;
+    item_db[cur_id].atk = 0;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 0;
@@ -708,176 +677,151 @@ void get_adjval() {
     if (adjid == 1) { /*GREAT!*/
         item_ap = 5;
         item_wait = -5;
-        item_dice = 1;
-        item_dicesides = 6;
+        item_atk = 1;
         item_con = 1.45;
     }
     else if (adjid == 2) { /*AWESOME*/
         item_ap = 6;
         item_wait = -5;
-        item_dice = 0;
-        item_dicesides = 7;
+        item_atk = 0;
         item_con = 1.65;
     }
     else if (adjid == 3) { /* Wonderful */
         item_ap = 5;
         item_wait = -1;
-        item_dice = 2;
-        item_dicesides = 1;
+        item_atk = 2;
         item_con = 1.5;
     }
     else if (adjid == 4) { /*Inspiring*/
         item_ap = 10;
         item_wait = -8;
-        item_dice = 3;
-        item_dicesides = 3;
+        item_atk = 3;
         item_con = 1.9;
     }
     else if (adjid == 5) { /*Immaculate*/
         item_ap = 9;
         item_wait = -6;
-        item_dice = 1;
-        item_dicesides = 1;
+        item_atk = 1;
         item_con = 1.6;
     }
     else if (adjid == 1 + GREAT_ADJ) { /*Good*/
         item_ap = 3;
         item_wait = -2;
-        item_dice = 0;
-        item_dicesides = 2;
+        item_atk = 0;
         item_con = 1.1;
     }
     else if (adjid == 2 + GREAT_ADJ) { /*Neat*/
         item_ap = 1;
         item_wait = -1;
-        item_dice = 0;
-        item_dicesides = 2;
+        item_atk = 0;
         item_con = 1.05;
     }
     else if (adjid == 3 + GREAT_ADJ) { /*Interesting*/
         item_ap = 4;
         item_wait = 0;
-        item_dice = 1;
-        item_dicesides = 0;
+        item_atk = 1;
         item_con = 1.2;
     }
     else if (adjid == 4 + GREAT_ADJ) { /*Better*/
         item_ap = 5;
         item_wait = -3;
-        item_dice = 1;
-        item_dicesides = 1;
+        item_atk = 1;
         item_con = 1.25;
     }
     else if (adjid == 5 + GREAT_ADJ) { /*B+*/
         item_ap = 1;
         item_wait = -1;
-        item_dice = 0;
-        item_dicesides = 3;
+        item_atk = 0;
         item_con = 1.12;
     }
     else if (adjid == 1 + GREAT_ADJ + GOOD_ADJ) { /*Average*/
         item_ap = 0;
         item_wait = 0;
-        item_dice = 0;
-        item_dicesides = 0;
+        item_atk = 0;
         item_con = 1.0;
     }
     else if (adjid == 2 + GREAT_ADJ + GOOD_ADJ) { /*Dull*/
         item_ap = 0;
         item_wait = -1;
-        item_dice = 0;
-        item_dicesides = 0;
+        item_atk = 0;
         item_con = 1.02;
     }
     else if (adjid == 3 + GREAT_ADJ + GOOD_ADJ) { /*Meh*/
         item_ap = 0;
         item_wait = 0;
-        item_dice = 0;
-        item_dicesides = 1;
+        item_atk = 0;
         item_con = 1.01;
     }
     else if (adjid == 4 + GREAT_ADJ + GOOD_ADJ) { /*Drab*/
         item_ap = 0;
         item_wait = 0;
-        item_dice = 0;
-        item_dicesides = 2;
+        item_atk = 0;
         item_con = 1.05;
     }
     else if (adjid == 5 + GREAT_ADJ + GOOD_ADJ) { /*Common*/
         item_ap = 0;
         item_wait = -1;
-        item_dice = 0;
-        item_dicesides = 0;
+        item_atk = 0;
         item_con = 1.03;
     }
     else if (adjid == 1 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ) { /*Bad*/
         item_ap = -3;
         item_wait = 4;
-        item_dice = -1;
-        item_dicesides = -3;
+        item_atk = -1;
         item_con = 0.75;
     }
     else if (adjid == 2 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ) { /*Confused*/
         item_ap = -3;
         item_wait = 6;
-        item_dice = -1;
-        item_dicesides = -6;
+        item_atk = -1;
         item_con = 0.65;
     }
     else if (adjid == 3 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ) { /*Ignorable*/
         item_ap = -4;
         item_wait = 2;
-        item_dice = -2;
-        item_dicesides = -3;
+        item_atk = -2;
         item_con = 0.5;
     }
     else if (adjid == 4 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ) { /*Angry*/
         item_ap = -1;
         item_wait = 3;
-        item_dice = -1;
-        item_dicesides = -2;
+        item_atk = -1;
         item_con = 0.52;
     }
     else if (adjid == 5 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ) { /*D-*/
         item_ap = -7;
         item_wait = 10;
-        item_dice = -2;
-        item_dicesides = -2;
+        item_atk = -2;
         item_con = 0.61;
     }
     else if (adjid == 1 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ + BAD_ADJ) { /*Horrible*/
         item_ap = -10;
         item_wait = 20;
-        item_dice = -3;
-        item_dicesides = -8;
+        item_atk = -3;
         item_con = 0.3;
     }
     else if (adjid == 2 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ + BAD_ADJ) { /*Atrocious*/
         item_ap = -15;
         item_wait = 25;
-        item_dice = -3;
-        item_dicesides = -10;
+        item_atk = -3;
         item_con = 0.2;
     }
     else if (adjid == 3 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ + BAD_ADJ) { /*Terrible*/
         item_ap = -8;
         item_wait = 15;
-        item_dice = -2;
-        item_dicesides = -12;
+        item_atk = -2;
         item_con = 0.35;
     }
     else if (adjid == 4 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ + BAD_ADJ) { /*Laughable*/
         item_ap = -17;
         item_wait = 30;
-        item_dice = -3;
-        item_dicesides = -9;
+        item_atk = -3;
         item_con = 0.15;
     }
     else if (adjid == 5 + GREAT_ADJ + GOOD_ADJ + AVG_ADJ + BAD_ADJ) { /*Failsause*/
         item_ap = -40;
         item_wait = 100;
-        item_dice = -7;
-        item_dicesides = -20;
+        item_atk = -7;
         item_con = 0.01;
     }
     
@@ -1013,8 +957,8 @@ int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
          mvwprintw(win,ycor++,1,"Permanent MP boost: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_STRUP)
          mvwprintw(win,ycor++,1,"Permanent STR boost: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_DEFUP)
-         mvwprintw(win,ycor++,1,"Permanent DEF boost: %.0f",inv[h].str + inv[h].mod);
+        else if (inv[h].effect == EFF_TOUUP)
+         mvwprintw(win,ycor++,1,"Permanent TOU boost: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_MAGUP)
          mvwprintw(win,ycor++,1,"Permanent MAG boost: %.0f",inv[h].str + inv[h].mod);
         else if (inv[h].effect == EFF_WTDOWN)
@@ -1033,8 +977,8 @@ int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
     if (inv[h].maxcon != 0)
      mvwprintw(win,ycor++,1,"Condition: %.0f/%.0f",inv[h].con,inv[h].maxcon);
 
-    if (inv[h].dice != 0 || inv[h].dicesides != 0)
-     mvwprintw(win,ycor++,1,"Damage: %.0fd%.0f%+.0f",inv[h].dice,inv[h].dicesides,inv[h].mod);
+    if (inv[h].atk != 0 || inv[h].mod != 0)
+     mvwprintw(win,ycor++,1,"Attack: %.0f%+.0f",inv[h].atk,inv[h].mod);
 
     if (inv[h].ap != 0)
      mvwprintw(win,ycor++,1,"AP: %.0f",inv[h].ap + inv[h].mod);
@@ -1132,9 +1076,8 @@ void equip_armor(int part, double armap, double armcon, int armid, int armwait) 
  * @param weabdam Weapon's bonus damage.
  * @param weaid ID of weapon.
  */
-void equip_weapon(double weadice, double weadisi, double weacon, double weaap, int weawait, double weabdam, int weaid) {
-    p.dice = weadice;
-    p.dice_sides = weadisi;
+void equip_weapon(double weaatk, double weacon, double weaap, int weawait, double weabdam, int weaid) {
+    p.equip_atk = weaatk;
     p.equip_maxcon = weacon;
     p.equip_con = p.equip_maxcon;
     p.equip_ap = weaap;
@@ -1206,9 +1149,9 @@ void item_effect(int ti, int effect, int istr) {
         if (ti == 0) p.str = p.str + istr;
         else e.str = e.str + istr;
     }
-    else if (effect == EFF_DEFUP) {
-        if (ti == 0) p.def = p.def + istr;
-        else e.def = e.def + istr;
+    else if (effect == EFF_TOUUP) {
+        if (ti == 0) p.tou = p.tou + istr;
+        else e.tou = e.tou + istr;
     }
     else if (effect == EFF_MAGUP) {
         if (ti == 0) p.mag = p.mag + istr;
@@ -1256,21 +1199,20 @@ void use_item(int b, int toss) {
         item_effect(toss,inv[b].effect,inv[b].str+inv[b].mod);
     }
     else if (inv[b].type == 2) {
-        if (toss == 0) equip_weapon(inv[b].dice, inv[b].dicesides,\
-         inv[b].con, inv[b].ap, inv[b].wait,\
-         inv[b].mod, inv[b].id);
-        else item_effect(toss,EFF_DAMAGE,(inv[b].dice * inv[b].dicesides)+inv[b].mod);
+        if (toss == 0) equip_weapon(inv[b].atk,inv[b].con, inv[b].ap,\
+         inv[b].wait, inv[b].mod, inv[b].id);
+        else item_effect(toss,inv[b].effect,inv[b].atk+inv[b].mod);
     }
     else if (inv[b].type == 3) {
         if (toss == 0) equip_armor(inv[b].part,inv[b].ap+inv[b].mod,\
          inv[b].con,inv[b].id,inv[b].wait);
-        else item_effect(toss,EFF_DAMAGE,inv[b].ap + inv[b].wait+inv[b].mod);
+        else item_effect(toss,inv[b].effect,inv[b].ap + inv[b].wait+inv[b].mod);
     }
 
     if (p.hp > p.maxhp) p.hp = p.maxhp;
     if (p.mp > p.maxmp) p.mp = p.maxmp;
     if (p.str > STAT_MAX) p.str = STAT_MAX;
-    if (p.def > STAT_MAX) p.def = STAT_MAX;
+    if (p.tou > STAT_MAX) p.tou = STAT_MAX;
     if (p.mag > STAT_MAX) p.mag = STAT_MAX;
     if (p.wait > 9999) p.wait = 9999;
     if (p.max_wait < 100) p.max_wait = 100;
@@ -1285,8 +1227,7 @@ void use_item(int b, int toss) {
         inv[b].amount = 0;
         inv[b].mod = 0;
         inv[b].adj = 0;
-        inv[b].dice = 0;
-        inv[b].dicesides = 0;
+        inv[b].atk = 0;
         inv[b].ap = 0;
         inv[b].wait = 0;
         inv[b].maxcon = 0;
@@ -1301,16 +1242,15 @@ void use_item(int b, int toss) {
 /**
  * Gives an item to the player.
  */
-void give_item(int id, int typ, double mod, int adj, double dice, double dicesides,\
-                double ap, int iwait, double maxcon, double con, double str, double eff,\
+void give_item(int id, int typ, double mod, int adj, double atk, double ap, \
+                int iwait, double maxcon, double con, double str, double eff,\
                 int part) {
 
     int a,item_given = 0;
 
     if (typ == 1) { /* regular item */
         adj = 0;
-        dice = 0;
-        dicesides = 0;
+        atk = 0;
         ap = 0;
         iwait = 0;
         maxcon = 0;
@@ -1321,8 +1261,7 @@ void give_item(int id, int typ, double mod, int adj, double dice, double dicesid
         part = -1; /* weapons can't be worn */
     }
     else if (typ == 3) { /* armor */
-        dice = 0; /* armor does not modify damage */
-        dicesides = 0;
+        atk = 0; /* armor does not modify damage */
     }
 
     if (maxcon > ITEM_STAT_MAX) maxcon = ITEM_STAT_MAX;
@@ -1331,16 +1270,15 @@ void give_item(int id, int typ, double mod, int adj, double dice, double dicesid
     for (a = 0;a <= INVEN_MAX;++a) {
         if (inv[a].id == id && inv[a].amount < 999 &&\
             inv[a].mod == mod && inv[a].adj == adj &&\
-            inv[a].dice == dice && inv[a].dicesides == dicesides &&\
-            inv[a].ap == ap && inv[a].wait == iwait && \
-            inv[a].maxcon == maxcon && inv[a].con == con && item_given == 0) {
+            inv[a].atk == atk && inv[a].ap == ap && \
+            inv[a].wait == iwait && inv[a].maxcon == maxcon && \
+            inv[a].con == con && item_given == 0) {
                 /* most of this is unnecessary? */
                 inv[a].id = id;
                 inv[a].amount = inv[a].amount + 1;
                 inv[a].mod = mod;
                 inv[a].adj = adj;
-                inv[a].dice = dice;
-                inv[a].dicesides = dicesides;
+                inv[a].atk = atk;
                 inv[a].ap = ap;
                 inv[a].wait = iwait;
                 inv[a].maxcon = maxcon;
@@ -1360,8 +1298,7 @@ void give_item(int id, int typ, double mod, int adj, double dice, double dicesid
                 inv[a].amount = 1;
                 inv[a].mod = mod;
                 inv[a].adj = adj;
-                inv[a].dice = dice;
-                inv[a].dicesides = dicesides;
+                inv[a].atk = atk;
                 inv[a].ap = ap;
                 inv[a].wait = iwait;
                 inv[a].maxcon = maxcon;
@@ -1390,8 +1327,7 @@ void unequip_item(int slot) {
         p.equip_ap = 0;
         p.equip_mod = 0;
         p.equip_wait = 0;
-        p.dice = 1;
-        p.dice_sides = 5;
+        p.equip_atk = 1;
         p.equip_maxcon = 0;
         p.equip_con = 0;
     }
@@ -1493,8 +1429,7 @@ int item_main(WINDOW *w) {
             inv[cho - 2].amount = 0;
             inv[cho - 2].mod = 0;
             inv[cho - 2].adj = 0;
-            inv[cho - 2].dice = 0;
-            inv[cho - 2].dicesides = 0;
+            inv[cho - 2].atk = 0;
             inv[cho - 2].ap = 0;
             inv[cho - 2].wait = 0;
             inv[cho - 2].maxcon = 0;
@@ -1550,8 +1485,8 @@ int craft_main(WINDOW *w) {
                 mvwprintw(w,20,1,"Permanent MP boost.");
             else if (item_db[i].effect == EFF_STRUP)
                 mvwprintw(w,20,1,"Permanent STR boost.");
-            else if (item_db[i].effect == EFF_DEFUP)
-                mvwprintw(w,20,1,"Permanent DEF boost.");
+            else if (item_db[i].effect == EFF_TOUUP)
+                mvwprintw(w,20,1,"Permanent TOU boost.");
             else if (item_db[i].effect == EFF_MAGUP)
                 mvwprintw(w,20,1,"Permanent MAG boost.");
             else if (item_db[i].effect == EFF_WTDOWN)
@@ -1611,8 +1546,8 @@ int craft_main(WINDOW *w) {
         if (roll_die(100) <= ((p.mag / item_db[cho].diff) * 100)) {
             struct Item it = item_db[cho];
             
-            give_item(it.id,it.type,get_craft_mod(it.diff),item_adjval,it.dice + item_dice,\
-            it.dice_sides + item_dicesides,it.ap + item_ap,it.wait + item_wait,it.condition * item_con,\
+            give_item(it.id,it.type,get_craft_mod(it.diff),item_adjval,it.atk + item_atk,\
+            it.ap + item_ap,it.wait + item_wait,it.condition * item_con,\
             it.condition * item_con,it.str,it.effect,it.body_part);
             
             award_sk_xp(SKILL_CRAFTING_GEN,max(1,(item_db[cho].cost / p.maxmp) * item_db[cho].diff));

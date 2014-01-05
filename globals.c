@@ -20,8 +20,7 @@ void init_globals() {
         inv[i].amount = 0;
         inv[i].mod = 0;
         inv[i].adj = 0;
-        inv[i].dice = 0;
-        inv[i].dicesides = 0;
+        inv[i].atk = 0;
         inv[i].ap = 0;
         inv[i].wait = 0;
         inv[i].maxcon = 0;
