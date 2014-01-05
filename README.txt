@@ -23,14 +23,9 @@ Except Wait, which has a range of 100-9999.
 Every level, your stats will improve based on your class. You also get
 to choose a bonus.
 
-Damage formula: (R * D) - AP
-R = STR / DEF. ranges from .01-100 (1%-10000%). This is shown in the menu
-     after "Attack".
-D = For each die, a random number between 1 and number of sides,
-     inclusive. Add these numbers together.
-     Ex: 2d5 means "2 dice with 5 sides", or 2-10. Bonus damage is added to the
-     result, so 3d3+1 means "3 dice with 3 sides, plus 1", or 4-10.
-AP= Armor Points
+Damage formula: (A + B) - (C + D) = DMG
+(A + B) = STR + ATK.
+(C + D) = TOU + AP.
 You can always do at least 1 damage.
 
 Death is permanent!
@@ -67,9 +62,7 @@ The_Game: A Game For Munchkins!
 
 Copyright 2012,2013 William Patrick McFadden
 
-If you make modifications to the code, make it explict and obvious, and do
-not claim authorship of the original code. Other than that, you are free
-to do whatever you wish with it.
+WTFPL license.
 
 ============================================================================
 
