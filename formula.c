@@ -39,15 +39,28 @@ void attack_formula(int target) {
     double dmg = 0; /* damage */
     double ap = p.head_ap + p.body_ap + p.legs_ap + p.feet_ap + p.hands_ap + p.equip_ap;
     int roll = 0,has_armor = 0;
+    double rdmg = 0,a = 0;
     
     /* Find damage */
     if (target == 1) {
         dmg = round((e.str + 0) - ((p.tou + ap) / 2));
     }
     else {
-        dmg = round((p.str + p.equip_atk) - ((e.tou + e.ap) / 2));
+        dmg = round((p.str + p.equip_atk) - ((e.tou + e.ap) / 2)) + p.bonus_damage;
     }
 
+    /* Vary damage by a random amount */
+    a = roll_die(21);
+    while (a > 1) {
+        roll = roll_die(2);
+        if (roll == 1) rdmg = rdmg + 0.01;
+        else rdmg = rdmg - 0.01;
+        --a;
+    }
+    if (rdmg > 1.2) rdmg = 1.2;
+    if (rdmg < 0.8) rdmg = 0.8;
+    dmg = round(dmg * rdmg);
+    
     if (dmg < 1) dmg = 1;
     
     if (target == 1) {        

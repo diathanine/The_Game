@@ -99,17 +99,18 @@ void kill_enemy() {
 
     generate_name();
 
-    /* reset to base stats */
-    e.hp = round(species[SPECIES_HUMAN][1] / 3);
-    e.maxhp = round(species[SPECIES_HUMAN][1] / 3);
-    e.mp = round(species[SPECIES_HUMAN][2] / 5);
-    e.maxmp = round(species[SPECIES_HUMAN][2] / 5);
-    e.str = round(species[SPECIES_HUMAN][3] / 4);
-    e.tou = round(species[SPECIES_HUMAN][4] / 4);
-    e.mag = round(species[SPECIES_HUMAN][5] / 4);
-    e.wait = species[SPECIES_HUMAN][6] + 150;
-    e.max_wait = species[SPECIES_HUMAN][6] + 150;
-    e.bonus_damage = species[SPECIES_HUMAN][7];
+    /* reset to base stats
+     Enemies don't have classes, so +1 to all per lv. */
+    e.hp = e.lv + 25;
+    e.maxhp = e.lv + 25;
+    e.mp = e.lv + 10;
+    e.maxmp = e.lv + 10;
+    e.str = e.lv + 8;
+    e.tou = e.lv + 8;
+    e.mag = e.lv + 8;
+    e.wait = round(e.lv / 5) + 500;
+    e.max_wait = round(e.lv / 5) + 500;
+    e.bonus_damage = 0.00;
     e.ap = 0;
     //e.atk = 0;
     e.status_id = 0;

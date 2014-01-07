@@ -382,8 +382,8 @@ int main(int argc, char *argv[]) {
     /* Define the species */
     
     species[SPECIES_DRACONIAN][0] = SPECIES_DRACONIAN; /* Draconian */
-    species[SPECIES_DRACONIAN][1] = 22; /* HP */
-    species[SPECIES_DRACONIAN][2] = 3; /* MP */
+    species[SPECIES_DRACONIAN][1] = 150; /* HP */
+    species[SPECIES_DRACONIAN][2] = 10; /* MP */
     species[SPECIES_DRACONIAN][3] = 15; /* STR */
     species[SPECIES_DRACONIAN][4] = 12; /* TOU */
     species[SPECIES_DRACONIAN][5] = 3; /* MAG */
@@ -391,8 +391,8 @@ int main(int argc, char *argv[]) {
     species[SPECIES_DRACONIAN][7] = 2.00; /* DAM */
 
     species[SPECIES_KOBOLD][0] = SPECIES_KOBOLD; /* Kobold */
-    species[SPECIES_KOBOLD][1] = 5; /* HP */
-    species[SPECIES_KOBOLD][2] = 20; /* MP */
+    species[SPECIES_KOBOLD][1] = 60; /* HP */
+    species[SPECIES_KOBOLD][2] = 45; /* MP */
     species[SPECIES_KOBOLD][3] = 7; /* STR */
     species[SPECIES_KOBOLD][4] = 7; /* TOU */
     species[SPECIES_KOBOLD][5] = 15; /* MAG */
@@ -400,8 +400,8 @@ int main(int argc, char *argv[]) {
     species[SPECIES_KOBOLD][7] = 0.50; /* DAM */
 
     species[SPECIES_HUMAN][0] = SPECIES_HUMAN; /* Human */
-    species[SPECIES_HUMAN][1] = 15; /* HP */
-    species[SPECIES_HUMAN][2] = 15; /* MP */
+    species[SPECIES_HUMAN][1] = 100; /* HP */
+    species[SPECIES_HUMAN][2] = 30; /* MP */
     species[SPECIES_HUMAN][3] = 10; /* STR */
     species[SPECIES_HUMAN][4] = 10; /* TOU */
     species[SPECIES_HUMAN][5] = 10; /* MAG */
@@ -409,8 +409,8 @@ int main(int argc, char *argv[]) {
     species[SPECIES_HUMAN][7] = 0.00; /* DAM */
 
     species[SPECIES_MINOTAUR][0] = SPECIES_MINOTAUR; /* Minotaur */
-    species[SPECIES_MINOTAUR][1] = 20; /* HP */
-    species[SPECIES_MINOTAUR][2] = 10; /* MP */
+    species[SPECIES_MINOTAUR][1] = 130; /* HP */
+    species[SPECIES_MINOTAUR][2] = 20; /* MP */
     species[SPECIES_MINOTAUR][3] = 14; /* STR */
     species[SPECIES_MINOTAUR][4] = 10; /* TOU */
     species[SPECIES_MINOTAUR][5] = 6; /* MAG */
@@ -418,8 +418,8 @@ int main(int argc, char *argv[]) {
     species[SPECIES_MINOTAUR][7] = 1.20; /* DAM */
 
     species[SPECIES_GOLEM][0] = SPECIES_GOLEM; /* Golem */
-    species[SPECIES_GOLEM][1] = 35; /* HP */
-    species[SPECIES_GOLEM][2] = 1; /* MP */
+    species[SPECIES_GOLEM][1] = 220; /* HP */
+    species[SPECIES_GOLEM][2] = 5; /* MP */
     species[SPECIES_GOLEM][3] = 15; /* STR */
     species[SPECIES_GOLEM][4] = 14; /* TOU */
     species[SPECIES_GOLEM][5] = 1; /* MAG */
@@ -427,8 +427,8 @@ int main(int argc, char *argv[]) {
     species[SPECIES_GOLEM][7] = 1.50; /* DAM */
 
     species[SPECIES_FAIRY][0] = SPECIES_FAIRY; /* Fairy */
-    species[SPECIES_FAIRY][1] = 3; /* HP */
-    species[SPECIES_FAIRY][2] = 35; /* MP */
+    species[SPECIES_FAIRY][1] = 20; /* HP */
+    species[SPECIES_FAIRY][2] = 70; /* MP */
     species[SPECIES_FAIRY][3] = 1; /* STR */
     species[SPECIES_FAIRY][4] = 1; /* TOU */
     species[SPECIES_FAIRY][5] = 30; /* MAG */
@@ -1084,7 +1084,8 @@ int main(int argc, char *argv[]) {
                         a++; /* blank line; hopefully makes it look less clutered */
                         mvwprintw(sidebar,a++,1,"Base Damage: %.0f%+.2f",p.str + p.equip_atk,p.bonus_damage + p.equip_mod);
                         mvwprintw(sidebar,a++,1,"Approx. Damage: %.0f - %.0f",\
-                                   max(1,(p.str + p.equip_atk) * .8),max(1,(p.str + p.equip_atk) * 1.2));
+                                   max(1,(((p.str + p.equip_atk) - round(e.tou / 2)) + p.bonus_damage) * .8),\
+                                   max(1,(((p.str + p.equip_atk) - round(e.tou / 2)) + p.bonus_damage) * 1.2));
                         a++; /* another blank line */
                         mvwprintw(sidebar,a++,1,"Total AP : %+.0f; Total Wait: %+.0f",p.head_ap + p.body_ap + p.legs_ap +\
                                 p.feet_ap + p.hands_ap + p.equip_ap,p.head_wait + p.body_wait + p.feet_wait + p.legs_wait + p.hands_wait + p.equip_wait);
@@ -1253,7 +1254,7 @@ int main(int argc, char *argv[]) {
                     mvwprintw(sidebar,7,4,"HP +3, MP -3");
                     mvwprintw(sidebar,8,4,"HP -3, MP +3");
                     mvwprintw(sidebar,9,4,"Wait -15 (Min 100)");
-                    mvwprintw(sidebar,10,4,"Damage +0.15");
+                    mvwprintw(sidebar,10,4,"Damage +0.2");
                     mvwprintw(sidebar,11,4,"HP regen +1, takes 5 turns longer");
                     mvwprintw(sidebar,12,4,"MP regen +1, takes 5 turns longer");
 
@@ -1323,7 +1324,7 @@ int main(int argc, char *argv[]) {
                         p.max_wait = p.max_wait - 15;
                     }
                     else if (schoice == 7) {
-                        p.bonus_damage = p.bonus_damage + 0.15;
+                        p.bonus_damage = p.bonus_damage + 0.2;
                     }
                     else if (schoice == 8) {
                         ++p.hp_regen_amount;
