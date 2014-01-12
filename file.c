@@ -571,7 +571,7 @@ void save_game() {
         sprintf(p_buffer,"%.0f",inv[invslot].str);
         fprintf(save,"%s\n",p_buffer);
         
-        sprintf(p_buffer,"%.0f",inv[invslot].type);
+        sprintf(p_buffer,"%d",inv[invslot].type);
         fprintf(save,"%s\n",p_buffer);
         
         sprintf(p_buffer,"%.0f",inv[invslot].part);
@@ -672,43 +672,43 @@ void reset_save() {
     fprintf(save,"0\n"); /* wait */
     fprintf(save,"500\n"); /* maxwait */
     fprintf(save,"0.00\n"); /* bonus damage */
-    fprintf(save,"0\n"); /* equip ID */
+    fprintf(save,"6\n"); /* equip ID */
     fprintf(save,"0\n"); /* equip wait */
     fprintf(save,"0\n"); /* equip ap */
-    fprintf(save,"0\n"); /* equip maxcon */
-    fprintf(save,"0\n"); /* equip con */
-    fprintf(save,"0\n"); /* equip atk */
-    fprintf(save,"0\n"); /* Head AP */
-    fprintf(save,"0\n"); /* Body AP */
-    fprintf(save,"0\n"); /* Legs AP */
-    fprintf(save,"0\n"); /* Feet AP */
-    fprintf(save,"0\n"); /* Hands AP */
-    fprintf(save,"0\n"); /* Head ID */
-    fprintf(save,"0\n"); /* Body ID */
-    fprintf(save,"0\n"); /* Legs ID */
-    fprintf(save,"0\n"); /* Feet ID */
-    fprintf(save,"0\n"); /* Hands ID */
+    fprintf(save,"5000\n"); /* equip maxcon */
+    fprintf(save,"5000\n"); /* equip con */
+    fprintf(save,"2\n"); /* equip atk */
+    fprintf(save,"1\n"); /* Head AP */
+    fprintf(save,"3\n"); /* Body AP */
+    fprintf(save,"2\n"); /* Legs AP */
+    fprintf(save,"1\n"); /* Feet AP */
+    fprintf(save,"1\n"); /* Hands AP */
+    fprintf(save,"9\n"); /* Head ID */
+    fprintf(save,"10\n"); /* Body ID */
+    fprintf(save,"12\n"); /* Legs ID */
+    fprintf(save,"13\n"); /* Feet ID */
+    fprintf(save,"11\n"); /* Hands ID */
     fprintf(save,"0\n"); /* Head Wait */
     fprintf(save,"0\n"); /* Body Wait */
     fprintf(save,"0\n"); /* Legs Wait */
     fprintf(save,"0\n"); /* Feet Wait */
     fprintf(save,"0\n"); /* Hands Wait */
-    fprintf(save,"0\n"); /* Head Maxcon */
-    fprintf(save,"0\n"); /* Body Maxcon */
-    fprintf(save,"0\n"); /* Legs Maxcon */
-    fprintf(save,"0\n"); /* Feet Maxcon */
-    fprintf(save,"0\n"); /* Hands Maxcon */
-    fprintf(save,"0\n"); /* Head Con */
-    fprintf(save,"0\n"); /* Body Con */
-    fprintf(save,"0\n"); /* Legs Con */
-    fprintf(save,"0\n"); /* Feet Con */
-    fprintf(save,"0\n"); /* Hands Con */
+    fprintf(save,"300\n"); /* Head Maxcon */
+    fprintf(save,"425\n"); /* Body Maxcon */
+    fprintf(save,"200\n"); /* Legs Maxcon */
+    fprintf(save,"110\n"); /* Feet Maxcon */
+    fprintf(save,"120\n"); /* Hands Maxcon */
+    fprintf(save,"300\n"); /* Head Con */
+    fprintf(save,"425\n"); /* Body Con */
+    fprintf(save,"200\n"); /* Legs Con */
+    fprintf(save,"110\n"); /* Feet Con */
+    fprintf(save,"120\n"); /* Hands Con */
     fprintf(save,"0\n"); /* status */
     fprintf(save,"0\n"); /* status dur */
     fprintf(save,"0\n"); /* status str */
     fprintf(save,"1\n"); /* lv */
     fprintf(save,"0\n"); /* xp */
-    fprintf(save,"30\n"); /* next xp */
+    fprintf(save,"100\n"); /* next xp */
     fprintf(save,"20\n"); /* hp regen time */
     fprintf(save,"20\n"); /* hp regen current */
     fprintf(save,"1\n"); /* hp regen amount */

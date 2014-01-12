@@ -254,15 +254,11 @@ void magic_formula(int sid, int user) {
     }
     else if (stc.effect == MEF_RPW) {
         if (user == 0) {
-            minn = min(p.mag / stc.diff,MAGIC_MAX_PERCENT);
-            maxx = max(MAGIC_MIN_PERCENT,minn);
-            result = round(stc.str * maxx);
-            result = roll_sk_bonus(result,get_sk_chances(skill[SKILL_CASTING_GEN][0],skill[stc.skill][0]));
-
-            while (result > 0) {
+            while (1) {
                 p.equip_maxcon = p.equip_maxcon - 2;
                 p.equip_con = p.equip_con + 1;
-                --result;
+                if (p.equip_con > p.equip_maxcon) p.equip_con = p.equip_maxcon;
+                if (p.equip_con == p.equip_maxcon) break;
             }
 
             if (p.equip_con > p.equip_maxcon) p.equip_con = p.equip_maxcon;
@@ -275,7 +271,7 @@ void magic_formula(int sid, int user) {
 
 /**
  * Returns a percentage for magic menu.
- * 
+ *
  */
 /** @todo
  * This should be made into a function

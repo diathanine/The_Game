@@ -151,7 +151,7 @@ struct Inventory {
     double maxcon;
     double con;
     double str;
-    double type;
+    int type;
     double part;
     double effect;
 };

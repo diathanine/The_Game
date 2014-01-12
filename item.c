@@ -656,7 +656,7 @@ void get_adjval() {
      * Just a random formula I thought up. Not tested
      * for balance.
      */
-    item_adjval = (e.lv / 3) - (p.lv * 2);
+    item_adjval = e.lv - (p.lv * 2);
     if (item_adjval >= 75) {
         adjid = roll_die(GREAT_ADJ);
     }
@@ -974,16 +974,16 @@ int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
         else mvwprintw(win,ycor++,1,"Unknown effect %d",inv[h].effect);
     }
     
-    if (inv[h].maxcon != 0)
+    if (inv[h].type != 1 && inv[h].maxcon != 0)
      mvwprintw(win,ycor++,1,"Condition: %.0f/%.0f",inv[h].con,inv[h].maxcon);
 
-    if (inv[h].atk != 0 || inv[h].mod != 0)
+    if (inv[h].type != 1 && (inv[h].atk != 0 || inv[h].mod != 0))
      mvwprintw(win,ycor++,1,"Attack: %.0f%+.0f",inv[h].atk,inv[h].mod);
 
-    if (inv[h].ap != 0)
+    if (inv[h].type != 1 && inv[h].ap != 0)
      mvwprintw(win,ycor++,1,"AP: %.0f",inv[h].ap + inv[h].mod);
 
-    if (inv[h].wait != 0)
+    if (inv[h].type != 1 && inv[h].wait != 0)
      mvwprintw(win,ycor++,1,"Wait: %+d",inv[h].wait);
 
     print_desc(win,(char *)idesc,ycor++,1);
