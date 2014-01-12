@@ -9,20 +9,20 @@
 #include "status.h"
 #include "formula.h"
 
-/** 
+/**
  *  Called when the enemy dies.
- * 
+ *
  * Runs whenever an enemy is killed; handles rewarding the player
  * and generating a new enemy.
 */
 void kill_enemy() {
     /** @todo
      * This functions badly needs to be split up.
-     */ 
+     */
     double xp_mod = 1;
     double lv_diff;
     int roll;
-    double e_SP,e_bonus_SP;
+    double e_SP;
     /* XP reward*/
     /** @todo
      * XP reward needs balance!
@@ -80,7 +80,7 @@ void kill_enemy() {
 
     /* *** GENERATING NEW ENEMY STARTS HERE *** */
 
-    e_bonus_SP = 0;
+	e_SP = e.lv - 1;
     lv_diff = 0;
 
     /* 10% chance to go down 1 lv*/
@@ -93,7 +93,7 @@ void kill_enemy() {
     every 10 gives enemy 1 extra SP. */
     lv_diff = p.lv - e.lv; /* recalculate for new e_lv */
     while (lv_diff >= 10) {
-        ++e_bonus_SP;
+        ++e_SP;
         lv_diff = lv_diff - 5;
     }
 
@@ -118,9 +118,6 @@ void kill_enemy() {
     e.status_dur = 0;
 
     /* Distribute SP */
-    e_SP = e.lv - 1;
-    e_SP = e_SP + e_bonus_SP;
-    e_SP += 1;
     while (e_SP > 0) {
         if (e.maxhp < STAT_MAX) e.maxhp = e.maxhp + 2;
         if (e.maxmp < STAT_MAX) e.maxmp = e.maxmp + 2;
@@ -150,11 +147,11 @@ void kill_enemy() {
             /// @todo increase atk.
         }
         else if (roll == 5) {
-            ++e.maxhp;
+            e.maxhp = e.maxhp + 3;
             e.maxmp = e.maxmp - 3;
         }
         else if (roll == 6) {
-            ++e.maxmp;
+            e.maxmp = e.maxmp + 3;
             e.maxhp = e.maxhp - 3;
         }
         else if (roll == 7) {
