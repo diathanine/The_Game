@@ -14,7 +14,7 @@ void init_magic() {
     magic_db[cur_id].status = 0;
     magic_db[cur_id].invert = 0;
     magic_db[cur_id].cost = 10;
-    magic_db[cur_id].str = 30;
+    magic_db[cur_id].str = 20;
     magic_db[cur_id].diff = 60;
     magic_db[cur_id].lv = 1;
     magic_db[cur_id].skill = SKILL_CASTING_HEA;
@@ -27,10 +27,10 @@ void init_magic() {
     magic_db[cur_id].effect = MEF_DMG;
     magic_db[cur_id].status = 0;
     magic_db[cur_id].invert = 0;
-    magic_db[cur_id].cost = 5;
-    magic_db[cur_id].str = 10;
-    magic_db[cur_id].diff = 20;
-    magic_db[cur_id].lv = 2;
+    magic_db[cur_id].cost = 8;
+    magic_db[cur_id].str = 15;
+    magic_db[cur_id].diff = 60;
+    magic_db[cur_id].lv = 1;
     magic_db[cur_id].skill = SKILL_CASTING_FIR;
     strcpy(magic_db[cur_id].desc,"(Fire) Singe your foes for minor damage.");
 
@@ -41,10 +41,10 @@ void init_magic() {
     magic_db[cur_id].effect = MEF_DMG;
     magic_db[cur_id].status = 0;
     magic_db[cur_id].invert = 0;
-    magic_db[cur_id].cost = 4;
-    magic_db[cur_id].str = 7;
-    magic_db[cur_id].diff = 17;
-    magic_db[cur_id].lv = 2;
+    magic_db[cur_id].cost = 6;
+    magic_db[cur_id].str = 10;
+    magic_db[cur_id].diff = 50;
+    magic_db[cur_id].lv = 1;
     magic_db[cur_id].skill = SKILL_CASTING_WAT;
     strcpy(magic_db[cur_id].desc,"(Water) Chill your enemies for little damage.");
 
@@ -55,10 +55,10 @@ void init_magic() {
     magic_db[cur_id].effect = MEF_DMG;
     magic_db[cur_id].status = 0;
     magic_db[cur_id].invert = 0;
-    magic_db[cur_id].cost = 6;
-    magic_db[cur_id].str = 12;
-    magic_db[cur_id].diff = 22;
-    magic_db[cur_id].lv = 2;
+    magic_db[cur_id].cost = 10;
+    magic_db[cur_id].str = 20;
+    magic_db[cur_id].diff = 70;
+    magic_db[cur_id].lv = 1;
     magic_db[cur_id].skill = SKILL_CASTING_EAR;
     strcpy(magic_db[cur_id].desc,"(Earth) Pelt your enemy with pebbles for small damage.");
 
@@ -69,9 +69,9 @@ void init_magic() {
     magic_db[cur_id].effect = MEF_STA;
     magic_db[cur_id].status = POISON_ID;
     magic_db[cur_id].invert = 1;
-    magic_db[cur_id].cost = 10;
+    magic_db[cur_id].cost = 30;
     magic_db[cur_id].str = 5;
-    magic_db[cur_id].diff = 35;
+    magic_db[cur_id].diff = 80;
     magic_db[cur_id].lv = 3;
     magic_db[cur_id].skill = SKILL_CASTING_STA;
     strcpy(magic_db[cur_id].desc,"(Status) Poisons your enemy, doing damage over time.");
@@ -83,9 +83,9 @@ void init_magic() {
     magic_db[cur_id].effect = MEF_STA;
     magic_db[cur_id].status = STUN_ID;
     magic_db[cur_id].invert = 1;
-    magic_db[cur_id].cost = 15;
+    magic_db[cur_id].cost = 150;
     magic_db[cur_id].str = 3;
-    magic_db[cur_id].diff = 60;
+    magic_db[cur_id].diff = 200;
     magic_db[cur_id].lv = 7;
     magic_db[cur_id].skill = SKILL_CASTING_STA;
     strcpy(magic_db[cur_id].desc,"(Status) Prevents the enemy from doing anything.");
@@ -97,9 +97,9 @@ void init_magic() {
     magic_db[cur_id].effect = MEF_STA;
     magic_db[cur_id].status = SAP_ID;
     magic_db[cur_id].invert = 1;
-    magic_db[cur_id].cost = 20;
-    magic_db[cur_id].str = 60;
-    magic_db[cur_id].diff = 40;
+    magic_db[cur_id].cost = 50;
+    magic_db[cur_id].str = 5;
+    magic_db[cur_id].diff = 100;
     magic_db[cur_id].lv = 10;
     magic_db[cur_id].skill = SKILL_CASTING_STA;
     strcpy(magic_db[cur_id].desc,"(Status) Like Poison, but for MP.");
@@ -111,10 +111,10 @@ void init_magic() {
     magic_db[cur_id].effect = MEF_STA;
     magic_db[cur_id].status = HASTE_ID;
     magic_db[cur_id].invert = 0;
-    magic_db[cur_id].cost = 45;
+    magic_db[cur_id].cost = 120;
     magic_db[cur_id].str = 25;
-    magic_db[cur_id].diff = 50;
-    magic_db[cur_id].lv = 12;
+    magic_db[cur_id].diff = 250;
+    magic_db[cur_id].lv = 25;
     magic_db[cur_id].skill = SKILL_CASTING_STA;
     strcpy(magic_db[cur_id].desc,"(Status) Temporarly lowers Wait.");
 
@@ -125,10 +125,10 @@ void init_magic() {
     magic_db[cur_id].effect = MEF_STA;
     magic_db[cur_id].status = WALL_ID;
     magic_db[cur_id].invert = 0;
-    magic_db[cur_id].cost = 40;
+    magic_db[cur_id].cost = 80;
     magic_db[cur_id].str = 15;
-    magic_db[cur_id].diff = 70;
-    magic_db[cur_id].lv = 14;
+    magic_db[cur_id].diff = 150;
+    magic_db[cur_id].lv = 18;
     magic_db[cur_id].skill = SKILL_CASTING_STA;
     strcpy(magic_db[cur_id].desc,"(Status) Temporarly raises AP.");
 

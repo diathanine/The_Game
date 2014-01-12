@@ -384,44 +384,44 @@ int main(int argc, char *argv[]) {
     species[SPECIES_DRACONIAN][0] = SPECIES_DRACONIAN; /* Draconian */
     species[SPECIES_DRACONIAN][1] = 150; /* HP */
     species[SPECIES_DRACONIAN][2] = 10; /* MP */
-    species[SPECIES_DRACONIAN][3] = 15; /* STR */
-    species[SPECIES_DRACONIAN][4] = 12; /* TOU */
-    species[SPECIES_DRACONIAN][5] = 3; /* MAG */
+    species[SPECIES_DRACONIAN][3] = 18; /* STR */
+    species[SPECIES_DRACONIAN][4] = 17; /* TOU */
+    species[SPECIES_DRACONIAN][5] = 5; /* MAG */
     species[SPECIES_DRACONIAN][6] = 550; /* WAI */
     species[SPECIES_DRACONIAN][7] = 2.00; /* DAM */
 
     species[SPECIES_KOBOLD][0] = SPECIES_KOBOLD; /* Kobold */
     species[SPECIES_KOBOLD][1] = 60; /* HP */
     species[SPECIES_KOBOLD][2] = 45; /* MP */
-    species[SPECIES_KOBOLD][3] = 7; /* STR */
-    species[SPECIES_KOBOLD][4] = 7; /* TOU */
-    species[SPECIES_KOBOLD][5] = 15; /* MAG */
+    species[SPECIES_KOBOLD][3] = 12; /* STR */
+    species[SPECIES_KOBOLD][4] = 11; /* TOU */
+    species[SPECIES_KOBOLD][5] = 17; /* MAG */
     species[SPECIES_KOBOLD][6] = 425; /* WAI */
     species[SPECIES_KOBOLD][7] = 0.50; /* DAM */
 
     species[SPECIES_HUMAN][0] = SPECIES_HUMAN; /* Human */
     species[SPECIES_HUMAN][1] = 100; /* HP */
     species[SPECIES_HUMAN][2] = 30; /* MP */
-    species[SPECIES_HUMAN][3] = 10; /* STR */
-    species[SPECIES_HUMAN][4] = 10; /* TOU */
-    species[SPECIES_HUMAN][5] = 10; /* MAG */
+    species[SPECIES_HUMAN][3] = 15; /* STR */
+    species[SPECIES_HUMAN][4] = 15; /* TOU */
+    species[SPECIES_HUMAN][5] = 15; /* MAG */
     species[SPECIES_HUMAN][6] = 500; /* WAI */
     species[SPECIES_HUMAN][7] = 0.00; /* DAM */
 
     species[SPECIES_MINOTAUR][0] = SPECIES_MINOTAUR; /* Minotaur */
     species[SPECIES_MINOTAUR][1] = 130; /* HP */
     species[SPECIES_MINOTAUR][2] = 20; /* MP */
-    species[SPECIES_MINOTAUR][3] = 14; /* STR */
-    species[SPECIES_MINOTAUR][4] = 10; /* TOU */
-    species[SPECIES_MINOTAUR][5] = 6; /* MAG */
+    species[SPECIES_MINOTAUR][3] = 17; /* STR */
+    species[SPECIES_MINOTAUR][4] = 17; /* TOU */
+    species[SPECIES_MINOTAUR][5] = 9; /* MAG */
     species[SPECIES_MINOTAUR][6] = 525; /* WAI */
     species[SPECIES_MINOTAUR][7] = 1.20; /* DAM */
 
     species[SPECIES_GOLEM][0] = SPECIES_GOLEM; /* Golem */
     species[SPECIES_GOLEM][1] = 220; /* HP */
     species[SPECIES_GOLEM][2] = 5; /* MP */
-    species[SPECIES_GOLEM][3] = 15; /* STR */
-    species[SPECIES_GOLEM][4] = 14; /* TOU */
+    species[SPECIES_GOLEM][3] = 20; /* STR */
+    species[SPECIES_GOLEM][4] = 24; /* TOU */
     species[SPECIES_GOLEM][5] = 1; /* MAG */
     species[SPECIES_GOLEM][6] = 650; /* WAI */
     species[SPECIES_GOLEM][7] = 1.50; /* DAM */
@@ -431,7 +431,7 @@ int main(int argc, char *argv[]) {
     species[SPECIES_FAIRY][2] = 70; /* MP */
     species[SPECIES_FAIRY][3] = 1; /* STR */
     species[SPECIES_FAIRY][4] = 1; /* TOU */
-    species[SPECIES_FAIRY][5] = 30; /* MAG */
+    species[SPECIES_FAIRY][5] = 35; /* MAG */
     species[SPECIES_FAIRY][6] = 250; /* WAI */
     species[SPECIES_FAIRY][7] = 0.00; /* DAM */
 
@@ -711,7 +711,11 @@ int main(int argc, char *argv[]) {
 		wattroff(stat_win,A_BOLD | A_BLINK);
 
 		mvwprintw(stat_win,stat_line++,1,"MaxMP: %.0f",p.maxmp);
-		mvwprintw(stat_win,stat_line++,1,"STR  : %.0f",p.str);
+        
+        v = 0.00;
+        v = p.equip_atk + round(p.bonus_damage);
+        
+		mvwprintw(stat_win,stat_line++,1,"STR  : %.0f%+.0f",p.str,v);
 		mvwprintw(stat_win,stat_line++,1,"TOU  : %.0f",p.tou);
 		mvwprintw(stat_win,stat_line++,1,"MAG  : %.0f",p.mag);
 
