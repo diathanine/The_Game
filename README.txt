@@ -20,7 +20,7 @@ grow as you level up. Again, not much impact here.
 All stats cap at ((2 ^ 63) - 1) / 10  (922,337,203,685,477,580).
 Except Wait, which has a range of 100-9999.
 
-Every level, your stats will improve based on your class. You also get
+Every level, your stats will improve based on your class, and you get
 to choose a bonus.
 
 Damage formula: (STR + ATK) - ((TOU + AP) / 2) = DMG
@@ -30,7 +30,7 @@ You can always do at least 1 damage.
 
 Death is permanent!
 
-Stat display (blue/white window) :
+Stat display (blue/white windows) :
   Name: name
     HP: current HP
  MaxHP: maximum HP
@@ -48,7 +48,6 @@ Stat display (blue/white window) :
 
 Sidebar (green window) :
  Version of game being played
- Current time
  Turn number (time left in this turn)
 
  Summary of last three turns, displaying:
@@ -60,11 +59,7 @@ Sidebar (green window) :
 
 The_Game: A Game For Munchkins!
 
-Copyright 2012,2013 William Patrick McFadden
-
 WTFPL license.
-
-============================================================================
 
 contact info:
 e-mail  : wbkm16@yahoo.com
