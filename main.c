@@ -1501,7 +1501,7 @@ int main(int argc, char *argv[]) {
         get_e_name(stdscr,(int)e.name[0]);
         if (e.name[0] == 0) wprintw(stdscr," (how sad...)");
 
-        
+        remove("./savefile");
 	}
 	else {
 	    attron(COLOR_PAIR(6));
