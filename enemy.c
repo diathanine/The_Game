@@ -261,9 +261,9 @@ void generate_name() {
  * It prints the name at the cursor's
  * position when found.
  */
-void get_e_name(WINDOW *w) {
-    wattron(w,COLOR_PAIR(e_namedb[e.name[0]].color));
-    wprintw(w,"%s",e_namedb[e.name[0]].name);
+void get_e_name(WINDOW *w,int id) {
+    wattron(w,COLOR_PAIR(e_namedb[id].color));
+    wprintw(w,"%s",e_namedb[id].name);
     wattron(w,COLOR_PAIR(6));
 }
 

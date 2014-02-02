@@ -266,7 +266,7 @@ int main(int argc, char *argv[]) {
         p.name[0] = getch(); /* Resizing the window creates input(?) */
     }
 
-    p.name[0] = 32; /* gets rid of above input */
+    p.name[0] = ' '; /* gets rid of above input */
 
 	keypad(choice_win,TRUE);
 	keypad(sidebar,TRUE);
@@ -285,7 +285,7 @@ int main(int argc, char *argv[]) {
 	wattron(enemy_win,COLOR_PAIR(6));
 	wattron(sidebar,COLOR_PAIR(3));
 
-    load_game(); /* Always load the save game. New games have a default state. */
+    load_game(); /* Always load the save game. */
 
     #ifdef DEBUG
         /* Give super healing item so tester can live more easily. */
@@ -672,18 +672,7 @@ int main(int argc, char *argv[]) {
     if (p.mag < 1) p.mag = 1;
     if (p.max_wait < 100) p.max_wait = 100;
 
-    if (endgame != 1) {
-        sizeofname = 21;
-        for (a = 20;a > 0;--a) {
-            if (p.name[a] == 0x20) {
-                --sizeofname;
-            }
-            else break;
-        }
-
-        curs_set(0); /* No cursor */
-        refresh();
-    }
+    curs_set(0);
 
 	while (endgame != 1) {
 		/* Erase old text */
@@ -778,7 +767,7 @@ int main(int argc, char *argv[]) {
 
         stat_line = 1;
         mvwprintw(enemy_win,stat_line++,1,"Enemy: ");
-        get_e_name(enemy_win);
+        get_e_name(enemy_win,(int)e.name[0]);
 
         if (e.hp < e.maxhp * .2) wattron(enemy_win,COLOR_PAIR(1));
         mvwprintw(enemy_win,stat_line++,1,"HP   : %.0f",e.hp);
@@ -1508,15 +1497,11 @@ int main(int argc, char *argv[]) {
 
 	if (p.hp <= 0) {
 	    attron(COLOR_PAIR(1));
-	    mvprintw(0,0,"R.I.P. ");
-	    for (ii = 0;ii < sizeofname;++ii) {
-            mvprintw(0,ii + 7,"%c",p.name[ii]);
-        }
-        mvprintw(0,sizeofname + 7,", killed by "); /* +7 because of earlier chars */
-        get_e_name(stdscr);
+	    mvprintw(0,0,"R.I.P. %s, killed by ",p.name);
+        get_e_name(stdscr,(int)e.name[0]);
         if (e.name[0] == 0) wprintw(stdscr," (how sad...)");
 
-        reset_save(); /* reset the save so that when the game is next loaded, it acts like "New Game" */
+        
 	}
 	else {
 	    attron(COLOR_PAIR(6));
@@ -1530,7 +1515,7 @@ int main(int argc, char *argv[]) {
 	wattroff(enemy_win,COLOR_PAIR(6));
 	wattroff(sidebar,COLOR_PAIR(3));
 
-    if (p.hp > 0) save_game(); /* only save if player isn't dead. It resets in that case. */
+    if (p.hp > 0) save_game(); /* only save if player isn't dead. */
 
 	endwin();
     delwin(enemy_win);
