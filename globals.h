@@ -80,7 +80,7 @@ void clean_sidebar(WINDOW *w);
 void print_desc(WINDOW *w, char desc[], int y, int x);
 
 struct Character {
-    int name[21];
+    char name[21];
     int pclass;
     int species;
     double hp;

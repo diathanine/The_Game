@@ -4,9 +4,6 @@ Make MAGIC_MAX auto-update.
 
 XP gain needs balancing.
 
-savefile should be converted to an .ini file, which should make
-    future edits and reorganizing it easier.
-
 Content and balancing! Very low priority for now.
 
 Item descs wrap, but only on a letter by letter basis.

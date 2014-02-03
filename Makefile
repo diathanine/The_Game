@@ -9,7 +9,7 @@
 #
 #Major will become 1 when The_Game is "complete".
 
-VER="-DVERSION=\"Version 0.11.1 2014-01-05\""
+VER="-DVERSION=\"Version 0.12.1 2014-01-05\""
 
 all:
 	gcc $(VER) -o The_Game main.c -w -lncurses -lm
