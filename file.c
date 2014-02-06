@@ -48,8 +48,8 @@ void load_game() {
         else if (strcmp(f_buffer,"player:str") == 0) p.str = strtod(tok,NULL);
         else if (strcmp(f_buffer,"player:tou") == 0) p.tou = strtod(tok,NULL);
         else if (strcmp(f_buffer,"player:mag") == 0) p.mag = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:wait") == 0) p.wait = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:maxwait") == 0) p.max_wait = strtod(tok,NULL);
+        else if (strcmp(f_buffer,"player:wait") == 0) p.wait = atoi(tok);
+        else if (strcmp(f_buffer,"player:maxwait") == 0) p.max_wait = atoi(tok);
         else if (strcmp(f_buffer,"player:bonusdamage") == 0) p.bonus_damage = strtod(tok,NULL);
         else if (strcmp(f_buffer,"player:equipid") == 0) p.equip_id = strtod(tok,NULL);
         else if (strcmp(f_buffer,"player:equipwait") == 0) p.equip_wait = strtod(tok,NULL);
@@ -135,8 +135,8 @@ void load_game() {
         else if (strcmp(f_buffer,"enemy:tou") == 0) e.tou = strtod(tok,NULL);
         else if (strcmp(f_buffer,"enemy:mag") == 0) e.mag = strtod(tok,NULL);
         else if (strcmp(f_buffer,"enemy:ap") == 0) e.ap = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:wait") == 0) e.wait = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:maxwait") == 0) e.max_wait = strtod(tok,NULL);
+        else if (strcmp(f_buffer,"enemy:wait") == 0) e.wait = atoi(tok,NULL);
+        else if (strcmp(f_buffer,"enemy:maxwait") == 0) e.max_wait = atoi(tok,NULL);
         else if (strcmp(f_buffer,"enemy:bonusdamage") == 0) e.bonus_damage = strtod(tok,NULL);
         else if (strcmp(f_buffer,"enemy:statusid") == 0) e.status_id = strtod(tok,NULL);
         else if (strcmp(f_buffer,"enemy:statusdur") == 0) e.status_dur = strtod(tok,NULL);

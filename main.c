@@ -50,18 +50,17 @@ void init_skills() {
 void clean_sidebar(WINDOW *w) {
     int i,j;
     
-    for (i = 0;i <= 36;++i) {
-        for (j = 0;j <= 65;++j) {
+    for (i = 0;i <= SIDEBAR_HEIGHT;++i) {
+        for (j = 0;j <= SIDEBAR_WIDTH;++j) {
             mvwprintw(w,i,j," ");
         }
     }
 }
 
 void draw_sk_bar(WINDOW *w, int xp, int xpn) {
-    int a,b;
+    int a,b = 10;
     
-    a = 10 * ((double)xp / (double)xpn);
-    b = 10;
+    a = ((xp * 10) / xpn);
     while (a > 0) {
         wprintw(w,"#");
         --a;
@@ -75,10 +74,9 @@ void draw_sk_bar(WINDOW *w, int xp, int xpn) {
 }
 
 void draw_con_bar(WINDOW *w, double con, double maxcon) {
-    int a,b;
+    int a,b = 10;
     
-    a = 10 * (con / maxcon);
-    b = 10;
+    a = ((con * 10) / maxcon);
     while (a > 0) {
         wprintw(w,"#");
         --a;
@@ -293,8 +291,8 @@ int main(int argc, char *argv[]) {
         inv[9].str = 1337;
         inv[9].mod = 9001;
         inv[9].amount = 777;
-        inv[9].type = EFF_HEALHP;
-        inv[9].effect = 1;
+        inv[9].type = 1;
+        inv[9].effect = EFF_HEALHP;
 
         /* Allow test to give xp at command line:
          * ./The_Game [xp]
@@ -335,9 +333,6 @@ int main(int argc, char *argv[]) {
         else if (a == 13) mvprintw(10,1,"Draconian draconian is draconian.");
 
         mvprintw(11,1,"Enter a name (Max 21 letters):");
-
-        mvprintw(14,1,"The_Game Copyright (C) 2012,2013 William Patrick McFadden");
-        mvprintw(15,1,"This program comes with ABSOLUTELY NO WARRANTY!");
 
         move(12,1);
         refresh();
