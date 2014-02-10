@@ -33,126 +33,128 @@ void load_game() {
         fscanf(save,"%s",f_buffer);
         tok = strtok(f_buffer,"=");
         tok = strtok(NULL,"=");
-        if (strcmp(f_buffer,"player:name") == 0) {
-            for (a = 0;a <= 20;++a) {
-                fscanf(save,"%s",f_buffer);
-                tok = strtok(f_buffer,"=");
-                tok = strtok(NULL,"=");
-                p.name[a] = atoi(tok);
+        if (tok != NULL) {
+            if (strcmp(f_buffer,"player:name") == 0) {
+                for (a = 0;a <= 20;++a) {
+                    fscanf(save,"%s",f_buffer);
+                    tok = strtok(f_buffer,"=");
+                    tok = strtok(NULL,"=");
+                    p.name[a] = atoi(tok);
+                }
             }
-        }
-        else if (strcmp(f_buffer,"player:hp") == 0) p.hp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:maxhp") == 0) p.maxhp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:mp") == 0) p.mp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:maxmp") == 0) p.maxmp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:str") == 0) p.str = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:tou") == 0) p.tou = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:mag") == 0) p.mag = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:wait") == 0) p.wait = atoi(tok);
-        else if (strcmp(f_buffer,"player:maxwait") == 0) p.max_wait = atoi(tok);
-        else if (strcmp(f_buffer,"player:bonusdamage") == 0) p.bonus_damage = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:equipid") == 0) p.equip_id = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:equipwait") == 0) p.equip_wait = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:equipap") == 0) p.equip_ap = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:equipmaxcon") == 0) p.equip_maxcon = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:equipcon") == 0) p.equip_con = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:equipatk") == 0) p.equip_atk = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:headap") == 0) p.head_ap = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:bodyap") == 0) p.body_ap = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:legsap") == 0) p.legs_ap = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:feetap") == 0) p.feet_ap = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:handsap") == 0) p.hands_ap = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:headid") == 0) p.head_id = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:bodyid") == 0) p.body_id = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:legsid") == 0) p.legs_id = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:feetid") == 0) p.feet_id = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:handsid") == 0) p.hands_id = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:headwait") == 0) p.head_wait = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:bodywait") == 0) p.body_wait = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:legswait") == 0) p.legs_wait = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:feetwait") == 0) p.feet_wait = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:handswait") == 0) p.hands_wait = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:headmaxcon") == 0) p.head_maxcon = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:bodymaxcon") == 0) p.body_maxcon = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:legsmaxcon") == 0) p.legs_maxcon = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:feetmaxcon") == 0) p.feet_maxcon = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:handsmaxcon") == 0) p.hands_maxcon = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:headcon") == 0) p.head_con = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:bodycon") == 0) p.body_con = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:legscon") == 0) p.legs_con = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:feetcon") == 0) p.feet_con = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:handscon") == 0) p.hands_con = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:statusid") == 0) p.status_id = atoi(tok);
-        else if (strcmp(f_buffer,"player:statusdur") == 0) p.status_dur = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:statusstr") == 0) p.status_str = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:lv") == 0) p.lv = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:xp") == 0) p.xp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:nextxp") == 0) p.next_xp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:hpregentime") == 0) p.hp_regen_time = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:hpregencur") == 0) p.hp_regen_cur = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:hpregenamount") == 0) p.hp_regen_amount = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:mpregentime") == 0) p.mp_regen_time = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:mpregencur") == 0) p.mp_regen_cur = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:mpregenamount") == 0) p.mp_regen_amount = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"skills") == 0) {
-            for (a = 0;a <= 12;strcmp(f_buffer,"NEXT") == 0 ? ++a : a) {
-                fscanf(save,"%s",f_buffer);
-                tok = strtok(f_buffer,"=");
-                tok = strtok(NULL,"=");
-                if (strcmp(f_buffer,"lv") == 0) skill[a][0] = atoi(tok);
-                else if (strcmp(f_buffer,"xp") == 0) skill[a][1] = atoi(tok);
-                else if (strcmp(f_buffer,"nextxp") == 0) skill[a][2] = atoi(tok);
+            else if (strcmp(f_buffer,"player:hp") == 0) p.hp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:maxhp") == 0) p.maxhp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:mp") == 0) p.mp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:maxmp") == 0) p.maxmp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:str") == 0) p.str = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:tou") == 0) p.tou = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:mag") == 0) p.mag = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:wait") == 0) p.wait = atoi(tok);
+            else if (strcmp(f_buffer,"player:maxwait") == 0) p.max_wait = atoi(tok);
+            else if (strcmp(f_buffer,"player:bonusdamage") == 0) p.bonus_damage = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:equipid") == 0) p.equip_id = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:equipwait") == 0) p.equip_wait = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:equipap") == 0) p.equip_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:equipmaxcon") == 0) p.equip_maxcon = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:equipcon") == 0) p.equip_con = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:equipatk") == 0) p.equip_atk = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:headap") == 0) p.head_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:bodyap") == 0) p.body_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:legsap") == 0) p.legs_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:feetap") == 0) p.feet_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:handsap") == 0) p.hands_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:headid") == 0) p.head_id = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:bodyid") == 0) p.body_id = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:legsid") == 0) p.legs_id = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:feetid") == 0) p.feet_id = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:handsid") == 0) p.hands_id = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:headwait") == 0) p.head_wait = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:bodywait") == 0) p.body_wait = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:legswait") == 0) p.legs_wait = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:feetwait") == 0) p.feet_wait = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:handswait") == 0) p.hands_wait = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:headmaxcon") == 0) p.head_maxcon = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:bodymaxcon") == 0) p.body_maxcon = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:legsmaxcon") == 0) p.legs_maxcon = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:feetmaxcon") == 0) p.feet_maxcon = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:handsmaxcon") == 0) p.hands_maxcon = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:headcon") == 0) p.head_con = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:bodycon") == 0) p.body_con = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:legscon") == 0) p.legs_con = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:feetcon") == 0) p.feet_con = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:handscon") == 0) p.hands_con = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:statusid") == 0) p.status_id = atoi(tok);
+            else if (strcmp(f_buffer,"player:statusdur") == 0) p.status_dur = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:statusstr") == 0) p.status_str = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:lv") == 0) p.lv = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:xp") == 0) p.xp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:nextxp") == 0) p.next_xp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:hpregentime") == 0) p.hp_regen_time = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:hpregencur") == 0) p.hp_regen_cur = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:hpregenamount") == 0) p.hp_regen_amount = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:mpregentime") == 0) p.mp_regen_time = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:mpregencur") == 0) p.mp_regen_cur = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:mpregenamount") == 0) p.mp_regen_amount = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"skills") == 0) {
+                for (a = 0;a <= 12;strcmp(f_buffer,"NEXT") == 0 ? ++a : a) {
+                    fscanf(save,"%s",f_buffer);
+                    tok = strtok(f_buffer,"=");
+                    tok = strtok(NULL,"=");
+                    if (strcmp(f_buffer,"lv") == 0) skill[a][0] = atoi(tok);
+                    else if (strcmp(f_buffer,"xp") == 0) skill[a][1] = atoi(tok);
+                    else if (strcmp(f_buffer,"nextxp") == 0) skill[a][2] = atoi(tok);
+                }
             }
-        }
-        else if (strcmp(f_buffer,"player:species") == 0) p.species = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"player:class") == 0) p.pclass = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"items") == 0) {
-            for (a = 0;a <= INVEN_MAX;strcmp(f_buffer,"NEXT") == 0 ? ++a : a) {
-                fscanf(save,"%s",f_buffer);
-                tok = strtok(f_buffer,"=");
-                tok = strtok(NULL,"=");
-                if (strcmp(f_buffer,"id") == 0) inv[a].id = atoi(tok);
-                else if (strcmp(f_buffer,"amount") == 0) inv[a].amount = strtod(tok,NULL);
-                else if (strcmp(f_buffer,"mod") == 0) inv[a].mod = strtod(tok,NULL);
-                else if (strcmp(f_buffer,"adj") == 0) inv[a].adj = strtod(tok,NULL);
-                else if (strcmp(f_buffer,"atk") == 0) inv[a].atk = strtod(tok,NULL);
-                else if (strcmp(f_buffer,"ap") == 0) inv[a].ap = strtod(tok,NULL);
-                else if (strcmp(f_buffer,"wait") == 0) inv[a].wait = atoi(tok);
-                else if (strcmp(f_buffer,"maxcon") == 0) inv[a].maxcon = strtod(tok,NULL);
-                else if (strcmp(f_buffer,"con") == 0) inv[a].con = strtod(tok,NULL);
-                else if (strcmp(f_buffer,"str") == 0) inv[a].str = strtod(tok,NULL);
-                else if (strcmp(f_buffer,"type") == 0) inv[a].type = atoi(tok);
-                else if (strcmp(f_buffer,"part") == 0) inv[a].part = atoi(tok);
-                else if (strcmp(f_buffer,"effect") == 0) inv[a].effect = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:species") == 0) p.species = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"player:class") == 0) p.pclass = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"items") == 0) {
+                for (a = 0;a <= INVEN_MAX;strcmp(f_buffer,"NEXT") == 0 ? ++a : a) {
+                    fscanf(save,"%s",f_buffer);
+                    tok = strtok(f_buffer,"=");
+                    tok = strtok(NULL,"=");
+                    if (strcmp(f_buffer,"id") == 0) inv[a].id = atoi(tok);
+                    else if (strcmp(f_buffer,"amount") == 0) inv[a].amount = strtod(tok,NULL);
+                    else if (strcmp(f_buffer,"mod") == 0) inv[a].mod = strtod(tok,NULL);
+                    else if (strcmp(f_buffer,"adj") == 0) inv[a].adj = strtod(tok,NULL);
+                    else if (strcmp(f_buffer,"atk") == 0) inv[a].atk = strtod(tok,NULL);
+                    else if (strcmp(f_buffer,"ap") == 0) inv[a].ap = strtod(tok,NULL);
+                    else if (strcmp(f_buffer,"wait") == 0) inv[a].wait = atoi(tok);
+                    else if (strcmp(f_buffer,"maxcon") == 0) inv[a].maxcon = strtod(tok,NULL);
+                    else if (strcmp(f_buffer,"con") == 0) inv[a].con = strtod(tok,NULL);
+                    else if (strcmp(f_buffer,"str") == 0) inv[a].str = strtod(tok,NULL);
+                    else if (strcmp(f_buffer,"type") == 0) inv[a].type = atoi(tok);
+                    else if (strcmp(f_buffer,"part") == 0) inv[a].part = atoi(tok);
+                    else if (strcmp(f_buffer,"effect") == 0) inv[a].effect = strtod(tok,NULL);
+                }
             }
+            else if (strcmp(f_buffer,"enemy:name") == 0) e.name[0] = atoi(tok);
+            else if (strcmp(f_buffer,"enemy:hp") == 0) e.hp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:maxhp") == 0) e.maxhp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:mp") == 0) e.mp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:maxmp") == 0) e.maxmp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:str") == 0) e.str = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:tou") == 0) e.tou = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:mag") == 0) e.mag = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:ap") == 0) e.ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:wait") == 0) e.wait = atoi(tok);
+            else if (strcmp(f_buffer,"enemy:maxwait") == 0) e.max_wait = atoi(tok);
+            else if (strcmp(f_buffer,"enemy:bonusdamage") == 0) e.bonus_damage = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:statusid") == 0) e.status_id = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:statusdur") == 0) e.status_dur = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:statusstr") == 0) e.status_str = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:lv") == 0) e.lv = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:xp") == 0) e.xp = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"stat:kills") == 0) stat_kills = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"stat:mcasts") == 0) stat_m_casts = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"stat:iused") == 0) stat_i_used = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"stat:damdealt") == 0) stat_p_dam_dealt = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"stat:damtaken") == 0) stat_p_dam_taken = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"game:pcreation") == 0) p_creation = atoi(tok);
+            else if (strcmp(f_buffer,"game:turn") == 0) turn = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"game:wait") == 0) global_wait = atoi(tok);
+            else if (strcmp(f_buffer,"END") == 0) break;
         }
-        else if (strcmp(f_buffer,"enemy:name") == 0) strcpy(e.name,tok);
-        else if (strcmp(f_buffer,"enemy:hp") == 0) e.hp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:maxhp") == 0) e.maxhp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:mp") == 0) e.mp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:maxmp") == 0) e.maxmp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:str") == 0) e.str = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:tou") == 0) e.tou = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:mag") == 0) e.mag = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:ap") == 0) e.ap = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:wait") == 0) e.wait = atoi(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:maxwait") == 0) e.max_wait = atoi(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:bonusdamage") == 0) e.bonus_damage = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:statusid") == 0) e.status_id = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:statusdur") == 0) e.status_dur = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:statusstr") == 0) e.status_str = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:lv") == 0) e.lv = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"enemy:xp") == 0) e.xp = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"stat:kills") == 0) stat_kills = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"stat:mcasts") == 0) stat_m_casts = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"stat:iused") == 0) stat_i_used = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"stat:damdealt") == 0) stat_p_dam_dealt = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"stat:damtaken") == 0) stat_p_dam_taken = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"game:pcreation") == 0) p_creation = atoi(tok);
-        else if (strcmp(f_buffer,"game:turn") == 0) turn = strtod(tok,NULL);
-        else if (strcmp(f_buffer,"game:wait") == 0) global_wait = atoi(tok);
-        else if (strcmp(f_buffer,"END") == 0) break;
-        
+        else early_termination("Reading savefile failed.");
     }
     
     fclose(save);
@@ -199,7 +201,7 @@ void save_game() {
     fprintf(save,"player:wait=%s\n",f_buffer);
 
     sprintf(f_buffer,"%d",p.max_wait);
-    fprintf(save,"player:max_wait=%s\n",f_buffer);
+    fprintf(save,"player:maxwait=%s\n",f_buffer);
 
     sprintf(f_buffer,"%.2f",p.bonus_damage);
     fprintf(save,"player:bonusdamage=%s\n",f_buffer);
@@ -363,7 +365,7 @@ void save_game() {
     }
 
     sprintf(f_buffer,"%d",p_creation);
-    fprintf(save,"game:creation=%s\n",f_buffer);
+    fprintf(save,"game:pcreation=%s\n",f_buffer);
 
     sprintf(f_buffer,"%d",p.species);
     fprintf(save,"player:species=%s\n",f_buffer);
@@ -554,7 +556,7 @@ void reset_save() {
         fprintf(save,"nextxp=100\n");
         fprintf(save,"NEXT=0\n");
     }
-    fprintf(save,"game:creation=0\n");
+    fprintf(save,"game:pcreation=0\n");
     fprintf(save,"player:species=0\n");
     fprintf(save,"player:class=0\n");
     fprintf(save,"items=9\n");
