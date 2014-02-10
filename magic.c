@@ -217,7 +217,7 @@ int magic_main(WINDOW *w) {
     cho = 0;
     
     while (cho == 0) {
-        clean_sidebar(w);
+        wclear(w);
 
         box(w,0,0);
         mvwprintw(w,hl,1,"-> ");

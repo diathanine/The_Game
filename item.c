@@ -1375,7 +1375,7 @@ int item_main(WINDOW *w) {
     int ch,cho = 0,hl = 1,di = 0,ti = 0;
     
     while (cho == 0) {
-        clean_sidebar(w);
+        wclear(w);
 
         item_menu(w);
 
@@ -1385,7 +1385,7 @@ int item_main(WINDOW *w) {
         if (hl >= 2) draw_item(w,hl - 2);
 
         box(w,0,0);
-        refresh();
+        wrefresh(w);
         ch = wgetch(w);
         switch (ch) {
             case KEY_DOWN:
@@ -1454,7 +1454,7 @@ int craft_main(WINDOW *w) {
     mvwprintw(w,4,1,"->");
     pg = 1;
     while (cho == 0) {
-        clean_sidebar(w);
+        wclear(w);
         j = 0;
         for (i = 0;i <= INVEN_MAX;++i) { // count empty inv slots
             if (inv[i].id == 0) ++j;
@@ -1503,7 +1503,7 @@ int craft_main(WINDOW *w) {
         }
 
         box(w,0,0);
-        refresh();
+        wrefresh(w);
         ch = wgetch(w);
         switch (ch) {
             case KEY_DOWN:

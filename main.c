@@ -47,16 +47,6 @@ void init_skills() {
     }
 }
 
-void clean_sidebar(WINDOW *w) {
-    int i,j;
-    
-    for (i = 0;i <= SIDEBAR_HEIGHT;++i) {
-        for (j = 0;j <= SIDEBAR_WIDTH;++j) {
-            mvwprintw(w,i,j," ");
-        }
-    }
-}
-
 void draw_sk_bar(WINDOW *w, int xp, int xpn) {
     int a,b = 10;
     
@@ -87,6 +77,161 @@ void draw_con_bar(WINDOW *w, double con, double maxcon) {
         --b;
     }
     wprintw(w,"] %.0f/%.0f",con,maxcon);
+}
+
+void draw_stat_win(WINDOW *w) {
+    double a;
+    int b,stat_line;
+    
+    box(w,0,0);
+    mvwprintw(w,0,2,"Status");
+    /* Erase old text */
+    for (b = 1;b <= 14;++b) {
+        mvwprintw(w,b,1,"                           ");
+    }
+    stat_line = 1;
+    wattron(w,COLOR_PAIR(2));
+    mvwprintw(w,stat_line,1,"Name :");
+    for (b = 0;b < 21;++b) {
+        mvwprintw(w,stat_line,b + 8,"%c",p.name[b]);
+    }
+
+    stat_line++;
+    if (p.hp < p.maxhp * .2) wattron(w,COLOR_PAIR(1) | A_BOLD | A_BLINK);
+    mvwprintw(w,stat_line++,1,"HP   : %.0f",p.hp);
+    wattron(w,COLOR_PAIR(2));
+    wattroff(w,A_BOLD | A_BLINK);
+
+    mvwprintw(w,stat_line++,1,"MaxHP: %.0f",p.maxhp);
+
+    if (p.mp < p.maxmp * .2) wattron(w,COLOR_PAIR(1) | A_BOLD);
+    mvwprintw(w,stat_line++,1,"MP   : %.0f",p.mp);
+    wattron(w,COLOR_PAIR(2));
+    wattroff(w,A_BOLD | A_BLINK);
+
+    mvwprintw(w,stat_line++,1,"MaxMP: %.0f",p.maxmp);
+        
+    a = 0.00;
+    a = p.equip_atk + round(p.bonus_damage);
+        
+    mvwprintw(w,stat_line++,1,"STR  : %.0f%+.0f",p.str,a);
+    mvwprintw(w,stat_line++,1,"TOU  : %.0f",p.tou);
+    mvwprintw(w,stat_line++,1,"MAG  : %.0f",p.mag);
+
+    b = 0;
+    b = (p.status_id == HASTE_ID) ? p.status_str * -1 : 0;
+    b = b + p.equip_wait + p.head_wait + p.body_wait + p.legs_wait + p.feet_wait + p.hands_wait;
+
+    mvwprintw(w,stat_line++,1,"Wait : %d/%d",p.wait,p.max_wait);
+    if (b > 0.0) wattron(w,COLOR_PAIR(1));
+    else if (b < 0.0) wattron(w,COLOR_PAIR(3));
+    wprintw(w,"%+.0f",b);
+    wattron(w,COLOR_PAIR(2));
+
+    /*
+    * A status effect will work if it's ID isn't regisered here,
+    * but won't display properly. */
+    if (p.status_id == FINE_ID) mvwprintw(w,stat_line,1,"Staus: Fine");
+    else if (p.status_id == POISON_ID) {
+        wattron(w,COLOR_PAIR(5));
+        mvwprintw(w,stat_line,1,"Staus: Poisoned!");
+    }
+    else if (p.status_id == STUN_ID) {
+        wattron(w,COLOR_PAIR(6));
+        mvwprintw(w,stat_line,1,"Staus: Stunned!");
+    }
+    else if (p.status_id == SAP_ID) {
+        wattron(w,COLOR_PAIR(7));
+        mvwprintw(w,stat_line,1,"Staus: MP Sap!");
+    }
+    else if (p.status_id == WALL_ID) {
+        wattron(w,COLOR_PAIR(6) | A_REVERSE);
+        mvwprintw(w,stat_line,1,"Staus: Wall!");
+        wattroff(w,A_REVERSE);
+    }
+    else if (p.status_id == HASTE_ID) {
+        wattron(w,COLOR_PAIR(3));
+        mvwprintw(w,stat_line,1,"Staus: Haste!");
+    }
+    else mvwprintw(w,stat_line,1,"Staus: ID:#%d:BUG",p.status_id);
+    if (p.status_id != FINE_ID) wprintw(w," - %.0f turns",p.status_dur);
+    wattron(w,COLOR_PAIR(2));
+
+    stat_line++;
+    a = p.equip_ap;
+    if (p.status_id == WALL_ID) a = a + p.status_str;
+    a = a + p.head_ap + p.body_ap + p.legs_ap + p.feet_ap + p.hands_ap;
+
+    if (a > 0.0) wattron(w,COLOR_PAIR(3));
+    else if (a < 0.0) wattron(w,COLOR_PAIR(1));
+    mvwprintw(w,stat_line++,1,"AP   : %+.0f",a);
+    wattron(w,COLOR_PAIR(2));
+
+    mvwprintw(w,stat_line++,1,"LV   : %.0f",p.lv);
+    mvwprintw(w,stat_line++,1,"XP   : %.0f",p.xp);
+    mvwprintw(w,stat_line++,1,"NxtLv: %.0f",p.next_xp);
+    
+    wrefresh(w);
+}
+
+void draw_enemy_win(WINDOW *w) {
+    int i,stat_line;
+    
+    box(w,0,0);
+    mvwprintw(w,0,2,"Enemy");
+    for (i = 1;i <= 14;++i) {
+        mvwprintw(w,i,1,"                                     ");
+    }
+
+    stat_line = 1;
+    mvwprintw(w,stat_line++,1,"Enemy: ");
+    get_e_name(w,(int)e.name[0]);
+
+    if (e.hp < e.maxhp * .2) wattron(w,COLOR_PAIR(1));
+    mvwprintw(w,stat_line++,1,"HP   : %.0f",e.hp);
+    wattron(w,COLOR_PAIR(6));
+
+    mvwprintw(w,stat_line++,1,"MaxHP: %.0f",e.maxhp);
+
+    if (e.mp < e.maxmp * .2) wattron(w,COLOR_PAIR(1));
+    mvwprintw(w,stat_line++,1,"MP   : %.0f",e.mp);
+    wattron(w,COLOR_PAIR(6));
+
+    mvwprintw(w,stat_line++,1,"MaxMP: %.0f",e.maxmp);
+    mvwprintw(w,stat_line++,1,"STR  : %.0f",e.str);
+    mvwprintw(w,stat_line++,1,"TOU  : %.0f",e.tou);
+    mvwprintw(w,stat_line++,1,"MAG  : %.0f",e.mag);
+    mvwprintw(w,stat_line++,1,"Wait : %d/%d%+.0f",e.wait,e.max_wait,\
+                (e.status_id == HASTE_ID) ? e.status_str : 0.0);
+
+    if (e.status_id == FINE_ID) mvwprintw(w,stat_line,1,"Staus: Fine");
+    else if (e.status_id == POISON_ID) {
+        wattron(w,COLOR_PAIR(5));
+        mvwprintw(w,stat_line,1,"Staus: Poisoned!");
+    }
+    else if (e.status_id == STUN_ID) mvwprintw(w,stat_line,1,"Staus: Stunned!");
+    else if (e.status_id == SAP_ID) {
+        wattron(w,COLOR_PAIR(7));
+        mvwprintw(w,stat_line,1,"Staus: MP Sap!");
+    }
+    else if (e.status_id == WALL_ID) {
+        wattron(w,COLOR_PAIR(6) || A_REVERSE);
+        mvwprintw(w,stat_line,1,"Staus: Wall!");
+        wattroff(w,A_REVERSE);
+    }
+    else if (e.status_id == HASTE_ID) {
+        wattron(w,COLOR_PAIR(3));
+        mvwprintw(w,stat_line,1,"Staus: Haste!");
+    }
+    else mvwprintw(w,stat_line,1,"Staus: ID:#%dBUG",e.status_id);
+    if (e.status_id != FINE_ID) wprintw(w," - %.0f turns",e.status_dur);
+    wattron(w,COLOR_PAIR(6));
+
+    stat_line++;
+    mvwprintw(w,stat_line++,1,"AP   : %.0f",e.ap);
+    mvwprintw(w,stat_line++,1,"LV   : %.0f",e.lv);
+    
+    wrefresh(w);
 }
 
 /**
@@ -225,7 +370,6 @@ double v,w,x,y,z; /* doubles for random use */
 int ii = 0,sizeofname = 0;
 
 int main(int argc, char *argv[]) {
-
 	WINDOW *stat_win,*choice_win,*enemy_win,*sidebar;
 	int highlight = 1,shl = 1,choice = 0,schoice = 0;
 	int ch,i,pg,stat_line = 1;
@@ -670,143 +814,8 @@ int main(int argc, char *argv[]) {
     curs_set(0);
 
 	while (endgame != 1) {
-		/* Erase old text */
-		for (i = 1;i <= 14;++i) {
-            mvwprintw(stat_win,i,1,"                           ");
-        }
-        stat_line = 1;
-        wattron(stat_win,COLOR_PAIR(2));
-		mvwprintw(stat_win,stat_line,1,"Name :");
-		for (ii = 0;ii < 21;++ii) {
-            mvwprintw(stat_win,stat_line,ii + 8,"%c",p.name[ii]);
-        }
-
-        stat_line++;
-        if (p.hp < p.maxhp * .2) wattron(stat_win,COLOR_PAIR(1) | A_BOLD | A_BLINK);
-		mvwprintw(stat_win,stat_line++,1,"HP   : %.0f",p.hp);
-		wattron(stat_win,COLOR_PAIR(2));
-		wattroff(stat_win,A_BOLD | A_BLINK);
-
-		mvwprintw(stat_win,stat_line++,1,"MaxHP: %.0f",p.maxhp);
-
-		if (p.mp < p.maxmp * .2) wattron(stat_win,COLOR_PAIR(1) | A_BOLD);
-		mvwprintw(stat_win,stat_line++,1,"MP   : %.0f",p.mp);
-		wattron(stat_win,COLOR_PAIR(2));
-		wattroff(stat_win,A_BOLD | A_BLINK);
-
-		mvwprintw(stat_win,stat_line++,1,"MaxMP: %.0f",p.maxmp);
-        
-        v = 0.00;
-        v = p.equip_atk + round(p.bonus_damage);
-        
-		mvwprintw(stat_win,stat_line++,1,"STR  : %.0f%+.0f",p.str,v);
-		mvwprintw(stat_win,stat_line++,1,"TOU  : %.0f",p.tou);
-		mvwprintw(stat_win,stat_line++,1,"MAG  : %.0f",p.mag);
-
-		v = 0.0;
-		v = (p.status_id == HASTE_ID) ? p.status_str * -1 : 0;
-		v = v + p.equip_wait + p.head_wait + p.body_wait + p.legs_wait + p.feet_wait + p.hands_wait;
-
-		mvwprintw(stat_win,stat_line++,1,"Wait : %d/%d",p.wait,p.max_wait);
-		if (v > 0.0) wattron(stat_win,COLOR_PAIR(1));
-		else if (v < 0.0) wattron(stat_win,COLOR_PAIR(3));
-		wprintw(stat_win,"%+.0f",v);
-		wattron(stat_win,COLOR_PAIR(2));
-
-        /*
-         * A status effect will work if it's ID isn't regisered here,
-         * but won't display properly. */
-		if (p.status_id == FINE_ID) mvwprintw(stat_win,stat_line,1,"Staus: Fine");
-		else if (p.status_id == POISON_ID) {
-		    wattron(stat_win,COLOR_PAIR(5));
-		    mvwprintw(stat_win,stat_line,1,"Staus: Poisoned!");
-		}
-		else if (p.status_id == STUN_ID) {
-		    wattron(stat_win,COLOR_PAIR(6));
-		    mvwprintw(stat_win,stat_line,1,"Staus: Stunned!");
-		}
-		else if (p.status_id == SAP_ID) {
-		    wattron(stat_win,COLOR_PAIR(7));
-		    mvwprintw(stat_win,stat_line,1,"Staus: MP Sap!");
-		}
-		else if (p.status_id == WALL_ID) {
-		    wattron(stat_win,COLOR_PAIR(6) | A_REVERSE);
-		    mvwprintw(stat_win,stat_line,1,"Staus: Wall!");
-		    wattroff(stat_win,A_REVERSE);
-		}
-		else if (p.status_id == HASTE_ID) {
-			wattron(stat_win,COLOR_PAIR(3));
-			mvwprintw(stat_win,stat_line,1,"Staus: Haste!");
-		}
-		else mvwprintw(stat_win,stat_line,1,"Staus: ID:#%d:BUG",p.status_id);
-		if (p.status_id != FINE_ID) wprintw(stat_win," - %.0f turns",p.status_dur);
-        wattron(stat_win,COLOR_PAIR(2));
-
-        stat_line++;
-        x = p.equip_ap;
-        if (p.status_id == WALL_ID) x = x + p.status_str;
-        x = x + p.head_ap + p.body_ap + p.legs_ap + p.feet_ap + p.hands_ap;
-
-        if (x > 0.0) wattron(stat_win,COLOR_PAIR(3));
-        else if (x < 0.0) wattron(stat_win,COLOR_PAIR(1));
-        mvwprintw(stat_win,stat_line++,1,"AP   : %+.0f",x);
-        wattron(stat_win,COLOR_PAIR(2));
-
-		mvwprintw(stat_win,stat_line++,1,"LV   : %.0f",p.lv);
-		mvwprintw(stat_win,stat_line++,1,"XP   : %.0f",p.xp);
-		mvwprintw(stat_win,stat_line++,1,"NxtLv: %.0f",p.next_xp);
-
-        for (i = 1;i <= 24;++i) {
-            mvwprintw(enemy_win,i,1,"                                     ");
-        }
-
-        stat_line = 1;
-        mvwprintw(enemy_win,stat_line++,1,"Enemy: ");
-        get_e_name(enemy_win,(int)e.name[0]);
-
-        if (e.hp < e.maxhp * .2) wattron(enemy_win,COLOR_PAIR(1));
-        mvwprintw(enemy_win,stat_line++,1,"HP   : %.0f",e.hp);
-        wattron(enemy_win,COLOR_PAIR(6));
-
-        mvwprintw(enemy_win,stat_line++,1,"MaxHP: %.0f",e.maxhp);
-
-        if (e.mp < e.maxmp * .2) wattron(enemy_win,COLOR_PAIR(1));
-        mvwprintw(enemy_win,stat_line++,1,"MP   : %.0f",e.mp);
-        wattron(enemy_win,COLOR_PAIR(6));
-
-        mvwprintw(enemy_win,stat_line++,1,"MaxMP: %.0f",e.maxmp);
-        mvwprintw(enemy_win,stat_line++,1,"STR  : %.0f",e.str);
-        mvwprintw(enemy_win,stat_line++,1,"TOU  : %.0f",e.tou);
-        mvwprintw(enemy_win,stat_line++,1,"MAG  : %.0f",e.mag);
-        mvwprintw(enemy_win,stat_line++,1,"Wait : %d/%d%+.0f",e.wait,e.max_wait,\
-                  (e.status_id == HASTE_ID) ? e.status_str : 0.0);
-
-        if (e.status_id == FINE_ID) mvwprintw(enemy_win,stat_line,1,"Staus: Fine");
-        else if (e.status_id == POISON_ID) {
-            wattron(enemy_win,COLOR_PAIR(5));
-            mvwprintw(enemy_win,stat_line,1,"Staus: Poisoned!");
-        }
-        else if (e.status_id == STUN_ID) mvwprintw(enemy_win,stat_line,1,"Staus: Stunned!");
-        else if (e.status_id == SAP_ID) {
-            wattron(enemy_win,COLOR_PAIR(7));
-            mvwprintw(enemy_win,stat_line,1,"Staus: MP Sap!");
-        }
-        else if (e.status_id == WALL_ID) {
-            wattron(enemy_win,COLOR_PAIR(6) || A_REVERSE);
-            mvwprintw(enemy_win,stat_line,1,"Staus: Wall!");
-            wattroff(enemy_win,A_REVERSE);
-        }
-        else if (e.status_id == HASTE_ID) {
-            wattron(enemy_win,COLOR_PAIR(3));
-            mvwprintw(enemy_win,stat_line,1,"Staus: Haste!");
-        }
-        else mvwprintw(enemy_win,stat_line,1,"Staus: ID:#%dBUG",e.status_id);
-        if (e.status_id != FINE_ID) wprintw(enemy_win," - %.0f turns",e.status_dur);
-        wattron(enemy_win,COLOR_PAIR(6));
-
-        stat_line++;
-        mvwprintw(enemy_win,stat_line++,1,"AP   : %.0f",e.ap);
-		mvwprintw(enemy_win,stat_line++,1,"LV   : %.0f",e.lv);
+		draw_stat_win(stat_win);
+        draw_enemy_win(enemy_win);
 
         for (i = 0;i <= 36;++i) {
             mvwprintw(sidebar,i,1,"                                                                               ");
@@ -869,14 +878,6 @@ int main(int argc, char *argv[]) {
         }
 
         attron(COLOR_PAIR(4));
-
-        box(stat_win,0,0);
-        mvwprintw(stat_win,0,2,"Status");
-        wrefresh(stat_win);
-        
-        box(enemy_win,0,0);
-        mvwprintw(enemy_win,0,2,"Enemy");
-        wrefresh(enemy_win);
         
         box(sidebar,0,0);
         mvwprintw(sidebar,0,2,"Sidebar");
@@ -928,7 +929,9 @@ int main(int argc, char *argv[]) {
                 pg = 1;
                 
                 while (schoice == 0) {
-                    clean_sidebar(sidebar);
+                    wclear(sidebar);
+                    draw_stat_win(stat_win);
+                    draw_enemy_win(enemy_win);
                     mvwprintw(sidebar,1,1,"Press c to go back, up/down changes page, # to unequip.");
 
                     if (pg == 1) {
@@ -1227,9 +1230,9 @@ int main(int argc, char *argv[]) {
                     if (p.max_wait < 9999) p.max_wait = p.max_wait + classes[p.pclass][6];
                     if (p.bonus_damage < STAT_MAX) p.bonus_damage = p.bonus_damage + classes[p.pclass][7];
 
-                    clean_sidebar(sidebar);
-
-                    wrefresh(stat_win);
+                    wclear(sidebar);
+                    draw_stat_win(stat_win);
+                    draw_enemy_win(enemy_win);
 
                     mvwprintw(sidebar,1,3," LV up! HP%+.0f, MP%+.0f, STR%+.0f, TOU%+.0f, MAG%+.0f,",\
                               classes[p.pclass][1],classes[p.pclass][2],classes[p.pclass][3],classes[p.pclass][4],\
@@ -1249,20 +1252,12 @@ int main(int argc, char *argv[]) {
                     mvwprintw(sidebar,4,1,"-> ");
 
                     box(sidebar,0,0);
-                    refresh();
+                    wrefresh(sidebar);
                     while (schoice == 0) {
                         for (i = 1;i <= 20;++i) {
-                        mvwprintw(sidebar,i,1,"  ");
-                    }
-                        if (shl == 1) mvwprintw(sidebar,4,1,"-> ");
-                        else if (shl == 2) mvwprintw(sidebar,5,1,"-> ");
-                        else if (shl == 3) mvwprintw(sidebar,6,1,"-> ");
-                        else if (shl == 4) mvwprintw(sidebar,7,1,"-> ");
-                        else if (shl == 5) mvwprintw(sidebar,8,1,"-> ");
-                        else if (shl == 6) mvwprintw(sidebar,9,1,"-> ");
-                        else if (shl == 7) mvwprintw(sidebar,10,1,"-> ");
-                        else if (shl == 8) mvwprintw(sidebar,11,1,"-> ");
-                        else if (shl == 9) mvwprintw(sidebar,12,1,"-> ");
+                            mvwprintw(sidebar,i,1,"  ");
+                        }
+                        mvwprintw(sidebar,shl + 3,1,"-> ");
 
                         ch = wgetch(sidebar);
                         switch (ch) {
@@ -1342,7 +1337,6 @@ int main(int argc, char *argv[]) {
                     if (p.tou < 1) p.tou = 1;
                     if (p.mag < 1) p.mag = 1;
                 }
-            wrefresh(stat_win);
             }
 		}
 
