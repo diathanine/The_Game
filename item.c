@@ -1327,7 +1327,7 @@ void unequip_item(int slot) {
         p.equip_ap = 0;
         p.equip_mod = 0;
         p.equip_wait = 0;
-        p.equip_atk = 1;
+        p.equip_atk = 0;
         p.equip_maxcon = 0;
         p.equip_con = 0;
     }
