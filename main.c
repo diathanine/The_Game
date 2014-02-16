@@ -86,9 +86,7 @@ void draw_stat_win(WINDOW *w) {
     box(w,0,0);
     mvwprintw(w,0,2,"Status");
     /* Erase old text */
-    for (b = 1;b <= 14;++b) {
-        mvwprintw(w,b,1,"                           ");
-    }
+    wclear(w);
     stat_line = 1;
     wattron(w,COLOR_PAIR(2));
     mvwprintw(w,stat_line,1,"Name :");
@@ -179,9 +177,7 @@ void draw_enemy_win(WINDOW *w) {
     
     box(w,0,0);
     mvwprintw(w,0,2,"Enemy");
-    for (i = 1;i <= 14;++i) {
-        mvwprintw(w,i,1,"                                     ");
-    }
+    wclear(w);
 
     stat_line = 1;
     mvwprintw(w,stat_line++,1,"Enemy: ");
@@ -817,9 +813,7 @@ int main(int argc, char *argv[]) {
 		draw_stat_win(stat_win);
         draw_enemy_win(enemy_win);
 
-        for (i = 0;i <= 36;++i) {
-            mvwprintw(sidebar,i,1,"                                                                               ");
-        }
+        wclear(sidebar);
         wattron(sidebar,COLOR_PAIR(3));
         mvwprintw(sidebar,1,1,"%s",VERSION);
 
