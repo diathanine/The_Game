@@ -508,8 +508,8 @@ void reset_save() {
     fprintf(save,"player:equipcon=5000\n");
     fprintf(save,"player:equipatk=2\n");
     fprintf(save,"player:headap=1\n");
-    fprintf(save,"player:bodyap=3\n");
-    fprintf(save,"player:legsap=2\n");
+    fprintf(save,"player:bodyap=2\n");
+    fprintf(save,"player:legsap=1\n");
     fprintf(save,"player:feetap=1\n");
     fprintf(save,"player:handsap=1\n");
     fprintf(save,"player:headid=9\n");

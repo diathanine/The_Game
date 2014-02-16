@@ -200,7 +200,7 @@ int init_items() {
     item_db[cur_id].diff = 30;
     item_db[cur_id].lv = 7;
     item_db[cur_id].lootable = 1;
-    item_db[cur_id].atk = 1;
+    item_db[cur_id].atk = 3;
     item_db[cur_id].ap = 0;
     item_db[cur_id].body_part = 0;
     item_db[cur_id].condition = 22000;
@@ -239,7 +239,7 @@ int init_items() {
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
     item_db[cur_id].atk = 0;
-    item_db[cur_id].ap = 3;
+    item_db[cur_id].ap = 2;
     item_db[cur_id].body_part = 2;
     item_db[cur_id].condition = 425;
     item_db[cur_id].wait = 0;
@@ -277,7 +277,7 @@ int init_items() {
     item_db[cur_id].lv = 1;
     item_db[cur_id].lootable = 1;
     item_db[cur_id].atk = 0;
-    item_db[cur_id].ap = 2;
+    item_db[cur_id].ap = 1;
     item_db[cur_id].body_part = 3;
     item_db[cur_id].condition = 200;
     item_db[cur_id].wait = 0;
