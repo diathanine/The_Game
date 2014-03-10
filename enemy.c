@@ -362,7 +362,8 @@ double get_loot_mod(double i_lv) {
 }
 
 void enemy_turn() {
-    int i,j,sc = 0,mid,cc;
+    int i,j,mid,cc;
+    int sc = 0;
     /** @note
       * The enemy requires being 5 levels higher than the player to cast a certain spell -
       * Not sure how I feel about that...

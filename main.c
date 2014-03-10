@@ -83,10 +83,9 @@ void draw_stat_win(WINDOW *w) {
     double a;
     int b,stat_line;
     
+    wclear(w);
     box(w,0,0);
     mvwprintw(w,0,2,"Status");
-    /* Erase old text */
-    wclear(w);
     stat_line = 1;
     wattron(w,COLOR_PAIR(2));
     mvwprintw(w,stat_line,1,"Name :");
@@ -105,27 +104,31 @@ void draw_stat_win(WINDOW *w) {
     if (p.mp < p.maxmp * .2) wattron(w,COLOR_PAIR(1) | A_BOLD);
     mvwprintw(w,stat_line++,1,"MP   : %.0f",p.mp);
     wattron(w,COLOR_PAIR(2));
-    wattroff(w,A_BOLD | A_BLINK);
+    wattroff(w,A_BOLD);
 
     mvwprintw(w,stat_line++,1,"MaxMP: %.0f",p.maxmp);
         
     a = 0.00;
     a = p.equip_atk + round(p.bonus_damage);
         
-    mvwprintw(w,stat_line++,1,"STR  : %.0f%+.0f",p.str,a);
+    mvwprintw(w,stat_line++,1,"STR  : %.0f",p.str);
+    if (a != 0.00) wprintw(w,"%+.0f",a);
+    
     mvwprintw(w,stat_line++,1,"TOU  : %.0f",p.tou);
     mvwprintw(w,stat_line++,1,"MAG  : %.0f",p.mag);
+    mvwprintw(w,stat_line++,1,"Wait : %d/%d",p.wait,p.max_wait);
 
     b = 0;
     b = (p.status_id == HASTE_ID) ? p.status_str * -1 : 0;
     b = b + p.equip_wait + p.head_wait + p.body_wait + p.legs_wait + p.feet_wait + p.hands_wait;
 
-    mvwprintw(w,stat_line++,1,"Wait : %d/%d",p.wait,p.max_wait);
-    if (b > 0.0) wattron(w,COLOR_PAIR(1));
-    else if (b < 0.0) wattron(w,COLOR_PAIR(3));
-    wprintw(w,"%+.0f",b);
-    wattron(w,COLOR_PAIR(2));
-
+    if (b != 0) {
+        if (b > 0) wattron(w,COLOR_PAIR(1));
+        else if (b < 0) wattron(w,COLOR_PAIR(3));
+        wprintw(w,"%+d",b);
+        wattron(w,COLOR_PAIR(2));
+    }
+    
     /*
     * A status effect will work if it's ID isn't regisered here,
     * but won't display properly. */
@@ -173,11 +176,11 @@ void draw_stat_win(WINDOW *w) {
 }
 
 void draw_enemy_win(WINDOW *w) {
-    int i,stat_line;
+    int stat_line;
     
+    wclear(w);
     box(w,0,0);
     mvwprintw(w,0,2,"Enemy");
-    wclear(w);
 
     stat_line = 1;
     mvwprintw(w,stat_line++,1,"Enemy: ");
@@ -368,7 +371,7 @@ int ii = 0,sizeofname = 0;
 int main(int argc, char *argv[]) {
 	WINDOW *stat_win,*choice_win,*enemy_win,*sidebar;
 	int highlight = 1,shl = 1,choice = 0,schoice = 0;
-	int ch,i,pg,stat_line = 1;
+	int ch,i,pg;
 
 	/* schoice: (sidebar choice)
         -1: Cancel action without taking player's turn
@@ -810,79 +813,79 @@ int main(int argc, char *argv[]) {
     curs_set(0);
 
 	while (endgame != 1) {
-		draw_stat_win(stat_win);
-        draw_enemy_win(enemy_win);
-
-        wclear(sidebar);
-        wattron(sidebar,COLOR_PAIR(3));
-        mvwprintw(sidebar,1,1,"%s",VERSION);
-
-        mvwprintw(sidebar,3,1,"Turn: %.0f (%03d Wait left)",turn,500 - global_wait);
-
-        if (turns_since_load > 0) {
-            mvwprintw(sidebar,5,1,"---Turn %.0f Summary---",turn - 1);
-
-            wattron(sidebar,p_msg_one_color);
-            mvwprintw(sidebar,7,1,"%s",p_msg_one);
-            wattron(sidebar,COLOR_PAIR(3));
-
-            wattron(sidebar,e_msg_one_color);
-            mvwprintw(sidebar,8,1,"%s",e_msg_one);
-            wattron(sidebar,COLOR_PAIR(3));
-
-            wattron(sidebar,COLOR_PAIR(1));
-            mvwprintw(sidebar,9,1,"%s",e_kill_msg_one);
-            wattron(sidebar,COLOR_PAIR(3));
-        }
-        if (turns_since_load > 1) {
-            mvwprintw(sidebar,11,1,"---Turn %.0f Summary---",turn - 2);
-
-            wattron(sidebar,p_msg_two_color);
-            mvwprintw(sidebar,13,1,"%s",p_msg_two);
-            wattron(sidebar,COLOR_PAIR(3));
-
-            wattron(sidebar,e_msg_two_color);
-            mvwprintw(sidebar,14,1,"%s",e_msg_two);
-            wattron(sidebar,COLOR_PAIR(3));
-
-            wattron(sidebar,COLOR_PAIR(1));
-            mvwprintw(sidebar,15,1,"%s",e_kill_msg_two);
-            wattron(sidebar,COLOR_PAIR(3));
-        }
-        if (turns_since_load > 2) {
-            mvwprintw(sidebar,17,1,"---Turn %.0f Summary---",turn - 3);
-
-            wattron(sidebar,p_msg_three_color);
-            mvwprintw(sidebar,19,1,"%s",p_msg_three);
-            wattron(sidebar,COLOR_PAIR(3));
-
-            wattron(sidebar,e_msg_three_color);
-            mvwprintw(sidebar,20,1,"%s",e_msg_three);
-            wattron(sidebar,COLOR_PAIR(3));
-
-            wattron(sidebar,COLOR_PAIR(1));
-            mvwprintw(sidebar,21,1,"%s",e_kill_msg_three);
-            wattron(sidebar,COLOR_PAIR(3));
-        }
-
-        wattron(sidebar,COLOR_PAIR(3));
-
-        for (i = 0;i <= 39;++i) {
-            mvwprintw(choice_win,i,1,"               ");
-        }
-
-        attron(COLOR_PAIR(4));
-        
-        box(sidebar,0,0);
-        mvwprintw(sidebar,0,2,"Sidebar");
-        wrefresh(sidebar);
-        
-        box(choice_win,0,0);
-        mvwprintw(choice_win,0,2,"Action");
-        print_menu(choice_win,highlight,1,1);
-        wrefresh(choice_win);
-
         if (p.wait == 0 && p.status_id != STUN_ID) { /* if player is stunned, they lose their turn */
+            draw_stat_win(stat_win);
+            draw_enemy_win(enemy_win);
+
+            wclear(sidebar);
+            wattron(sidebar,COLOR_PAIR(3));
+            mvwprintw(sidebar,1,1,"%s",VERSION);
+
+            mvwprintw(sidebar,3,1,"Turn: %.0f (%03d Wait left)",turn,500 - global_wait);
+
+            if (turns_since_load > 0) {
+                mvwprintw(sidebar,5,1,"---Turn %.0f Summary---",turn - 1);
+
+                wattron(sidebar,p_msg_one_color);
+                mvwprintw(sidebar,7,1,"%s",p_msg_one);
+                wattron(sidebar,COLOR_PAIR(3));
+
+                wattron(sidebar,e_msg_one_color);
+                mvwprintw(sidebar,8,1,"%s",e_msg_one);
+                wattron(sidebar,COLOR_PAIR(3));
+
+                wattron(sidebar,COLOR_PAIR(1));
+                mvwprintw(sidebar,9,1,"%s",e_kill_msg_one);
+                wattron(sidebar,COLOR_PAIR(3));
+            }
+            if (turns_since_load > 1) {
+                mvwprintw(sidebar,11,1,"---Turn %.0f Summary---",turn - 2);
+
+                wattron(sidebar,p_msg_two_color);
+                mvwprintw(sidebar,13,1,"%s",p_msg_two);
+                wattron(sidebar,COLOR_PAIR(3));
+
+                wattron(sidebar,e_msg_two_color);
+                mvwprintw(sidebar,14,1,"%s",e_msg_two);
+                wattron(sidebar,COLOR_PAIR(3));
+
+                wattron(sidebar,COLOR_PAIR(1));
+                mvwprintw(sidebar,15,1,"%s",e_kill_msg_two);
+                wattron(sidebar,COLOR_PAIR(3));
+            }
+            if (turns_since_load > 2) {
+                mvwprintw(sidebar,17,1,"---Turn %.0f Summary---",turn - 3);
+
+                wattron(sidebar,p_msg_three_color);
+                mvwprintw(sidebar,19,1,"%s",p_msg_three);
+                wattron(sidebar,COLOR_PAIR(3));
+
+                wattron(sidebar,e_msg_three_color);
+                mvwprintw(sidebar,20,1,"%s",e_msg_three);
+                wattron(sidebar,COLOR_PAIR(3));
+
+                wattron(sidebar,COLOR_PAIR(1));
+                mvwprintw(sidebar,21,1,"%s",e_kill_msg_three);
+                wattron(sidebar,COLOR_PAIR(3));
+            }
+
+            wattron(sidebar,COLOR_PAIR(3));
+
+            for (i = 0;i <= 39;++i) {
+                mvwprintw(choice_win,i,1,"               ");
+            }
+
+            attron(COLOR_PAIR(4)); // ?
+        
+            box(sidebar,0,0);
+            mvwprintw(sidebar,0,2,"Sidebar");
+            wrefresh(sidebar);
+        
+            box(choice_win,0,0);
+            mvwprintw(choice_win,0,2,"Action");
+            print_menu(choice_win,highlight,1,1);
+            wrefresh(choice_win);
+            
             ch = wgetch(choice_win);
             switch (ch) {
                 case KEY_DOWN:
@@ -924,8 +927,8 @@ int main(int argc, char *argv[]) {
                 
                 while (schoice == 0) {
                     wclear(sidebar);
-                    draw_stat_win(stat_win);
-                    draw_enemy_win(enemy_win);
+                   // draw_stat_win(stat_win);
+                   // draw_enemy_win(enemy_win);
                     mvwprintw(sidebar,1,1,"Press c to go back, up/down changes page, # to unequip.");
 
                     if (pg == 1) {

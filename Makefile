@@ -12,7 +12,7 @@
 VER="-DVERSION=\"Version 0.12.1 2014-01-05\""
 
 all:
-	gcc $(VER) -o The_Game main.c -w -lncurses -lm
+	gcc $(VER) -O2 -o The_Game main.c -w -lncurses -lm
 
 dev:
 	gcc $(VER) -DDEBUG -o The_Game -pg -g main.c -Wall -Wextra -Wunused -Wfatal-errors -lncurses -lm
