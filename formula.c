@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <curses.h>
+#ifdef __linux__
+    #include <ncurses.h>
+#else
+    #include <curses.h>
+#endif
 #include <math.h>
 #include "formula.h"
 #include "globals.h"

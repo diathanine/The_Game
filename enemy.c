@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
-#include <curses.h>
+#ifdef __linux__
+    #include <ncurses.h>
+#else
+    #include <curses.h>
+#endif
 #include <math.h>
 #include "enemy.h"
 #include "globals.h"

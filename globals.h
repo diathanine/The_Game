@@ -1,7 +1,11 @@
 #ifndef H_GLOBAL
 #define H_GLOBAL
 
-#include <curses.h>
+#ifdef __linux__
+    #include <ncurses.h>
+#else
+    #include <curses.h>
+#endif
 
 /** @def STAT_MAX
  * Where pretty much everything caps at.

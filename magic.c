@@ -1,5 +1,9 @@
 #include <stdio.h>
-#include <curses.h>
+#ifdef __linux__
+    #include <ncurses.h>
+#else
+    #include <curses.h>
+#endif
 #include <string.h>
 #include "magic.h"
 #include "status.h"

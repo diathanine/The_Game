@@ -8,7 +8,11 @@
 #include <math.h>
 #include <time.h>
 #include <string.h>
-#include <curses.h> /* key constants can be found here. */
+#ifdef __linux__
+    #include <ncurses.h>
+#else
+    #include <curses.h>
+#endif
 
 #include "globals.h"  /* stuff that's used everwur */
 #include "status.h" /* status effects */
