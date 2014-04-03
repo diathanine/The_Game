@@ -1,5 +1,6 @@
 A random assortment of info.
 
+On Linux:
 To compile:
 	cd <path>
 	make
@@ -7,6 +8,15 @@ To play:
 	./The_Game
 Note:
 	Where <path> is the path to the code. You'll need ncurses.
+	
+On Windows:
+Get PDCurses.
+You'll need gcc, I recommend downloading Code::Blocks.
+In C::B, open the project and click "Build".
+Copy the DLL from the PDCurses download to the same directory as the exe.
+If you use a different IDE, set up your linker to point to the PDCurses lib, then build.
+
+==================
 
 The_Game is horribly unbalanced. Don't expect any fairness.
 
