@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <ncurses.h>
+#include <curses.h>
 #include <math.h>
 #include "enemy.h"
 #include "globals.h"
@@ -56,7 +56,7 @@ void kill_enemy() {
         loot_req = ITEM_STAT_MAX;
         loot_lootable = 0;
         loot = roll_die(item_max); /* Equal chance for all items. */
-        
+
         loot_type = item_db[loot].type;
         loot_req = item_db[loot].lv;
         loot_lootable = item_db[loot].lootable;
@@ -324,7 +324,7 @@ void init_e_names() {
     e_namedb[cur_id].color = 1;
 
     ++cur_id;
-    
+
     while (cur_id < 20) {
     	strcpy(e_namedb[cur_id].name,"Unnamed");
     	e_namedb[cur_id].color = 2;
@@ -344,7 +344,7 @@ void init_e_names() {
 double get_loot_mod(double i_lv) {
     double total_mod = 0;
     double chances = 0;
-    
+
     chances = e.lv - p.lv; /* Enemy is higher lv; good */
     if (chances < 0) chances = 0;
 

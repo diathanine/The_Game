@@ -11,7 +11,7 @@
  */
 void init_globals() {
     int i,j;
-    
+
     p_creation = 0;
     p_waiting = 0;
     endgame = 0;
@@ -29,10 +29,10 @@ void init_globals() {
         inv[i].type = 0;
         inv[i].part = 0;
         inv[i].effect = 0;
-        
+
     }
-    for (i = 0;i <= 13;++i) {
-        for (j = 0;j <= 3;++j) {
+    for (i = 0;i <= 12;++i) {
+        for (j = 0;j <= 2;++j) {
             skill[i][j] = 0;
         }
     }
@@ -96,9 +96,9 @@ void print_desc(WINDOW *w, char desc[], int y, int x) {
      */
     int space = SIDEBAR_WIDTH - 2, cur = 0;
     size_t len = 0;
-    
+
     len = strlen(desc);
-    
+
     move(y,x);
     while (len != 0) {
         if (space != 0) {

@@ -1,9 +1,11 @@
 #ifndef H_GLOBAL
 #define H_GLOBAL
 
+#include <curses.h>
+
 /** @def STAT_MAX
  * Where pretty much everything caps at.
- * 
+ *
  * Note however, that this is for 32-bit systems.
  * If you're on a 64-bit system, you may increase
  * this by quite a bit!
@@ -11,12 +13,12 @@
 #define STAT_MAX 922337203685477580.0 /* =((2 ^ 63) - 1) / 10 */
 
 /** @def SKILL_MAX_LEVEL
- * 
+ *
  * The highest level a skill can achieve.
  */
 
 /** @def SKILL_MAX_XP_NEEDED
- * 
+ *
  * The most XP that a skill can require to go up.
  */
 

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <ncurses.h>
+#include <curses.h>
 #include <string.h>
 #include "magic.h"
 #include "status.h"
@@ -151,7 +151,7 @@ void init_magic() {
 
 void magic_entry_item(WINDOW *s, int pos, int m) {
     struct Magic ms = magic_db[m];
-    
+
     if (p.lv < ms.lv) {
         wattron(s,COLOR_PAIR(1));
         mvwprintw(s,pos,4,"??? Lv:%.0f",ms.lv);
@@ -164,14 +164,14 @@ void magic_entry_item(WINDOW *s, int pos, int m) {
         else if (p.mag <= (ms.diff * 3)) wattron(s,COLOR_PAIR(2));
         else if (p.mag <= (ms.diff * 4)) wattron(s,COLOR_PAIR(7));
         else wattron(s,COLOR_PAIR(5));
-    
+
         mvwprintw(s,pos,4,"%s",ms.name);
     }
 }
 
 /**
  * Displays the magic menu.
- * 
+ *
  * This is the list of spells the player sees when
  * they select "Magic" from the menu.
  * Takes an ncurses window as it's only argument.
@@ -186,13 +186,13 @@ void magic_menu(WINDOW *s, int cur) {
      */
     int m,pos = 2;
     struct Magic ms = magic_db[cur - 2];
-    
+
     for (m = 0;m < MAGIC_MAX;++m) {
         magic_entry_item(s,pos,m);
         wattron(s,COLOR_PAIR(3));
         ++pos;
     }
-    
+
     /** @bug
      * Descriptions do not wrap to the
      * next line nicely.
@@ -208,25 +208,25 @@ void magic_menu(WINDOW *s, int cur) {
 
 int magic_main(WINDOW *w) {
     int i,ch,cho,hl;
-    
+
     for (i = 0;i <= 39;++i) {
         mvwprintw(w,i,1,"                                                                            ");
     }
-    
+
     hl = 2;
     cho = 0;
-    
+
     while (cho == 0) {
         wclear(w);
 
         box(w,0,0);
         mvwprintw(w,hl,1,"-> ");
-            
+
         mvwprintw(w,1,4,"Press c to cancel");
         magic_menu(w,hl);
-                    
+
         wrefresh(w);
-                    
+
         ch = wgetch(w);
         switch (ch) {
             case KEY_DOWN:
@@ -257,6 +257,6 @@ int magic_main(WINDOW *w) {
         else cho = -1; /* Not high enough level; cancel choice */
     }
     else cho = -1; /* Not enough MP; cancel choice */
-    
+
     return cho;
 }

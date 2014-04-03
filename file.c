@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <ncurses.h>
+#include <curses.h>
 #include <stdlib.h>
 #include <string.h>
 #include "file.h"
@@ -27,7 +27,7 @@ void load_game() {
         reset_save();
         early_termination("Save is no longer compatible; it will be reset.\nPlease restart The_Game.");
     }
-    
+
     while (1) {
         for (a = 0;a <= 39;++a) f_buffer[a] = 32;
         fscanf(save,"%s",f_buffer);
@@ -156,7 +156,7 @@ void load_game() {
         }
         else early_termination("Reading savefile failed.");
     }
-    
+
     fclose(save);
 }
 
@@ -172,7 +172,7 @@ void save_game() {
 
     sprintf(f_buffer,"%d",SAVE_VERSION);
     fprintf(save,"version=%s\n",f_buffer);
-    
+
     fprintf(save,"player:name=21\n");
     for (a = 0;a <= 20;++a) fprintf(save,"let%d=%d\n",a,p.name[a]);
 
@@ -220,7 +220,7 @@ void save_game() {
 
     sprintf(f_buffer,"%.0f",p.equip_con);
     fprintf(save,"player:equipcon=%s\n",f_buffer);
-    
+
     sprintf(f_buffer,"%.0f",p.equip_atk);
     fprintf(save,"player:equipatk=%s\n",f_buffer);
 
@@ -360,7 +360,7 @@ void save_game() {
 
         sprintf(f_buffer,"%d",skill[a][2]);
         fprintf(save,"nextxp=%s\n",f_buffer);
-        
+
         fprintf(save,"NEXT=0\n");
     }
 
@@ -372,53 +372,53 @@ void save_game() {
 
     sprintf(f_buffer,"%d",p.pclass);
     fprintf(save,"player:class=%s\n",f_buffer);
-    
+
     fprintf(save,"items=9\n");
     while (invslot <= INVEN_MAX) {
         sprintf(f_buffer,"%d",inv[invslot].id);
         fprintf(save,"id=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].amount);
         fprintf(save,"amount=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].mod);
         fprintf(save,"mod=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].adj);
         fprintf(save,"adj=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].atk);
         fprintf(save,"atk=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].ap);
         fprintf(save,"ap=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%d",inv[invslot].wait);
         fprintf(save,"wait=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].maxcon);
         fprintf(save,"maxcon=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].con);
         fprintf(save,"con=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].str);
         fprintf(save,"str=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%d",inv[invslot].type);
         fprintf(save,"type=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].part);
         fprintf(save,"part=%s\n",f_buffer);
-        
+
         sprintf(f_buffer,"%.0f",inv[invslot].effect);
         fprintf(save,"effect=%s\n",f_buffer);
-        
+
         fprintf(save,"NEXT=0\n");
-        
+
         ++invslot;
     }
-    
+
     sprintf(f_buffer,"%d",e.name[0]);
     fprintf(save,"enemy:name=%s\n",f_buffer);
 
@@ -475,7 +475,7 @@ void save_game() {
 
     sprintf(f_buffer,"%d",global_wait);
     fprintf(save,"game:wait=%s\n",f_buffer);
-    
+
     fprintf(save,"END=0\n");
 
     fclose(save);

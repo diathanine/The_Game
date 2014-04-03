@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <ncurses.h>
+#include <curses.h>
 #include <string.h>
 #include <math.h>
 #include "formula.h"
@@ -8,7 +8,7 @@
 
 /**
  * Creates the items.
- * 
+ *
  * On startup, item_db[] is set to contain
  * the base stats of all the items in the game.
  */
@@ -20,7 +20,7 @@ int init_items() {
     int i,cur_id = 1;
 
     /* Set the default values for all items, in case something
-     * gets added to the struct and isn't set below. 
+     * gets added to the struct and isn't set below.
      */
     for (i = 0;i <= 49;++i) {
         strcpy(item_db[i].iname,"Unnamed Item");
@@ -40,7 +40,7 @@ int init_items() {
         item_db[i].wait = 0;
         strcpy(item_db[i].desc,"Fake item.");
     }
-    
+
     strcpy(item_db[0].iname,"Object 0");
     item_db[0].id = 0;
     item_db[0].type = 1;
@@ -57,7 +57,7 @@ int init_items() {
     item_db[0].condition = 0;
     item_db[0].wait = 0;
     strcpy(item_db[0].desc,"Fake item.");
-    
+
     strcpy(item_db[cur_id].iname,"Tiny Red Potion");
     item_db[cur_id].id = cur_id;
     item_db[cur_id].type = 1;
@@ -645,13 +645,13 @@ void get_adjname(int adjid) {
 
 /**
  * Returns the values of an adjective.
- * 
+ *
  * These values determine how an adjective
  * affects an item.
  */
 void get_adjval() {
     int adjid;
-    
+
     /*
      * Just a random formula I thought up. Not tested
      * for balance.
@@ -672,7 +672,7 @@ void get_adjval() {
     else {
         adjid = roll_die(HOR_ADJ) + GREAT_ADJ + GOOD_ADJ + AVG_ADJ + BAD_ADJ;
     }
-    
+
     item_adjval = adjid;
     if (adjid == 1) { /*GREAT!*/
         item_ap = 5;
@@ -824,7 +824,7 @@ void get_adjval() {
         item_atk = -7;
         item_con = 0.01;
     }
-    
+
     /*
      * Are these needed?
     if (item_ap > ITEM_STAT_MAX) item_ap = ITEM_STAT_MAX;
@@ -842,10 +842,10 @@ void get_adjval() {
 
 /**
  * Prints out the item menu.
- * 
+ *
  * This is the list the player sees when
  * they select "Item" from the menu.
- * 
+ *
  */
 void item_menu(WINDOW *sb) {
     int i = -1,o = 0,lo = 1;
@@ -943,7 +943,7 @@ int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
         get_adjname(inv[h].adj);
         mvwprintw(win,ycor++,1,"Adjectival: %s",p_buffer);
     }
-    
+
     if (inv[h].type == 1) {
         if (inv[h].effect == EFF_HEALHP)
          mvwprintw(win,ycor++,1,"Restores HP: %.0f",inv[h].str + inv[h].mod);
@@ -973,7 +973,7 @@ int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
          mvwprintw(win,ycor++,1,"Draws enemy level towards yours: %.0f",inv[h].str + inv[h].mod);
         else mvwprintw(win,ycor++,1,"Unknown effect %d",inv[h].effect);
     }
-    
+
     if (inv[h].type != 1 && inv[h].maxcon != 0)
      mvwprintw(win,ycor++,1,"Condition: %.0f/%.0f",inv[h].con,inv[h].maxcon);
 
@@ -1373,7 +1373,7 @@ void unequip_item(int slot) {
  */
 int item_main(WINDOW *w) {
     int ch,cho = 0,hl = 1,di = 0,ti = 0;
-    
+
     while (cho == 0) {
         wclear(w);
 
@@ -1415,7 +1415,7 @@ int item_main(WINDOW *w) {
                 break;
         };
     }
-    
+
     if (cho > 1 && di == 0) {
         if (inv[cho - 2].id == 0) cho = -1; /* if the slot chosen is empty. */
         else {
@@ -1441,7 +1441,7 @@ int item_main(WINDOW *w) {
         }
     }
     if (cho == 1) cho = -1;
-    
+
     return cho;
 }
 
@@ -1470,7 +1470,7 @@ int craft_main(WINDOW *w) {
         }
 
         mvwprintw(w,hl + 3,1,"-> ");
-        
+
         i = hl + ((pg - 1) * CRAFT_PER_PAGE);
         if (item_db[i].type == 1 && p.lv >= item_db[i].lv) {
             if (item_db[i].effect == EFF_HEALHP)
@@ -1545,16 +1545,16 @@ int craft_main(WINDOW *w) {
         p.mp = p.mp - item_db[cho].cost;
         if (roll_die(100) <= ((p.mag / item_db[cho].diff) * 100)) {
             struct Item it = item_db[cho];
-            
+
             give_item(it.id,it.type,get_craft_mod(it.diff),item_adjval,it.atk + item_atk,\
             it.ap + item_ap,it.wait + item_wait,it.condition * item_con,\
             it.condition * item_con,it.str,it.effect,it.body_part);
-            
+
             award_sk_xp(SKILL_CRAFTING_GEN,max(1,(item_db[cho].cost / p.maxmp) * item_db[cho].diff));
             award_sk_xp(item_db[cho].skl,max(1,(item_db[cho].cost / p.maxmp) * item_db[cho].diff));
         }
     }
     else cho = -1;
-    
+
     return cho;
 }

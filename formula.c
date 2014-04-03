@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ncurses.h>
+#include <curses.h>
 #include <math.h>
 #include "formula.h"
 #include "globals.h"
@@ -40,7 +40,7 @@ void attack_formula(int target) {
     double ap = p.head_ap + p.body_ap + p.legs_ap + p.feet_ap + p.hands_ap + p.equip_ap;
     int roll = 0,has_armor = 0;
     double rdmg = 0,a = 0;
-    
+
     /* Find damage */
     if (target == 1) {
         dmg = round((e.str + 0) - ((p.tou + ap) / 2));
@@ -60,16 +60,16 @@ void attack_formula(int target) {
     if (rdmg > 1.2) rdmg = 1.2;
     if (rdmg < 0.8) rdmg = 0.8;
     dmg = round(dmg * rdmg);
-    
+
     if (dmg < 1) dmg = 1;
-    
-    if (target == 1) {        
+
+    if (target == 1) {
         int hit = 0;
         p.hp = p.hp - dmg;
 
         if (p.body_id != 0 || p.head_id != 0 || p.feet_id != 0 || p.hands_id != 0 || p.legs_id != 0) has_armor = 1;
         if (has_armor == 1) {
-            while (true) {
+            while (1) {
                 roll = roll_die(5);
 
                 while (hit == 0) {
@@ -77,16 +77,16 @@ void attack_formula(int target) {
                        to next slot. */
                     if (roll == 1 && p.head_id == 0 && hit == 0) roll = 2;
                     else hit = 1;
-                    
+
                     if (roll == 2 && p.body_id == 0 && hit == 0) roll = 3;
                     else hit = 1;
-                    
+
                     if (roll == 3 && p.legs_id == 0 && hit == 0) roll = 4;
                     else hit = 1;
-                    
+
                     if (roll == 4 && p.feet_id == 0 && hit == 0) roll = 5;
                     else hit =  1;
-                    
+
                     if (roll == 5 && p.hands_id == 0 && hit == 0) roll = 1;
                     else hit = 1;
                 }
@@ -143,7 +143,7 @@ void attack_formula(int target) {
 
 /**
  * Handles casting of magic.
- * 
+ *
  * @param sid ID of spell.
  * @param user 0 = player, else enemy.
  */
@@ -152,10 +152,10 @@ void magic_formula(int sid, int user) {
 
     struct Magic stc;
     stc = magic_db[sid];
-    
+
     if (user == 0) p.mp = p.mp - stc.cost;
     else e.mp = e.mp - stc.cost;
-    
+
     if (p.mp < 0) p.mp = 0;
     if (e.mp < 0) e.mp = 0;
 
@@ -165,7 +165,7 @@ void magic_formula(int sid, int user) {
             maxx = max(MAGIC_MIN_PERCENT,minn);
             result = round(stc.str * maxx);
             result = roll_sk_bonus(result,get_sk_chances(skill[SKILL_CASTING_GEN][0],skill[stc.skill][0]));
-            
+
             if (stc.invert == 0) {
                 p.hp = p.hp + result;
                 if (p.hp > p.maxhp) p.hp = p.maxhp;
@@ -265,7 +265,7 @@ void magic_formula(int sid, int user) {
             if (p.equip_maxcon <= 0) p.equip_id = 0;
         }
     }
-    
+
     if (user == 0) ++stat_m_casts;
 }
 
@@ -290,13 +290,13 @@ double percentage(double diff,float min_per,float max_per) { /* for giving an ac
 
 /**
  * Returns the modified str of a spell.
- * 
+ *
  */
 /** @todo
  * This should be repurposed to be
  * a general percentage finder, not
  * just for spells.
- */ 
+ */
 double percentage_str(double str,double diff,float min_per,float max_per) { /* For giving a number based on a % */
     double minn,maxx,final;
 

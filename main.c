@@ -8,24 +8,24 @@
 #include <math.h>
 #include <time.h>
 #include <string.h>
-#include <ncurses.h> /* key constants can be found here. */
+#include <curses.h> /* key constants can be found here. */
 
-#include "globals.c"  /* stuff that's used everwur */
+#include "globals.h"  /* stuff that's used everwur */
 #include "status.h" /* status effects */
-#include "item.c" /* defines/item and crafting menus */
-#include "enemy.c" /* enemy killing/spawning and drawing */
-#include "magic.c" /* defines/magic menu */
-#include "formula.c" /* various formulas */
-#include "file.c" /* saving, loading, resetting */
+#include "item.h" /* defines/item and crafting menus */
+#include "enemy.h" /* enemy killing/spawning and drawing */
+#include "magic.h" /* defines/magic menu */
+#include "formula.h" /* various formulas */
+#include "file.h" /* saving, loading, resetting */
 
 /* MISC */
 /**
  * Rolls a die and returns the result.
- * 
+ *
  * To roll multiple dice, use a loop.
- * 
+ *
  * @param sides number of sides on die.
- * 
+ *
  * @returns A result between 1 and sides.
  */
 int roll_die(int sides) {
@@ -49,7 +49,7 @@ void init_skills() {
 
 void draw_sk_bar(WINDOW *w, int xp, int xpn) {
     int a,b = 10;
-    
+
     a = ((xp * 10) / xpn);
     while (a > 0) {
         wprintw(w,"#");
@@ -65,7 +65,7 @@ void draw_sk_bar(WINDOW *w, int xp, int xpn) {
 
 void draw_con_bar(WINDOW *w, double con, double maxcon) {
     int a,b = 10;
-    
+
     a = ((con * 10) / maxcon);
     while (a > 0) {
         wprintw(w,"#");
@@ -82,7 +82,7 @@ void draw_con_bar(WINDOW *w, double con, double maxcon) {
 void draw_stat_win(WINDOW *w) {
     double a;
     int b,stat_line;
-    
+
     wclear(w);
     box(w,0,0);
     mvwprintw(w,0,2,"Status");
@@ -107,13 +107,13 @@ void draw_stat_win(WINDOW *w) {
     wattroff(w,A_BOLD);
 
     mvwprintw(w,stat_line++,1,"MaxMP: %.0f",p.maxmp);
-        
+
     a = 0.00;
     a = p.equip_atk + round(p.bonus_damage);
-        
+
     mvwprintw(w,stat_line++,1,"STR  : %.0f",p.str);
     if (a != 0.00) wprintw(w,"%+.0f",a);
-    
+
     mvwprintw(w,stat_line++,1,"TOU  : %.0f",p.tou);
     mvwprintw(w,stat_line++,1,"MAG  : %.0f",p.mag);
     mvwprintw(w,stat_line++,1,"Wait : %d/%d",p.wait,p.max_wait);
@@ -128,7 +128,7 @@ void draw_stat_win(WINDOW *w) {
         wprintw(w,"%+d",b);
         wattron(w,COLOR_PAIR(2));
     }
-    
+
     /*
     * A status effect will work if it's ID isn't regisered here,
     * but won't display properly. */
@@ -171,13 +171,13 @@ void draw_stat_win(WINDOW *w) {
     mvwprintw(w,stat_line++,1,"LV   : %.0f",p.lv);
     mvwprintw(w,stat_line++,1,"XP   : %.0f",p.xp);
     mvwprintw(w,stat_line++,1,"NxtLv: %.0f",p.next_xp);
-    
+
     wrefresh(w);
 }
 
 void draw_enemy_win(WINDOW *w) {
     int stat_line;
-    
+
     wclear(w);
     box(w,0,0);
     mvwprintw(w,0,2,"Enemy");
@@ -229,13 +229,13 @@ void draw_enemy_win(WINDOW *w) {
     stat_line++;
     mvwprintw(w,stat_line++,1,"AP   : %.0f",e.ap);
     mvwprintw(w,stat_line++,1,"LV   : %.0f",e.lv);
-    
+
     wrefresh(w);
 }
 
 /**
- * A simple function to return the terminal to a usable state before crashing. 
- * 
+ * A simple function to return the terminal to a usable state before crashing.
+ *
  * @param str The error message to print.
  */
 void early_termination(char str[]) {
@@ -249,7 +249,7 @@ void early_termination(char str[]) {
 
 /**
  * Gives XP to skills.
- * 
+ *
  * @param id ID of the skill.
  * @param amount Amount of XP to give.
  */
@@ -359,10 +359,10 @@ int choice_win_startx = 30,choice_win_starty = 0;
 int enemy_win_startx = 0,enemy_win_starty = 18;
 int sidebar_startx = 50,sidebar_starty = 0;
 
-/** @todo 
- * Everything used to be defined outside functions; 
- * this was changed, so these can be moved where they are 
- * actually needed. 
+/** @todo
+ * Everything used to be defined outside functions;
+ * this was changed, so these can be moved where they are
+ * actually needed.
  */
 int a,b,c,d; /* ints for random use */
 double v,w,x,y,z; /* doubles for random use */
@@ -518,7 +518,7 @@ int main(int argc, char *argv[]) {
     a = 0;
 
     /* Define the species */
-    
+
     species[SPECIES_DRACONIAN][0] = SPECIES_DRACONIAN; /* Draconian */
     species[SPECIES_DRACONIAN][1] = 150; /* HP */
     species[SPECIES_DRACONIAN][2] = 10; /* MP */
@@ -708,7 +708,7 @@ int main(int argc, char *argv[]) {
     a = 0;
 
     /* Define the classes */
-    
+
     classes[CLASS_FIGHTER][0] = CLASS_FIGHTER; /* Fighter */
     classes[CLASS_FIGHTER][1] = 5; /* HP */
     classes[CLASS_FIGHTER][2] = 2; /* MP */
@@ -819,7 +819,7 @@ int main(int argc, char *argv[]) {
 
             wclear(sidebar);
             wattron(sidebar,COLOR_PAIR(3));
-            mvwprintw(sidebar,1,1,"%s",VERSION);
+            mvwprintw(sidebar,1,1,"%s","0");
 
             mvwprintw(sidebar,3,1,"Turn: %.0f (%03d Wait left)",turn,500 - global_wait);
 
@@ -876,16 +876,16 @@ int main(int argc, char *argv[]) {
             }
 
             attron(COLOR_PAIR(4)); // ?
-        
+
             box(sidebar,0,0);
             mvwprintw(sidebar,0,2,"Sidebar");
             wrefresh(sidebar);
-        
+
             box(choice_win,0,0);
             mvwprintw(choice_win,0,2,"Action");
             print_menu(choice_win,highlight,1,1);
             wrefresh(choice_win);
-            
+
             ch = wgetch(choice_win);
             switch (ch) {
                 case KEY_DOWN:
@@ -924,7 +924,7 @@ int main(int argc, char *argv[]) {
                 break;
             case 5: /* Stats */
                 pg = 1;
-                
+
                 while (schoice == 0) {
                     wclear(sidebar);
                    // draw_stat_win(stat_win);
@@ -950,7 +950,7 @@ int main(int argc, char *argv[]) {
                         if (p.pclass == classes[CLASS_FIGHTER][0]) wprintw(sidebar,"Fighter");
                         else if (p.pclass == classes[CLASS_MAGE][0]) wprintw(sidebar,"Mage");
                         else if (p.pclass == classes[CLASS_THIEF][0]) wprintw(sidebar,"Thief");
-                        
+
                         mvwprintw(sidebar,5,1,"HP Regen: %.0f every %.0f turns",p.hp_regen_amount,p.hp_regen_time);
                         mvwprintw(sidebar,6,1,"MP Regen: %.0f every %.0f turns",p.mp_regen_amount,p.mp_regen_time);
                     }
@@ -992,7 +992,7 @@ int main(int argc, char *argv[]) {
                             draw_con_bar(sidebar,p.head_con,p.head_maxcon);
                         }
                         else mvwprintw(sidebar,a++,1,"2. Head  : %s; AP: +0; Wait: +0",p_buffer);
-        
+
                         z = 0;
                         if (p.body_id > 0 && p.body_id <= item_max) {
                             sprintf(p_buffer,"%s",item_db[p.body_id].iname);
@@ -1004,7 +1004,7 @@ int main(int argc, char *argv[]) {
                         else {
                             sprintf(p_buffer,"Unused ID: %d",p.body_id);
                         }
-        
+
                         if (z != 0.0) {
                             mvwprintw(sidebar,a++,1,"3. Body  : %s%+.0f; AP: %+.0f; Wait: %+.0f",p_buffer,p.body_ap - z,p.body_ap,p.body_wait);
                             mvwprintw(sidebar,a++,3,"Condition: [");
@@ -1023,7 +1023,7 @@ int main(int argc, char *argv[]) {
                         else {
                             sprintf(p_buffer,"Unused ID: %d",p.legs_id);
                         }
-        
+
                         if (z != 0.0) {
                             mvwprintw(sidebar,a++,1,"4. Legs  : %s%+.0f; AP: %+.0f; Wait: %+.0f",p_buffer,p.legs_ap - z,p.legs_ap,p.legs_wait);
                             mvwprintw(sidebar,a++,3,"Condition: [");
@@ -1077,7 +1077,7 @@ int main(int argc, char *argv[]) {
                         a++; /* another blank line */
                         mvwprintw(sidebar,a++,1,"Total AP : %+.0f; Total Wait: %+.0f",p.head_ap + p.body_ap + p.legs_ap +\
                                 p.feet_ap + p.hands_ap + p.equip_ap,p.head_wait + p.body_wait + p.feet_wait + p.legs_wait + p.hands_wait + p.equip_wait);
-                    
+
                         /** @note
                          * Check how much space the sidebar has when player
                          * is wearing a full set of equipment.
@@ -1204,7 +1204,7 @@ int main(int argc, char *argv[]) {
             if (p.status_id == HASTE_ID) v = v - p.status_str;
             p.wait = v;
         }
-        
+
 		if (e.hp <= 0) {
 		    e_killed = 1;
 			kill_enemy();
@@ -1418,7 +1418,7 @@ int main(int argc, char *argv[]) {
                 e.status_id = FINE_ID;
                 e.status_str = 0;
             }
- 
+
             p_msg_three_color = p_msg_two_color;
             e_msg_three_color = e_msg_two_color;
             p_msg_two_color = p_msg_one_color;
@@ -1531,8 +1531,8 @@ WINDOW *create_newwin(int h, int w, int starty, int startx) {
 	WINDOW *win;
 
 	win = newwin(h, w, starty, startx);
-	box(win, 0 , 0);		
-	wrefresh(win);		
+	box(win, 0 , 0);
+	wrefresh(win);
 
 	return win;
 }
