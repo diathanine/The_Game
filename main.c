@@ -405,7 +405,8 @@ int main(int argc, char *argv[]) {
 
 	while (COLS <= (STAT_WIDTH + CHOICE_WIDTH + SIDEBAR_WIDTH)\
             || LINES <= (STAT_HEIGHT + MAIN_HEIGHT)) {
-        mvprintw(0,0,"Window is not big enough! (Needs 36x115)");
+        mvprintw(0,0,"Window is not big enough! (Needs %dx%d)",STAT_HEIGHT + MAIN_HEIGHT,\
+                  STAT_WIDTH + CHOICE_WIDTH + SIDEBAR_WIDTH);
         mvprintw(1,0,"Current HeightxWidth: %dx%d",LINES,COLS);
         refresh();
         p.name[0] = getch(); /* Resizing the window creates input(?) */
