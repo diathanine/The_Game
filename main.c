@@ -466,22 +466,25 @@ int main(int argc, char *argv[]) {
         mvprintw(9,1,  ",.;:=-''-=:;.,,.;:=-''-=:;.,,.;:=-''-=:;.,,.;:=-''-=:;.");
 
         a = roll_die(13);
-        if (a == 1) mvprintw(10,1,"Don't believe what The_Game tells you. It's all lies.");
-        else if (a == 2) mvprintw(10,1,"If you hate grinding, you'll LOVE The_Game.");
-        else if (a == 3) mvprintw(10,1,"Wielding two weapons at once is for losers.");
-        else if (a == 4) mvprintw(10,1,"If you think leveling is easy, you are not Lv 1000 yet.");
-        else if (a == 5) mvprintw(10,1,"Have you maxed any stats today?");
-        else if (a == 6) mvprintw(10,1,"The Average adjectival is the only one with base stats!");
-        else if (a == 7) mvprintw(10,1,"Trying to cast a spell when you don't have the MP wastes a turn.");
-        else if (a == 8) mvprintw(10,1,"Always keep an inventory slot free for loot.");
-        else if (a == 9) mvprintw(10,1,"You can only delete entire item stacks at a time.");
-        else if (a == 10) mvprintw(10,1,"The XP you earn is adjusted; fighting higher level enemies grants a bonus.");
-        else if (a == 11) mvprintw(10,1,"Who has a name longer than 21 letters?");
-        else if (a == 12) mvprintw(10,1,"An item's adjectival is determined by the level difference between fighters.");
-        else if (a == 13) mvprintw(10,1,"Draconian draconian is draconian.");
+        mvprintw(10,1,"Random tip: ");
+        if (a == 1) printw("Don't believe what The_Game tells you. It's all lies.");
+        else if (a == 2) printw("If you hate grinding, you'll LOVE The_Game.");
+        else if (a == 3) printw("Wielding two weapons at once is for losers.");
+        else if (a == 4) printw("If you think leveling is easy, you are not Lv 1000 yet.");
+        else if (a == 5) printw("Have you maxed any stats today?");
+        else if (a == 6) printw("The Average adjectival is the only one with base stats!");
+        else if (a == 7) printw("Trying to cast a spell when you don't have the MP wastes a turn.");
+        else if (a == 8) printw("Always keep an inventory slot free for loot.");
+        else if (a == 9) printw("You can only delete entire item stacks at a time.");
+        else if (a == 10) printw("The XP you earn is adjusted; fighting higher level enemies grants a bonus.");
+        else if (a == 11) printw("Who has a name longer than 21 letters?");
+        else if (a == 12) printw("An item's adjectival is determined by the level difference between fighters.");
+        else if (a == 13) printw("Draconian draconian is draconian.");
 
         mvprintw(11,1,"Enter a name (Max 21 letters):");
 
+        mvprintw(14,1,"Copyright © 2014 William McFadden, under the WTFPL; see COPYING for more info.");
+        
         move(12,1);
         refresh();
     }
