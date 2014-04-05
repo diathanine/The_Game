@@ -2,3 +2,6 @@ The_Game
 gmon.out
 savefile
 *.o
+*.exe
+*.depend
+*.layout
