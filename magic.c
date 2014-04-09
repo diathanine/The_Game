@@ -5,6 +5,7 @@
     #include <curses.h>
 #endif
 #include <string.h>
+#include "formula.h"
 #include "magic.h"
 #include "status.h"
 #include "globals.h"

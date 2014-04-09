@@ -484,7 +484,7 @@ int main(int argc, char *argv[]) {
         mvprintw(11,1,"Enter a name (Max 21 letters):");
 
         mvprintw(14,1,"Copyright © 2014 William McFadden, under the WTFPL; see COPYING for more info.");
-        
+
         move(12,1);
         refresh();
     }
@@ -511,7 +511,7 @@ int main(int argc, char *argv[]) {
             case 0x0107: /* BS/DEL */
             case 0x014D: /* BS/DEL */
                 if (i >= 0) {
-                    p.name[i - 1] = 0x20;
+                    p.name[i - 1] = ' ';
                     if (i > 0) --i;
                 }
                 break;
@@ -1491,7 +1491,17 @@ int main(int argc, char *argv[]) {
 
 	if (p.hp <= 0) {
 	    attron(COLOR_PAIR(1));
-	    mvprintw(0,0,"R.I.P. %s, killed by ",p.name);
+        for (a = 20;a > 0;--a) {
+            if (p.name[a] != ' ') break;
+        }
+        b = 0;
+        move(0,0);
+	    printw("R.I.P., ");
+	    while (b <= a) {
+            printw("%c",p.name[b]);
+            ++b;
+	    }
+	    printw(", killed by ");
         get_e_name(stdscr,(int)e.name[0]);
         if (e.name[0] == 0) wprintw(stdscr," (how sad...)");
 

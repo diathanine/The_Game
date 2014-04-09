@@ -3,6 +3,7 @@
  * global in scope.
  */
 
+#include <string.h>
 #include "globals.h"
 #include "item.h"
 
@@ -40,7 +41,7 @@ void init_globals() {
     turn = 1;
     turns_since_load = 0;
     e_killed = 0;
-    for (i = 40;i <= 40;++i) {
+    for (i = 39;i <= 39;++i) {
         p_buffer[i] = 0;
         p_msg_one[i] = 0;
         p_msg_two[i] = 0;
