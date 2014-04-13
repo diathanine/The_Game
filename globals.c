@@ -102,17 +102,17 @@ void print_desc(WINDOW *w, char desc[], int y, int x) {
 
     move(y,x);
     while (len != 0) {
-        if (space != 0) {
+        if (space > 0) {
             mvwprintw(w,y,x,"%c",desc[cur]);
             space = space - 1;
             ++x;
+            ++cur;
+            --len;
         }
         else {
             ++y;
             x = 1;
             space = SIDEBAR_WIDTH - 2;
         }
-        ++cur;
-        --len;
     }
 }
