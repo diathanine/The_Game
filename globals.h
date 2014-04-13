@@ -62,13 +62,13 @@
 #define CLASS_THIEF 2
 
 #define MAIN_WIDTH 50
-#define MAIN_HEIGHT 17
+#define MAIN_HEIGHT 15
 #define STAT_WIDTH 30
 #define STAT_HEIGHT 18
 #define CHOICE_WIDTH 20
 #define CHOICE_HEIGHT 18
-#define SIDEBAR_WIDTH 65
-#define SIDEBAR_HEIGHT 35
+#define SIDEBAR_WIDTH 50
+#define SIDEBAR_HEIGHT 33
 
 #ifndef max
 	#define max( a, b ) ( ((a) > (b)) ? (a) : (b) )

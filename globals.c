@@ -110,7 +110,7 @@ void print_desc(WINDOW *w, char desc[], int y, int x) {
         else {
             ++y;
             x = 1;
-            space = 63;
+            space = SIDEBAR_WIDTH - 2;
         }
         ++cur;
         --len;
