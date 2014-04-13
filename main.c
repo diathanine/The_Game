@@ -22,6 +22,8 @@
 #include "formula.h" /* various formulas */
 #include "file.h" /* saving, loading, resetting */
 
+#define VERSION "Version 0.12.1 2014-04-12"
+
 /* MISC */
 /**
  * Rolls a die and returns the result.
@@ -827,7 +829,7 @@ int main(int argc, char *argv[]) {
 
             wclear(sidebar);
             wattron(sidebar,COLOR_PAIR(3));
-            mvwprintw(sidebar,1,1,"%s","0");
+            mvwprintw(sidebar,1,1,"%s",VERSION);
 
             mvwprintw(sidebar,3,1,"Turn: %.0f (%03d Wait left)",turn,500 - global_wait);
 
