@@ -370,7 +370,7 @@ int sidebar_startx = 50,sidebar_starty = 0;
  * this was changed, so these can be moved where they are
  * actually needed.
  */
-int a,b,c,d; /* ints for random use */
+int a,b,c,d,i,f,g; /* ints for random use */
 double v,w,x,y,z; /* doubles for random use */
 int ii = 0,sizeofname = 0;
 
@@ -720,31 +720,31 @@ int main(int argc, char *argv[]) {
     /* Define the classes */
 
     classes[CLASS_FIGHTER][0] = CLASS_FIGHTER; /* Fighter */
-    classes[CLASS_FIGHTER][1] = 5; /* HP */
-    classes[CLASS_FIGHTER][2] = 2; /* MP */
-    classes[CLASS_FIGHTER][3] = 2; /* STR */
-    classes[CLASS_FIGHTER][4] = 2; /* TOU */
-    classes[CLASS_FIGHTER][5] = 1; /* MAG */
-    classes[CLASS_FIGHTER][6] = 5; /* WAI */
-    classes[CLASS_FIGHTER][7] = 0.05; /* DAM */
+    classes[CLASS_FIGHTER][1] = 50; /* HP */
+    classes[CLASS_FIGHTER][2] = 20; /* MP */
+    classes[CLASS_FIGHTER][3] = 20; /* STR */
+    classes[CLASS_FIGHTER][4] = 20; /* TOU */
+    classes[CLASS_FIGHTER][5] = 10; /* MAG */
+    classes[CLASS_FIGHTER][6] = 50; /* WAI */
+    classes[CLASS_FIGHTER][7] = 3; /* DAM */
 
     classes[CLASS_MAGE][0] = CLASS_MAGE; /* Mage */
-    classes[CLASS_MAGE][1] = 2; /* HP */
-    classes[CLASS_MAGE][2] = 5; /* MP */
-    classes[CLASS_MAGE][3] = 1; /* STR */
-    classes[CLASS_MAGE][4] = 1; /* TOU */
-    classes[CLASS_MAGE][5] = 3; /* MAG */
-    classes[CLASS_MAGE][6] = 3; /* WAI */
-    classes[CLASS_MAGE][7] = 0.01; /* DAM */
+    classes[CLASS_MAGE][1] = 20; /* HP */
+    classes[CLASS_MAGE][2] = 50; /* MP */
+    classes[CLASS_MAGE][3] = 10; /* STR */
+    classes[CLASS_MAGE][4] = 10; /* TOU */
+    classes[CLASS_MAGE][5] = 30; /* MAG */
+    classes[CLASS_MAGE][6] = 30; /* WAI */
+    classes[CLASS_MAGE][7] = 1; /* DAM */
 
     classes[CLASS_THIEF][0] = CLASS_THIEF; /* Thief */
-    classes[CLASS_THIEF][1] = 2; /* HP */
-    classes[CLASS_THIEF][2] = 2; /* MP */
-    classes[CLASS_THIEF][3] = 2; /* STR */
-    classes[CLASS_THIEF][4] = 1; /* TOU */
-    classes[CLASS_THIEF][5] = 2; /* MAG */
-    classes[CLASS_THIEF][6] = 1; /* WAI */
-    classes[CLASS_THIEF][7] = 0.03; /* DAM */
+    classes[CLASS_THIEF][1] = 30; /* HP */
+    classes[CLASS_THIEF][2] = 25; /* MP */
+    classes[CLASS_THIEF][3] = 25; /* STR */
+    classes[CLASS_THIEF][4] = 15; /* TOU */
+    classes[CLASS_THIEF][5] = 20; /* MAG */
+    classes[CLASS_THIEF][6] = 10; /* WAI */
+    classes[CLASS_THIEF][7] = 2; /* DAM */
 
     while (p_creation == 2) {
         for (i = 1;i <= 40;++i) {
@@ -759,14 +759,14 @@ int main(int argc, char *argv[]) {
 
         mvprintw(a + 2,1,"->");
 
-        mvprintw(9,20,"Increase per level");
-        mvprintw(10,20,"HP    : %+.0f",classes[a][1]);
-        mvprintw(11,20,"MP    : %+.0f",classes[a][2]);
-        mvprintw(12,20,"STR   : %+.0f",classes[a][3]);
-        mvprintw(13,20,"TOU   : %+.0f",classes[a][4]);
-        mvprintw(14,20,"MAG   : %+.0f",classes[a][5]);
-        mvprintw(15,20,"Wait  : %+.0f",classes[a][6]);
-        mvprintw(16,20,"Damage: %+.0f",classes[a][7]);
+        mvprintw(9,20,"Chance to increase per level:");
+        mvprintw(10,20,"HP    : %.0f%%",classes[a][1]);
+        mvprintw(11,20,"MP    : %.0f%%",classes[a][2]);
+        mvprintw(12,20,"STR   : %.0f%%",classes[a][3]);
+        mvprintw(13,20,"TOU   : %.0f%%",classes[a][4]);
+        mvprintw(14,20,"MAG   : %.0f%%",classes[a][5]);
+        mvprintw(15,20,"Wait  : %.0f%%",classes[a][6]);
+        mvprintw(16,20,"Damage: %.0f%%",classes[a][7]);
 
         if (a == classes[CLASS_FIGHTER][0]) {
             mvprintw(1,20,"No                                ");
@@ -1224,35 +1224,90 @@ int main(int argc, char *argv[]) {
                 ++p.lv;
                 p.xp = p.xp - p.next_xp;
                 if (p.lv < STAT_MAX) {
+                        /*
+                        increase next xp
+                        subtract cur xp
+                        roll die for HP, see if < class chance
+                        repeat for each class stat.
+                        display stats that increased.
+                        eventually, classes will have multiple roll chances.
+                        */
+                    a = 0;
+                    b = 0;
+                    c = 0;
+                    d = 0;
+                    i = 0;
+                    f = 0;
+                    g = 0;
+
                     p.next_xp = ceil(p.next_xp * 1.10); /* 10% more xp needed, rounded up. */
                     if (p.next_xp > STAT_MAX) p.next_xp = STAT_MAX;
 
-                    p.maxhp = p.maxhp + classes[p.pclass][1];
-                    p.hp = p.hp + classes[p.pclass][1];
-                    p.maxmp = p.maxmp + classes[p.pclass][2];
-                    p.mp = p.mp + classes[p.pclass][2];
-                    if (p.str < STAT_MAX) p.str = p.str + classes[p.pclass][3];
-                    if (p.tou < STAT_MAX) p.tou = p.tou + classes[p.pclass][4];
-                    if (p.mag < STAT_MAX) p.mag = p.mag + classes[p.pclass][5];
-                    if (p.max_wait < 9999) p.max_wait = p.max_wait + classes[p.pclass][6];
-                    if (p.bonus_damage < STAT_MAX) p.bonus_damage = p.bonus_damage + classes[p.pclass][7];
+                    if (roll_die(100) <= classes[p.pclass][1]) {
+                        if (p.maxhp < STAT_MAX) {
+                            ++p.maxhp;
+                            ++p.hp;
+                        }
+                        ++a;
+                    }
+
+                    if (roll_die(100) <= classes[p.pclass][2]) {
+                        if (p.maxmp < STAT_MAX) {
+                            ++p.maxmp;
+                            ++p.mp;
+                        }
+                        ++b;
+                    }
+
+                    if (roll_die(100) <= classes[p.pclass][3]) {
+                        if (p.str < STAT_MAX) ++p.str;
+                        ++c;
+                    }
+
+                    if (roll_die(100) <= classes[p.pclass][4]) {
+                        if (p.tou < STAT_MAX) ++p.tou;
+                        ++d;
+                    }
+
+                    if (roll_die(100) <= classes[p.pclass][5]) {
+                        if (p.mag < STAT_MAX) ++p.mag;
+                        ++i;
+                    }
+
+                    if (roll_die(100) <= classes[p.pclass][6]) {
+                        if (p.max_wait < 9999) ++p.max_wait;
+                        ++f;
+                    }
+
+                    if (roll_die(100) <= classes[p.pclass][7]) {
+                        if (p.bonus_damage < STAT_MAX) ++p.bonus_damage;
+                        ++g;
+                    }
 
                     wclear(sidebar);
                     draw_stat_win(stat_win);
                     draw_enemy_win(enemy_win);
 
-                    mvwprintw(sidebar,1,3," LV up! HP%+.0f, MP%+.0f, STR%+.0f, TOU%+.0f, MAG%+.0f,",\
-                              classes[p.pclass][1],classes[p.pclass][2],classes[p.pclass][3],classes[p.pclass][4],\
-                              classes[p.pclass][5]);
-                    mvwprintw(sidebar,2,3," Wait%+.0f, Damage%+.2f",classes[p.pclass][6],classes[p.pclass][7]);
-                    mvwprintw(sidebar,3,3," Pick something to improve:");
-                    mvwprintw(sidebar,4,4,"STR +2, TOU -1, MAG -1");
-                    mvwprintw(sidebar,5,4,"STR -1, TOU +2, MAG -1");
-                    mvwprintw(sidebar,6,4,"STR -1, TOU -1, MAG +2");
-                    mvwprintw(sidebar,7,4,"HP +3, MP -3");
-                    mvwprintw(sidebar,8,4,"HP -3, MP +3");
-                    mvwprintw(sidebar,9,4,"Wait -15 (Min 100)");
-                    mvwprintw(sidebar,10,4,"Damage +0.2");
+                    wmove(sidebar,1,4);
+                    wprintw(sidebar,"Lv up!");
+                    if (a != 0) wprintw(sidebar,"HP+%d ",a);
+                    if (b != 0) wprintw(sidebar,"MP+%d ",b);
+                    if (c != 0) wprintw(sidebar,"STR+%d ",c);
+                    if (d != 0) wprintw(sidebar,"TOU+%d ",d);
+                    if (i != 0) wprintw(sidebar,"MAG+%d ",i);
+                    wmove(sidebar,2,4);
+                    if (f != 0) wprintw(sidebar,"Wait+%d ",f);
+                    if (g != 0) wprintw(sidebar,"Damage+%d ",g);
+                    wmove(sidebar,3,4);
+                    wprintw(sidebar,"Choose a bonus:");
+
+                    mvwprintw(sidebar,4,4,"STR + 2,TOU - 1,MAG - 1");
+                    mvwprintw(sidebar,5,4,"STR - 1,TOU + 2,MAG - 1");
+                    mvwprintw(sidebar,6,4,"STR - 1,TOU - 1,MAG + 2");
+                    mvwprintw(sidebar,7,4,"HP + 3,MP - 3");
+                    mvwprintw(sidebar,8,4,"HP - 3,MP + 3");
+                    mvwprintw(sidebar,9,4,"Wait - 15");
+                    mvwprintw(sidebar,10,4,"Damage + 0.2");
                     mvwprintw(sidebar,11,4,"HP regen +1, takes 5 turns longer");
                     mvwprintw(sidebar,12,4,"MP regen +1, takes 5 turns longer");
 
