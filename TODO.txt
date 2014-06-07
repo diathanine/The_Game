@@ -1,13 +1,16 @@
+Consider this as more of a wish-list of features than anything else.
+
 Create a pop-up window for errors and debugging.
 
 Make MAGIC_MAX auto-update.
+ * Will probably have to change from a #define to a global const.
 
 XP gain needs balancing.
 
 Content and balancing! Very low priority for now.
 
 Item descs wrap, but only on a letter by letter basis.
-    It would be preferable to wrap whole words.
+ * It would be preferable to wrap whole words.
 
 Status effects that temp reduce stats. STR,DEF,MAG...?
 
@@ -18,3 +21,4 @@ Give the enemy an actual inventory.
  * Remove some info from the enemy's window, viewable when scanned. (AP, ATK, etc.)
 
 Convert code to use GMP.
+ * Or any other portable arbitrary precision library.
