@@ -1168,7 +1168,7 @@ int main(int argc, char *argv[]) {
 
                     wattron(sidebar,COLOR_PAIR(3));
                     box(sidebar,0,0);
-                    refresh();
+                    wrefresh(sidebar);
                     ch = wgetch(sidebar);
                     switch (ch) {
                         case KEY_UP:
