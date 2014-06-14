@@ -1288,30 +1288,41 @@ int main(int argc, char *argv[]) {
                     draw_stat_win(stat_win);
                     draw_enemy_win(enemy_win);
 
-                    wmove(sidebar,1,4);
+                    wmove(sidebar,1,1);
                     wprintw(sidebar,"Lv up!");
-                    if (a != 0) wprintw(sidebar,"HP+%d ",a);
-                    if (b != 0) wprintw(sidebar,"MP+%d ",b);
-                    if (c != 0) wprintw(sidebar,"STR+%d ",c);
-                    if (d != 0) wprintw(sidebar,"TOU+%d ",d);
-                    if (i != 0) wprintw(sidebar,"MAG+%d ",i);
-                    wmove(sidebar,2,4);
-                    if (f != 0) wprintw(sidebar,"Wait+%d ",f);
-                    if (g != 0) wprintw(sidebar,"Damage+%d ",g);
-                    wmove(sidebar,3,4);
+                    mvwprintw(sidebar,3,1,"HP+%d",a);
+                    mvwprintw(sidebar,3,12,"-> %.0f",p.maxhp);
+                    mvwprintw(sidebar,4,1,"MP+%d",b);
+                    mvwprintw(sidebar,4,12,"-> %.0f",p.maxmp);
+                    mvwprintw(sidebar,5,1,"STR+%d",c);
+                    mvwprintw(sidebar,5,12,"-> %.0f",p.str);
+                    mvwprintw(sidebar,6,1,"TOU+%d",d);
+                    mvwprintw(sidebar,6,12,"-> %.0f",p.tou);
+                    mvwprintw(sidebar,7,1,"MAG+%d",i);
+                    mvwprintw(sidebar,7,12,"-> %.0f",p.mag);
+                    mvwprintw(sidebar,8,1,"Wait+%d",f);
+                    mvwprintw(sidebar,8,12,"-> %d",p.max_wait);
+                    mvwprintw(sidebar,9,1,"Damage+%d",g);
+                    mvwprintw(sidebar,9,12,"-> %.2f",p.bonus_damage);
+
+                    box(sidebar,0,0);
+                    wrefresh(sidebar);
+                    ch = wgetch(sidebar);
+
+                    wclear(sidebar);
+                    wmove(sidebar,1,4);
                     wprintw(sidebar,"Choose a bonus:");
+                    mvwprintw(sidebar,3,4,"STR + 2,TOU - 1,MAG - 1");
+                    mvwprintw(sidebar,4,4,"STR - 1,TOU + 2,MAG - 1");
+                    mvwprintw(sidebar,5,4,"STR - 1,TOU - 1,MAG + 2");
+                    mvwprintw(sidebar,6,4,"HP + 3,MP - 3");
+                    mvwprintw(sidebar,7,4,"HP - 3,MP + 3");
+                    mvwprintw(sidebar,8,4,"Wait - 15");
+                    mvwprintw(sidebar,9,4,"Damage + 0.2");
+                    mvwprintw(sidebar,10,4,"HP regen +1, takes 5 turns longer");
+                    mvwprintw(sidebar,11,4,"MP regen +1, takes 5 turns longer");
 
-                    mvwprintw(sidebar,4,4,"STR + 2,TOU - 1,MAG - 1");
-                    mvwprintw(sidebar,5,4,"STR - 1,TOU + 2,MAG - 1");
-                    mvwprintw(sidebar,6,4,"STR - 1,TOU - 1,MAG + 2");
-                    mvwprintw(sidebar,7,4,"HP + 3,MP - 3");
-                    mvwprintw(sidebar,8,4,"HP - 3,MP + 3");
-                    mvwprintw(sidebar,9,4,"Wait - 15");
-                    mvwprintw(sidebar,10,4,"Damage + 0.2");
-                    mvwprintw(sidebar,11,4,"HP regen +1, takes 5 turns longer");
-                    mvwprintw(sidebar,12,4,"MP regen +1, takes 5 turns longer");
-
-                    mvwprintw(sidebar,4,1,"-> ");
+                    mvwprintw(sidebar,3,1,"-> ");
 
                     box(sidebar,0,0);
                     wrefresh(sidebar);
@@ -1319,7 +1330,7 @@ int main(int argc, char *argv[]) {
                         for (i = 1;i <= 20;++i) {
                             mvwprintw(sidebar,i,1,"  ");
                         }
-                        mvwprintw(sidebar,shl + 3,1,"-> ");
+                        mvwprintw(sidebar,shl + 2,1,"-> ");
 
                         ch = wgetch(sidebar);
                         switch (ch) {
