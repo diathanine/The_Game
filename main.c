@@ -939,7 +939,7 @@ int main(int argc, char *argv[]) {
                     wclear(sidebar);
                    // draw_stat_win(stat_win);
                    // draw_enemy_win(enemy_win);
-                    mvwprintw(sidebar,1,1,"Press c to go back, up/down changes page, # to unequip.");
+                    mvwprintw(sidebar,1,1,"Press c to go back, up/down changes page,\n # to unequip.");
 
                     if (pg == 1) {
                         mvwprintw(sidebar,3,1,"Enemies killed..% 12.0f",stat_kills);
@@ -1101,56 +1101,69 @@ int main(int argc, char *argv[]) {
                         wattroff(sidebar,A_BOLD);
 
                         wattron(sidebar,COLOR_PAIR(1));
-                        mvwprintw(sidebar,a++,3,"1. Fighting: Lv. % 9d [",skill[SKILL_FIGHTING][0]);
+                        mvwprintw(sidebar,a++,3,"1. Fighting: Lv. % 9d\n     [",skill[SKILL_FIGHTING][0]);
                         draw_sk_bar(sidebar,skill[SKILL_FIGHTING][1],skill[SKILL_FIGHTING][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(6));
-                        mvwprintw(sidebar,a++,3,"2. Crafting: Lv. % 9d [",skill[SKILL_CRAFTING_GEN][0]);
+                        mvwprintw(sidebar,a++,3,"2. Crafting: Lv. % 9d\n     [",skill[SKILL_CRAFTING_GEN][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CRAFTING_GEN][1],skill[SKILL_CRAFTING_GEN][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(6));
-                        mvwprintw(sidebar,a++,3," a. Healing: Lv. % 9d [",skill[SKILL_CRAFTING_HEA][0]);
+                        mvwprintw(sidebar,a++,3," a. Healing: Lv. % 9d\n     [",skill[SKILL_CRAFTING_HEA][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CRAFTING_HEA][1],skill[SKILL_CRAFTING_HEA][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(1));
-                        mvwprintw(sidebar,a++,3," b.  Attack: Lv. % 9d [",skill[SKILL_CRAFTING_ATT][0]);
+                        mvwprintw(sidebar,a++,3," b.  Attack: Lv. % 9d\n     [",skill[SKILL_CRAFTING_ATT][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CRAFTING_ATT][1],skill[SKILL_CRAFTING_ATT][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(4));
-                        mvwprintw(sidebar,a++,3," c.  Wep&Ar: Lv. % 9d [",skill[SKILL_CRAFTING_WAA][0]);
+                        mvwprintw(sidebar,a++,3," c.  Wep&Ar: Lv. % 9d\n     [",skill[SKILL_CRAFTING_WAA][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CRAFTING_WAA][1],skill[SKILL_CRAFTING_WAA][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(6));
-                        mvwprintw(sidebar,a++,3," d.   Other: Lv. % 9d [",skill[SKILL_CRAFTING_OTH][0]);
+                        mvwprintw(sidebar,a++,3," d.   Other: Lv. % 9d\n     [",skill[SKILL_CRAFTING_OTH][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CRAFTING_OTH][1],skill[SKILL_CRAFTING_OTH][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(2));
-                        mvwprintw(sidebar,a++,3,"3.  Casting: Lv. % 9d [",skill[SKILL_CASTING_GEN][0]);
+                        mvwprintw(sidebar,a++,3,"3.  Casting: Lv. % 9d\n     [",skill[SKILL_CASTING_GEN][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CASTING_GEN][1],skill[SKILL_CASTING_GEN][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(6));
-                        mvwprintw(sidebar,a++,3," a. Healing: Lv. % 9d [",skill[SKILL_CASTING_HEA][0]);
+                        mvwprintw(sidebar,a++,3," a. Healing: Lv. % 9d\n     [",skill[SKILL_CASTING_HEA][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CASTING_HEA][1],skill[SKILL_CASTING_HEA][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(1));
-                        mvwprintw(sidebar,a++,3," b.  Attack: Lv. % 9d [",skill[SKILL_CASTING_ATT][0]);
+                        mvwprintw(sidebar,a++,3," b.  Attack: Lv. % 9d\n     [",skill[SKILL_CASTING_ATT][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CASTING_ATT][1],skill[SKILL_CASTING_ATT][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(4));
-                        mvwprintw(sidebar,a++,3," c.  Status: Lv. % 9d [",skill[SKILL_CASTING_STA][0]);
+                        mvwprintw(sidebar,a++,3," c.  Status: Lv. % 9d\n     [",skill[SKILL_CASTING_STA][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CASTING_STA][1],skill[SKILL_CASTING_STA][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(1));
-                        mvwprintw(sidebar,a++,3," d.    Fire: Lv. % 9d [",skill[SKILL_CASTING_FIR][0]);
+                        mvwprintw(sidebar,a++,3," d.    Fire: Lv. % 9d\n     [",skill[SKILL_CASTING_FIR][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CASTING_FIR][1],skill[SKILL_CASTING_FIR][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(7));
-                        mvwprintw(sidebar,a++,3," e.   Water: Lv. % 9d [",skill[SKILL_CASTING_WAT][0]);
+                        mvwprintw(sidebar,a++,3," e.   Water: Lv. % 9d\n     [",skill[SKILL_CASTING_WAT][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CASTING_WAT][1],skill[SKILL_CASTING_WAT][2]);
+                        a++;
 
                         wattron(sidebar,COLOR_PAIR(3));
-                        mvwprintw(sidebar,a++,3," f.   Earth: Lv. % 9d [",skill[SKILL_CASTING_EAR][0]);
+                        mvwprintw(sidebar,a++,3," f.   Earth: Lv. % 9d\n     [",skill[SKILL_CASTING_EAR][0]);
                         draw_sk_bar(sidebar,skill[SKILL_CASTING_EAR][1],skill[SKILL_CASTING_EAR][2]);
+                        a++;
                     }
 
                     wattron(sidebar,COLOR_PAIR(3));
