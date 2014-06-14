@@ -489,43 +489,44 @@ int main(int argc, char *argv[]) {
 
         move(12,1);
         refresh();
-    }
 
-    i = 0;
+        i = 0;
 
-    while (p_creation == 0 && i < 21) {
-        for (ii = 0;ii < 21;++ii) {
-            mvprintw(12,ii,"%c",p.name[ii]);
-        }
-        move(12,i);
-        refresh();
-        ch = getch();
-        /* resizing terminal win prints gibberish; this should fix. */
-        if (ch < 0x00 || ch > 0x14D) ch = 0x00;
-        switch (ch) {
-            case 0x00:
-                break;
-            case 0x0A: /* Enter */
-                if (i != 0) p_creation = 1;
-                break;
-            case 0x08: /* ASCII Backspace */
-            case 0x7F: /* ASCII Delete */
-            case 0x0107: /* BS/DEL */
-            case 0x014D: /* BS/DEL */
-                if (i >= 0) {
-                    p.name[i - 1] = ' ';
-                    if (i > 0) --i;
-                }
-                break;
-            default:
-                p.name[i] = ch;
-                ++i;
-                if (i == 21) p_creation = 1;
-                break;
+        while (p_creation == 0 && i < 21) {
+            for (ii = 0;ii < 21;++ii) {
+                mvprintw(12,ii,"%c",p.name[ii]);
+            }
+            move(12,i);
+            refresh();
+            ch = getch();
+            /* resizing terminal win prints gibberish; this should fix. */
+            if (ch < 0x00 || ch > 0x14D) ch = 0x00;
+            switch (ch) {
+                case 0x00:
+                    break;
+                case 0x0A: /* Enter */
+                    if (i != 0) p_creation = 1;
+                    break;
+                case 0x08: /* ASCII Backspace */
+                case 0x7F: /* ASCII Delete */
+                case 0x0107: /* BS/DEL */
+                case 0x014D: /* BS/DEL */
+                    if (i >= 0) {
+                        p.name[i - 1] = ' ';
+                        if (i > 0) --i;
+                    }
+                    break;
+                default:
+                    p.name[i] = ch;
+                    ++i;
+                    if (i == 21) p_creation = 1;
+                    break;
+            }
         }
     }
 
     a = 0;
+    clear();
 
     /* Define the species */
 
