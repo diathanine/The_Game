@@ -853,6 +853,7 @@ void get_adjval() {
  */
 void item_menu(WINDOW *sb) {
     int i = -1,o = 0,lo = 1;
+    mvwprintw(sb,1,1,"Press c to cancel.");
     while (o <= INVEN_MAX) {
         /* o = current slot,lo = last o
         i isn't immediately reset because the next item slot might be a match
@@ -1376,41 +1377,45 @@ void unequip_item(int slot) {
  * The main loop for the item command.
  */
 int item_main(WINDOW *w) {
-    int ch,cho = 0,hl = 1,di = 0,ti = 0;
+    int ch,cho = 0,hl = 0,di = 0,ti = 0;
 
     while (cho == 0) {
         wclear(w);
 
         item_menu(w);
 
-        mvwprintw(w,1,4,"Cancel");
-        mvwprintw(w,hl,1,"-> ");
+        mvwprintw(w,hl + 2,1,"-> ");
 
-        if (hl >= 2) draw_item(w,hl - 2);
+        if (hl >= 2) draw_item(w,hl);
 
         box(w,0,0);
         wrefresh(w);
         ch = wgetch(w);
         switch (ch) {
             case KEY_DOWN:
-                if (hl < 11) hl = hl + 1;
-                else hl = 1;
+                if (hl < 9) hl = hl + 1;
+                else hl = 0;
                 break;
             case KEY_UP:
-                if (hl > 1) hl = hl - 1;
-                else hl = 11;
+                if (hl > 0) hl = hl - 1;
+                else hl = 9;
                 break;
             case 0x0A: /* Enter */
                 cho = hl;
                 di = 0;
                 ti = 0;
                 break;
-            case 0x64: /* d */
+            case 'c':
+                cho = -1;
+                di = 0;
+                ti = 0;
+                break;
+            case 'd':
                 cho = hl;
                 di = 1;
                 ti = 0;
                 break;
-            case 0x74: /* t */
+            case 't':
                 cho = hl;
                 di = 0;
                 ti = 1;
@@ -1421,27 +1426,27 @@ int item_main(WINDOW *w) {
     }
 
     if (cho > 1 && di == 0) {
-        if (inv[cho - 2].id == 0) cho = -1; /* if the slot chosen is empty. */
+        if (inv[cho].id == 0) cho = -1; /* if the slot chosen is empty. */
         else {
-            use_item(cho - 2,ti);
+            use_item(cho,ti);
         }
     }
     else if (cho > 1 && di == 1) {
-        if (inv[cho - 2].id == 0) cho =- 1;
+        if (inv[cho].id == 0) cho = -1;
         else {
-            inv[cho - 2].id = 0;
-            inv[cho - 2].amount = 0;
-            inv[cho - 2].mod = 0;
-            inv[cho - 2].adj = 0;
-            inv[cho - 2].atk = 0;
-            inv[cho - 2].ap = 0;
-            inv[cho - 2].wait = 0;
-            inv[cho - 2].maxcon = 0;
-            inv[cho - 2].con = 0;
-            inv[cho - 2].str = 0;
-            inv[cho - 2].type = 0;
-            inv[cho - 2].part = 0;
-            inv[cho - 2].effect = 0;
+            inv[cho].id = 0;
+            inv[cho].amount = 0;
+            inv[cho].mod = 0;
+            inv[cho].adj = 0;
+            inv[cho].atk = 0;
+            inv[cho].ap = 0;
+            inv[cho].wait = 0;
+            inv[cho].maxcon = 0;
+            inv[cho].con = 0;
+            inv[cho].str = 0;
+            inv[cho].type = 0;
+            inv[cho].part = 0;
+            inv[cho].effect = 0;
         }
     }
     if (cho == 1) cho = -1;
