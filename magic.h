@@ -5,14 +5,6 @@
  * defines for all the magic
 */
 
-/*
- * magic effectiveness ranges from .1% - 500%
- *  1    = 100%
- *  .1   = 10%
- *  .01  = 1%
- *  .001 = .1%
- */
-
 #define MAGIC_MAX 10
 #define MAGIC_MIN_PERCENT .001 /* .1% */
 #define MAGIC_MAX_PERCENT 5 /* 500% */

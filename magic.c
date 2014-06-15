@@ -150,8 +150,6 @@ void init_magic() {
     magic_db[cur_id].lv = 15;
     magic_db[cur_id].skill = SKILL_CASTING_HEA;
     strcpy(magic_db[cur_id].desc,"(Healing) Repairs your weapon; makes it more brittle, however.");
-
-    ++cur_id;
 }
 
 void magic_entry_item(WINDOW *s, int pos, int m) {
