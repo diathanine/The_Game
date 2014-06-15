@@ -943,7 +943,9 @@ void craft_menu(WINDOW *s, int pg) {
  * @param h Current inventory slot.
  * @param idesc The description of the current item.
  */
-int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
+int item_info(WINDOW *win, int ycor, int h) {
+    int a = inv[h].id;
+
     if (inv[h].adj != 0) {
         get_adjname(inv[h].adj);
         mvwprintw(win,ycor++,1,"Adjectival: %s",p_buffer);
@@ -991,14 +993,10 @@ int item_info(WINDOW *win, int ycor, int h, char idesc[]) {
     if (inv[h].type != 1 && inv[h].wait != 0)
      mvwprintw(win,ycor++,1,"Wait: %+d",inv[h].wait);
 
-    print_desc(win,(char *)idesc,ycor++,1);
+
+    print_desc(win,item_db[a].desc,ycor++,1);
 
     return ycor + 2;
-}
-
-void draw_item(WINDOW *s,int h) {
-    int id = inv[h].id;
-    if (id != 0) item_info(s,15,h,item_db[id].desc);
 }
 
 /**
@@ -1381,12 +1379,9 @@ int item_main(WINDOW *w) {
 
     while (cho == 0) {
         wclear(w);
-
         item_menu(w);
-
         mvwprintw(w,hl + 2,1,"-> ");
-
-        if (hl >= 2) draw_item(w,hl);
+        item_info(w,15,hl);
 
         box(w,0,0);
         wrefresh(w);

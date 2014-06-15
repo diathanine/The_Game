@@ -3,7 +3,7 @@
 
 /** @file item.h
  * Definitions and functions related to items.
- * 
+ *
  */
 
 /* defines all items
@@ -56,7 +56,7 @@ void get_adjval();
 void item_menu(WINDOW *sb);
 void craft_entry_item(WINDOW *s, int pos, double lv, double diff, double cost);
 void craft_menu(WINDOW *s, int p);
-int item_info(WINDOW *win, int ycor, int hb, char idesc[]);
+int item_info(WINDOW *win, int ycor, int h);
 void draw_item(WINDOW *s, int h);
 int get_craft_mod(double diff);
 void equip_armor(int part, double armap, double armcon, int armid, int armwait);
@@ -74,9 +74,9 @@ int item_max; /* highest item id */
 /* Currently transfering all item constants to use new struct. */
 
 /** @struct Item
- * 
+ *
  * Stores the data for all the items.
- * 
+ *
  */
 struct Item {
     char iname[50];

@@ -9,9 +9,6 @@ XP gain needs balancing.
 
 Content and balancing! Very low priority for now.
 
-Item descs wrap, but only on a letter by letter basis.
- * It would be preferable to wrap whole words.
-
 Status effects that temp reduce stats. STR,DEF,MAG...?
 
 Use game version to check savefile version.

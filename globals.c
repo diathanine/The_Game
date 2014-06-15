@@ -92,27 +92,40 @@ void print_desc(WINDOW *w, char desc[], int y, int x) {
      * Some notes:
      * No matter the starting x, will return to the far left
      *  when wrapping.
-     * Will wrap based on letters, not whole words.
      * space has "-2" because of the border around the window.
      */
-    int space = SIDEBAR_WIDTH - 2, cur = 0;
-    size_t len = 0;
+    int space = SIDEBAR_WIDTH - 2, first = 1, cont = 1;
+    char *tdesc, mdesc[100];
+    size_t len = 0, cur = 0;
 
+    /* Don't modify the item_db desc. ;P */
+    strcpy(mdesc,desc);
     len = strlen(desc);
 
     move(y,x);
-    while (len != 0) {
-        if (space > 0) {
-            mvwprintw(w,y,x,"%c",desc[cur]);
-            space = space - 1;
-            ++x;
-            ++cur;
-            --len;
+    while (len > 0 && y < SIDEBAR_HEIGHT - 1) {
+        if (first == 1) tdesc = strtok(mdesc," ");
+        else if (cont == 1) tdesc = strtok(NULL," ");
+
+        if (tdesc == NULL) break;
+        tdesc = tdesc + '\0';
+        cur = strlen(tdesc);
+
+        if (space > 0 && cur <= space) {
+            mvwprintw(w,y,x,"%s",tdesc);
+            /* An extra 1 for space between words. */
+            space = space - cur - 1;
+            x = x + cur + 1;
+            len = len - cur + 1;
+            cont = 1;
         }
         else {
+            cont = 0;
             ++y;
             x = 1;
             space = SIDEBAR_WIDTH - 2;
         }
+
+        if (first == 1) first = 0;
     }
 }
