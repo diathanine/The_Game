@@ -115,7 +115,6 @@ void kill_enemy() {
     e.wait = round(e.lv / 5) + 500;
     e.max_wait = round(e.lv / 5) + 500;
     e.bonus_damage = 0.00;
-    e.ap = 0;
     //e.atk = 0;
     e.status_id = 0;
     e.status_str = 0;
@@ -165,7 +164,12 @@ void kill_enemy() {
             e.bonus_damage = e.bonus_damage + 0.15;
         }
         else if (roll == 9) {
-            ++e.ap;
+            roll = roll_die(5);
+            if (roll == 1) ++e.head_ap;
+            else if (roll == 2) ++e.body_ap;
+            else if (roll == 3) ++e.legs_ap;
+            else if (roll == 4) ++e.feet_ap;
+            else if (roll == 5) ++e.hands_ap;
         }
         --e_SP;
 

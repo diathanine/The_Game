@@ -139,7 +139,11 @@ void load_game() {
             else if (strcmp(f_buffer,"enemy:str") == 0) e.str = strtod(tok,NULL);
             else if (strcmp(f_buffer,"enemy:tou") == 0) e.tou = strtod(tok,NULL);
             else if (strcmp(f_buffer,"enemy:mag") == 0) e.mag = strtod(tok,NULL);
-            else if (strcmp(f_buffer,"enemy:ap") == 0) e.ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:head_ap") == 0) e.head_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:body_ap") == 0) e.body_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:legs_ap") == 0) e.legs_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:feet_ap") == 0) e.feet_ap = strtod(tok,NULL);
+            else if (strcmp(f_buffer,"enemy:hands_ap") == 0) e.hands_ap = strtod(tok,NULL);
             else if (strcmp(f_buffer,"enemy:wait") == 0) e.wait = atoi(tok);
             else if (strcmp(f_buffer,"enemy:maxwait") == 0) e.max_wait = atoi(tok);
             else if (strcmp(f_buffer,"enemy:bonusdamage") == 0) e.bonus_damage = strtod(tok,NULL);
@@ -447,8 +451,20 @@ void save_game() {
     sprintf(f_buffer,"%.0f",e.mag);
     fprintf(save,"enemy:mag=%s\n",f_buffer);
 
-    sprintf(f_buffer,"%.0f",e.ap);
-    fprintf(save,"enemy:ap=%s\n",f_buffer);
+    sprintf(f_buffer,"%.0f",e.head_ap);
+    fprintf(save,"enemy:head_ap=%s\n",f_buffer);
+
+    sprintf(f_buffer,"%.0f",e.body_ap);
+    fprintf(save,"enemy:body_ap=%s\n",f_buffer);
+
+    sprintf(f_buffer,"%.0f",e.legs_ap);
+    fprintf(save,"enemy:legs_ap=%s\n",f_buffer);
+
+    sprintf(f_buffer,"%.0f",e.feet_ap);
+    fprintf(save,"enemy:feet_ap=%s\n",f_buffer);
+
+    sprintf(f_buffer,"%.0f",e.hands_ap);
+    fprintf(save,"enemy:hands_ap=%s\n",f_buffer);
 
     sprintf(f_buffer,"%d",e.wait);
     fprintf(save,"enemy:wait=%s\n",f_buffer);
@@ -616,7 +632,11 @@ void reset_save() {
     fprintf(save,"enemy:str=10\n");
     fprintf(save,"enemy:tou=10\n");
     fprintf(save,"enemy:mag=10\n");
-    fprintf(save,"enemy:ap=0\n");
+    fprintf(save,"enemy:head_ap=0\n");
+    fprintf(save,"enemy:body_ap=0\n");
+    fprintf(save,"enemy:legs_ap=0\n");
+    fprintf(save,"enemy:feet_ap=0\n");
+    fprintf(save,"enemy:hands_ap=0\n");
     fprintf(save,"enemy:wait=500\n");
     fprintf(save,"enemy:maxwait=500\n");
     fprintf(save,"enemy:bonusdamage=0.00\n");

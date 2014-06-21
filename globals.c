@@ -41,6 +41,7 @@ void init_globals() {
     turns_since_load = 0;
     e_killed = 0;
     e.species = -1;
+    e.equip_ap = 0;
     for (i = 39;i <= 39;++i) {
         p_buffer[i] = 0;
         p_msg_one[i] = 0;

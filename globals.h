@@ -108,7 +108,6 @@ struct Character {
     double next_xp;
     int wait;
     int max_wait;
-    double ap;
     double head_ap;
     double body_ap;
     double legs_ap;
