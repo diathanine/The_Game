@@ -921,7 +921,7 @@ int main(int argc, char *argv[]) {
         switch (choice) {
             case 1: /* Attack */
                 if (p.hp > 0) {
-                    attack_formula(2);
+                    attack_formula(&p,&e);
                 }
                 break;
             case 2: /* Magic */
@@ -1185,27 +1185,27 @@ int main(int argc, char *argv[]) {
                             break;
                         case 0x31: /* 1 */
                             schoice = 1;
-                            unequip_item(1);
+                            unequip_item(&p, 1);
                             break;
                         case 0x32: /* 2 */
                             schoice = 2;
-                            unequip_item(2);
+                            unequip_item(&p, 2);
                             break;
                         case 0x33: /* 3 */
                             schoice = 3;
-                            unequip_item(3);
+                            unequip_item(&p, 3);
                             break;
                         case 0x34: /* 4 */
                             schoice = 4;
-                            unequip_item(4);
+                            unequip_item(&p, 4);
                             break;
                         case 0x35: /* 5 */
                             schoice = 5;
-                            unequip_item(5);
+                            unequip_item(&p, 5);
                             break;
                         case 0x36: /* 6 */
                             schoice = 6;
-                            unequip_item(6);
+                            unequip_item(&p, 6);
                             break;
                         default:
                             break;

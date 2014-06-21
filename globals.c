@@ -30,7 +30,6 @@ void init_globals() {
         inv[i].type = 0;
         inv[i].part = 0;
         inv[i].effect = 0;
-
     }
     for (i = 0;i <= 12;++i) {
         for (j = 0;j <= 2;++j) {
@@ -41,6 +40,7 @@ void init_globals() {
     turn = 1;
     turns_since_load = 0;
     e_killed = 0;
+    e.species = -1;
     for (i = 39;i <= 39;++i) {
         p_buffer[i] = 0;
         p_msg_one[i] = 0;

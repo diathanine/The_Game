@@ -415,7 +415,7 @@ void enemy_turn() {
             if (cc > 50 || (cc <= 50 && sc == 0)) {
                 /* The enemy chose to attack OR they didn't cast something when that
                 was chosen. */
-                attack_formula(1);
+                attack_formula(&e,&p);
             }
             if (e.status_id == HASTE_ID) {
                 e.wait = e.max_wait - e.status_str > 9999 ? 9999 : (int)e.status_str;

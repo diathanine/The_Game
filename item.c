@@ -1321,53 +1321,53 @@ void give_item(int id, int typ, double mod, int adj, double atk, double ap, \
  *
  * For now, the item is simply deleted.
  */
-void unequip_item(int slot) {
+void unequip_item(struct Character *a, int slot) {
     /** @todo
      * Give the unequipped item back.
      */
     if (slot == 1) {
-        p.equip_id = 0;
-        p.equip_ap = 0;
-        p.equip_mod = 0;
-        p.equip_wait = 0;
-        p.equip_atk = 0;
-        p.equip_maxcon = 0;
-        p.equip_con = 0;
+        a->equip_id = 0;
+        a->equip_ap = 0;
+        a->equip_mod = 0;
+        a->equip_wait = 0;
+        a->equip_atk = 0;
+        a->equip_maxcon = 0;
+        a->equip_con = 0;
     }
     if (slot == 2) {
-        p.head_id = 0;
-        p.head_wait = 0;
-        p.head_ap = 0;
-        p.head_maxcon = 0;
-        p.head_con = 0;
+        a->head_id = 0;
+        a->head_wait = 0;
+        a->head_ap = 0;
+        a->head_maxcon = 0;
+        a->head_con = 0;
     }
     if (slot == 3) {
-        p.body_id = 0;
-        p.body_wait = 0;
-        p.body_ap = 0;
-        p.body_maxcon = 0;
-        p.body_con = 0;
+        a->body_id = 0;
+        a->body_wait = 0;
+        a->body_ap = 0;
+        a->body_maxcon = 0;
+        a->body_con = 0;
     }
     if (slot == 4) {
-        p.legs_id = 0;
-        p.legs_wait = 0;
-        p.legs_ap = 0;
-        p.legs_maxcon = 0;
-        p.legs_con = 0;
+        a->legs_id = 0;
+        a->legs_wait = 0;
+        a->legs_ap = 0;
+        a->legs_maxcon = 0;
+        a->legs_con = 0;
     }
     if (slot == 5) {
-        p.feet_id = 0;
-        p.feet_wait = 0;
-        p.feet_ap = 0;
-        p.feet_maxcon = 0;
-        p.feet_con = 0;
+        a->feet_id = 0;
+        a->feet_wait = 0;
+        a->feet_ap = 0;
+        a->feet_maxcon = 0;
+        a->feet_con = 0;
     }
     if (slot == 6) {
-        p.hands_id = 0;
-        p.hands_wait = 0;
-        p.hands_ap = 0;
-        p.hands_maxcon = 0;
-        p.hands_con = 0;
+        a->hands_id = 0;
+        a->hands_wait = 0;
+        a->hands_ap = 0;
+        a->hands_maxcon = 0;
+        a->hands_con = 0;
     }
 }
 

@@ -20,6 +20,8 @@
   3. Armor
   */
 
+#include "globals.h"
+
 #define GREAT_ADJ 5
 #define GOOD_ADJ 5
 #define AVG_ADJ 5
@@ -65,7 +67,7 @@ void item_effect(int ti, int effect, int istr);
 void use_item(int b, int toss);
 void give_item(int id, int typ, double mod, int adj, double atk, double ap,\
                 int iwait, double maxcon, double con, double str, double eff, int part);
-void unequip_item(int slot);
+void unequip_item(struct Character *a, int slot);
 int item_main(WINDOW *w);
 int craft_main(WINDOW *w);
 

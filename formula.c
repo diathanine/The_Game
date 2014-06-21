@@ -38,20 +38,15 @@ int roll_sk_bonus(int old_r, int chances) {
     return result;
 }
 
-void attack_formula(int target) {
+void attack_formula(struct Character *at,struct Character *de) {
     /* target = 1 if player being attacked, enemy otherwise */
     double dmg = 0; /* damage */
-    double ap = p.head_ap + p.body_ap + p.legs_ap + p.feet_ap + p.hands_ap + p.equip_ap;
+    double ap = de->head_ap + de->body_ap + de->legs_ap + de->feet_ap + de->hands_ap + de->equip_ap;
     int roll = 0,has_armor = 0;
     double rdmg = 0,a = 0;
 
     /* Find damage */
-    if (target == 1) {
-        dmg = round((e.str + 0) - ((p.tou + ap) / 2));
-    }
-    else {
-        dmg = round((p.str + p.equip_atk) - ((e.tou + e.ap) / 2)) + p.bonus_damage;
-    }
+    dmg = round((at->str + at->equip_atk) - ((de->tou + ap) / 2));
 
     /* Vary damage by a random amount */
     a = roll_die(21);
@@ -67,74 +62,64 @@ void attack_formula(int target) {
 
     if (dmg < 1) dmg = 1;
 
-    if (target == 1) {
-        int hit = 0;
-        p.hp = p.hp - dmg;
+    int hit = 0;
+    de->hp = de->hp - dmg;
 
-        if (p.body_id != 0 || p.head_id != 0 || p.feet_id != 0 || p.hands_id != 0 || p.legs_id != 0) has_armor = 1;
-        if (has_armor == 1) {
-            while (1) {
-                roll = roll_die(5);
+    if (de->body_id != 0 || de->head_id != 0 || de->feet_id != 0 || de->hands_id != 0 || de->legs_id != 0) has_armor = 1;
+    if (has_armor == 1) {
+        while (1) {
+            roll = roll_die(5);
 
-                while (hit == 0) {
-                    /* If there's no armor in the chosen slot, move damage
-                       to next slot. */
-                    if (roll == 1 && p.head_id == 0 && hit == 0) roll = 2;
-                    else hit = 1;
+            while (hit == 0) {
+                /* If there's no armor in the chosen slot, move damage
+                    to next slot. */
+                if (roll == 1 && de->head_id == 0 && hit == 0) roll = 2;
+                else hit = 1;
 
-                    if (roll == 2 && p.body_id == 0 && hit == 0) roll = 3;
-                    else hit = 1;
+                if (roll == 2 && de->body_id == 0 && hit == 0) roll = 3;
+                else hit = 1;
 
-                    if (roll == 3 && p.legs_id == 0 && hit == 0) roll = 4;
-                    else hit = 1;
+                if (roll == 3 && de->legs_id == 0 && hit == 0) roll = 4;
+                else hit = 1;
 
-                    if (roll == 4 && p.feet_id == 0 && hit == 0) roll = 5;
-                    else hit =  1;
+                if (roll == 4 && de->feet_id == 0 && hit == 0) roll = 5;
+                else hit =  1;
 
-                    if (roll == 5 && p.hands_id == 0 && hit == 0) roll = 1;
-                    else hit = 1;
-                }
-
-
-                if (roll == 1 && p.head_id != 0) {
-                    p.head_con = p.head_con - dmg;
-                    if (p.head_con <= 0) unequip_item(2);
-                    break;
-                }
-                else if (roll == 2 && p.body_id != 0) {
-                    p.body_con = p.body_con - dmg;
-                    if (p.body_con <= 0) unequip_item(3);
-                    break;
-                }
-                else if (roll == 3 && p.hands_id != 0) {
-                    p.hands_con = p.hands_con - dmg;
-                    if (p.hands_con <= 0) unequip_item(6);
-                    break;
-                }
-                else if (roll == 4 && p.legs_id != 0) {
-                    p.legs_con = p.legs_con - dmg;
-                    if (p.legs_con <= 0) unequip_item(4);
-                    break;
-                }
-                else if (roll == 5 && p.feet_id != 0) {
-                    p.feet_con = p.feet_con - dmg;
-                    if (p.feet_con <= 0) unequip_item(5);
-                    break;
-                }
+                if (roll == 5 && de->hands_id == 0 && hit == 0) roll = 1;
+                else hit = 1;
             }
-        }
-    }
-    else {
-        e.hp = e.hp - dmg;
-        if (p.equip_id != 0) {
-            p.equip_con = p.equip_con - ceil(dmg / 10);
-            if (p.equip_con <= 0) {
-                unequip_item(1);
+
+
+            if (roll == 1 && de->head_id != 0) {
+                de->head_con = de->head_con - dmg;
+                if (de->head_con <= 0) unequip_item(de, 2);
+                break;
+            }
+            else if (roll == 2 && de->body_id != 0) {
+                de->body_con = de->body_con - dmg;
+                if (de->body_con <= 0) unequip_item(de, 3);
+                break;
+            }
+            else if (roll == 3 && de->hands_id != 0) {
+                de->hands_con = de->hands_con - dmg;
+                if (de->hands_con <= 0) unequip_item(de, 6);
+                break;
+            }
+            else if (roll == 4 && de->legs_id != 0) {
+                de->legs_con = de->legs_con - dmg;
+                if (de->legs_con <= 0) unequip_item(de, 4);
+                break;
+            }
+            else if (roll == 5 && de->feet_id != 0) {
+                de->feet_con = de->feet_con - dmg;
+                if (de->feet_con <= 0) unequip_item(de, 5);
+                break;
             }
         }
     }
 
-    if (target == 1) {
+    /* Temp kludge to check if enemy is attacking. */
+    if (at->species == -1) {
         stat_p_dam_taken = stat_p_dam_taken + dmg; /* stat */
         e_dmg_dealt = e_dmg_dealt + dmg; /* this turn */
     }
