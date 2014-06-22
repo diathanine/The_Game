@@ -2,9 +2,6 @@ Consider this as more of a wish-list of features than anything else.
 
 Create a pop-up window for errors and debugging.
 
-Make MAGIC_MAX auto-update.
- * Will probably have to change from a #define to a global const.
-
 XP gain needs balancing.
 
 Content and balancing! Very low priority for now.
@@ -14,8 +11,5 @@ Status effects that temp reduce stats. STR,DEF,MAG...?
 Use game version to check savefile version.
 
 Give the enemy an actual inventory.
- * Add an effect for displaying enemy inventoy, with stats.
+ * Add an effect for displaying enemy inventory, with stats.
  * Remove some info from the enemy's window, viewable when scanned. (AP, ATK, etc.)
-
-Convert code to use GMP.
- * Or any other portable arbitrary precision library.
