@@ -233,7 +233,7 @@ void draw_enemy_win(WINDOW *w) {
     wattron(w,COLOR_PAIR(6));
 
     stat_line++;
-    mvwprintw(w,stat_line++,1,"AP   : %.0f",e.head_ap + e.body_ap + e.legs_ap + e.feet_ap + hands_ap);
+    mvwprintw(w,stat_line++,1,"AP   : %.0f",e.head_ap + e.body_ap + e.legs_ap + e.feet_ap + e.hands_ap);
     mvwprintw(w,stat_line++,1,"LV   : %.0f",e.lv);
 
     wrefresh(w);

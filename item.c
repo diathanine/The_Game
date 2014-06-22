@@ -946,55 +946,57 @@ void craft_menu(WINDOW *s, int pg) {
 int item_info(WINDOW *win, int ycor, int h) {
     int a = inv[h].id;
 
-    if (inv[h].adj != 0) {
-        get_adjname(inv[h].adj);
-        mvwprintw(win,ycor++,1,"Adjectival: %s",p_buffer);
+    if (a != 0) {
+        if (inv[h].adj != 0) {
+            get_adjname(inv[h].adj);
+            mvwprintw(win,ycor++,1,"Adjectival: %s",p_buffer);
+        }
+
+        if (inv[h].type == 1) {
+            if (inv[h].effect == EFF_HEALHP)
+             mvwprintw(win,ycor++,1,"Restores HP: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_HEALMP)
+             mvwprintw(win,ycor++,1,"Restores MP: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_DAMAGE)
+             mvwprintw(win,ycor++,1,"Causes damage: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_HPUP)
+             mvwprintw(win,ycor++,1,"Permanent HP boost: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_MPUP)
+             mvwprintw(win,ycor++,1,"Permanent MP boost: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_STRUP)
+             mvwprintw(win,ycor++,1,"Permanent STR boost: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_TOUUP)
+             mvwprintw(win,ycor++,1,"Permanent TOU boost: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_MAGUP)
+             mvwprintw(win,ycor++,1,"Permanent MAG boost: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_WTDOWN)
+             mvwprintw(win,ycor++,1,"Permanently lowers Wait: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_HPREG)
+             mvwprintw(win,ycor++,1,"Permanently boosts HP regen: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_MPREG)
+             mvwprintw(win,ycor++,1,"Permanently boosts MP regen: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_ELV)
+             mvwprintw(win,ycor++,1,"Changes enemy's level: %.0f",inv[h].str + inv[h].mod);
+            else if (inv[h].effect == EFF_ELVBAL)
+             mvwprintw(win,ycor++,1,"Draws enemy level towards yours: %.0f",inv[h].str + inv[h].mod);
+            else mvwprintw(win,ycor++,1,"Unknown effect %d",inv[h].effect);
+        }
+
+        if (inv[h].type != 1 && inv[h].maxcon != 0)
+         mvwprintw(win,ycor++,1,"Condition: %.0f/%.0f",inv[h].con,inv[h].maxcon);
+
+        if (inv[h].type != 1 && (inv[h].atk != 0 || inv[h].mod != 0))
+         mvwprintw(win,ycor++,1,"Attack: %.0f%+.0f",inv[h].atk,inv[h].mod);
+
+        if (inv[h].type != 1 && inv[h].ap != 0)
+         mvwprintw(win,ycor++,1,"AP: %.0f",inv[h].ap + inv[h].mod);
+
+        if (inv[h].type != 1 && inv[h].wait != 0)
+         mvwprintw(win,ycor++,1,"Wait: %+d",inv[h].wait);
+
+
+        print_desc(win,item_db[a].desc,ycor++,1);
     }
-
-    if (inv[h].type == 1) {
-        if (inv[h].effect == EFF_HEALHP)
-         mvwprintw(win,ycor++,1,"Restores HP: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_HEALMP)
-         mvwprintw(win,ycor++,1,"Restores MP: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_DAMAGE)
-         mvwprintw(win,ycor++,1,"Causes damage: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_HPUP)
-         mvwprintw(win,ycor++,1,"Permanent HP boost: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_MPUP)
-         mvwprintw(win,ycor++,1,"Permanent MP boost: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_STRUP)
-         mvwprintw(win,ycor++,1,"Permanent STR boost: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_TOUUP)
-         mvwprintw(win,ycor++,1,"Permanent TOU boost: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_MAGUP)
-         mvwprintw(win,ycor++,1,"Permanent MAG boost: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_WTDOWN)
-         mvwprintw(win,ycor++,1,"Permanently lowers Wait: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_HPREG)
-         mvwprintw(win,ycor++,1,"Permanently boosts HP regen: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_MPREG)
-         mvwprintw(win,ycor++,1,"Permanently boosts MP regen: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_ELV)
-         mvwprintw(win,ycor++,1,"Changes enemy's level: %.0f",inv[h].str + inv[h].mod);
-        else if (inv[h].effect == EFF_ELVBAL)
-         mvwprintw(win,ycor++,1,"Draws enemy level towards yours: %.0f",inv[h].str + inv[h].mod);
-        else mvwprintw(win,ycor++,1,"Unknown effect %d",inv[h].effect);
-    }
-
-    if (inv[h].type != 1 && inv[h].maxcon != 0)
-     mvwprintw(win,ycor++,1,"Condition: %.0f/%.0f",inv[h].con,inv[h].maxcon);
-
-    if (inv[h].type != 1 && (inv[h].atk != 0 || inv[h].mod != 0))
-     mvwprintw(win,ycor++,1,"Attack: %.0f%+.0f",inv[h].atk,inv[h].mod);
-
-    if (inv[h].type != 1 && inv[h].ap != 0)
-     mvwprintw(win,ycor++,1,"AP: %.0f",inv[h].ap + inv[h].mod);
-
-    if (inv[h].type != 1 && inv[h].wait != 0)
-     mvwprintw(win,ycor++,1,"Wait: %+d",inv[h].wait);
-
-
-    print_desc(win,item_db[a].desc,ycor++,1);
 
     return ycor + 2;
 }
@@ -1375,9 +1377,9 @@ void unequip_item(struct Character *a, int slot) {
  * The main loop for the item command.
  */
 int item_main(WINDOW *w) {
-    int ch,cho = 0,hl = 0,di = 0,ti = 0;
+    int ch,cho = -99,hl = 0,di = 0,ti = 0;
 
-    while (cho == 0) {
+    while (cho == -99) {
         wclear(w);
         item_menu(w);
         mvwprintw(w,hl + 2,1,"-> ");
@@ -1420,7 +1422,7 @@ int item_main(WINDOW *w) {
         };
     }
 
-    if (cho > 1 && di == 0) {
+    if (cho < 10 && cho > -1 && di == 0) {
         if (inv[cho].id == 0) cho = -1; /* if the slot chosen is empty. */
         else {
             use_item(cho,ti);

@@ -115,7 +115,11 @@ void kill_enemy() {
     e.wait = round(e.lv / 5) + 500;
     e.max_wait = round(e.lv / 5) + 500;
     e.bonus_damage = 0.00;
-    //e.atk = 0;
+    e.head_ap = 0;
+    e.body_ap = 0;
+    e.legs_ap = 0;
+    e.feet_ap = 0;
+    e.hands_ap = 0;
     e.status_id = 0;
     e.status_str = 0;
     e.status_dur = 0;
@@ -178,10 +182,13 @@ void kill_enemy() {
         if (e.str > STAT_MAX) e.str = STAT_MAX;
         if (e.tou > STAT_MAX) e.tou = STAT_MAX;
         if (e.mag > STAT_MAX) e.mag = STAT_MAX;
-        //if (e.atk > STAT_MAX) e.atk = STAT_MAX;
         if (e.max_wait > 9999) e.max_wait = 9999;
         if (e.bonus_damage > STAT_MAX) e.bonus_damage = STAT_MAX;
-        if (e.ap > STAT_MAX) e.ap = STAT_MAX;
+        if (e.head_ap > STAT_MAX) e.head_ap = STAT_MAX;
+        if (e.body_ap > STAT_MAX) e.body_ap = STAT_MAX;
+        if (e.legs_ap > STAT_MAX) e.legs_ap = STAT_MAX;
+        if (e.feet_ap > STAT_MAX) e.feet_ap = STAT_MAX;
+        if (e.hands_ap > STAT_MAX) e.hands_ap = STAT_MAX;
 
         if (e.str < 1) e.str = 1;
         if (e.tou < 1) e.tou = 1;
