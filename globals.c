@@ -109,7 +109,6 @@ void print_desc(WINDOW *w, char desc[], int y, int x) {
         else if (cont == 1) tdesc = strtok(NULL," ");
 
         if (tdesc == NULL) break;
-        tdesc = tdesc + '\0';
         cur = strlen(tdesc);
 
         if (space > 0 && cur <= space) {
