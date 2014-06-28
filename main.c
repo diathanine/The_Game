@@ -1304,19 +1304,19 @@ int main(int argc, char *argv[]) {
 
                     wmove(sidebar,1,1);
                     wprintw(sidebar,"Lv up!");
-                    mvwprintw(sidebar,3,1,"HP+%d",a);
+                    mvwprintw(sidebar,3,1,"    HP +%d",a);
                     mvwprintw(sidebar,3,12,"-> %.0f",p.maxhp);
-                    mvwprintw(sidebar,4,1,"MP+%d",b);
+                    mvwprintw(sidebar,4,1,"    MP +%d",b);
                     mvwprintw(sidebar,4,12,"-> %.0f",p.maxmp);
-                    mvwprintw(sidebar,5,1,"STR+%d",c);
+                    mvwprintw(sidebar,5,1,"   STR +%d",c);
                     mvwprintw(sidebar,5,12,"-> %.0f",p.str);
-                    mvwprintw(sidebar,6,1,"TOU+%d",d);
+                    mvwprintw(sidebar,6,1,"   TOU +%d",d);
                     mvwprintw(sidebar,6,12,"-> %.0f",p.tou);
-                    mvwprintw(sidebar,7,1,"MAG+%d",i);
+                    mvwprintw(sidebar,7,1,"   MAG +%d",i);
                     mvwprintw(sidebar,7,12,"-> %.0f",p.mag);
-                    mvwprintw(sidebar,8,1,"Wait+%d",f);
+                    mvwprintw(sidebar,8,1,"  Wait +%d",f);
                     mvwprintw(sidebar,8,12,"-> %d",p.max_wait);
-                    mvwprintw(sidebar,9,1,"Damage+%d",g);
+                    mvwprintw(sidebar,9,1,"Damage +%d",g);
                     mvwprintw(sidebar,9,12,"-> %.2f",p.bonus_damage);
 
                     box(sidebar,0,0);
