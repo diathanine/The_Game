@@ -25,7 +25,7 @@ void kill_enemy() {
      */
     double xp_mod = 1;
     double lv_diff;
-    int roll;
+    int roll, i;
     double e_SP;
     /* XP reward*/
     /** @todo
@@ -104,16 +104,16 @@ void kill_enemy() {
     generate_name();
 
     /* reset to base stats
-     Enemies don't have classes, so +1 to all per lv. */
-    e.hp = e.lv + 25;
-    e.maxhp = e.lv + 25;
-    e.mp = e.lv + 10;
-    e.maxmp = e.lv + 10;
-    e.str = e.lv + 8;
-    e.tou = e.lv + 8;
-    e.mag = e.lv + 8;
-    e.wait = round(e.lv / 5) + 500;
-    e.max_wait = round(e.lv / 5) + 500;
+     Enemies don't have classes, so 50% chance to +1 per lv. */
+    e.hp = 25;
+    e.maxhp = 25;
+    e.mp = 10;
+    e.maxmp = 10;
+    e.str = 8;
+    e.tou = 8;
+    e.mag = 8;
+    e.wait = 500;
+    e.max_wait = 500;
     e.bonus_damage = 0.00;
     e.head_ap = 0;
     e.body_ap = 0;
@@ -123,6 +123,34 @@ void kill_enemy() {
     e.status_id = 0;
     e.status_str = 0;
     e.status_dur = 0;
+
+    i = e.lv;
+    while (i > 0) {
+        if (roll_die(100) > 50) {
+                ++e.hp;
+                ++e.maxhp;
+        }
+        if (roll_die(100) > 50) {
+                ++e.mp;
+                ++e.maxmp;
+        }
+        if (roll_die(100) > 50) ++e.str;
+        if (roll_die(100) > 50) ++e.tou;
+        if (roll_die(100) > 50) ++e.mag;
+        if (roll_die(100) > 50) {
+                ++e.wait;
+                ++e.max_wait;
+        }
+        if (roll_die(100) > 50) ++e.bonus_damage;
+        /*
+        e.head_ap = 0;
+        e.body_ap = 0;
+        e.legs_ap = 0;
+        e.feet_ap = 0;
+        e.hands_ap = 0;
+        */
+        --i;
+    }
 
     /* Distribute SP */
     while (e_SP > 0) {

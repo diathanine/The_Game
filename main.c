@@ -182,7 +182,7 @@ void draw_stat_win(WINDOW *w) {
 }
 
 void draw_enemy_win(WINDOW *w) {
-    int stat_line;
+    int stat_line, a;
 
     wclear(w);
     box(w,0,0);
@@ -203,7 +203,11 @@ void draw_enemy_win(WINDOW *w) {
     wattron(w,COLOR_PAIR(6));
 
     mvwprintw(w,stat_line++,1,"MaxMP: %.0f",e.maxmp);
+
+    a = round(e.bonus_damage);
     mvwprintw(w,stat_line++,1,"STR  : %.0f",e.str);
+    if (a != 0.00) wprintw(w,"%+.0f",a);
+
     mvwprintw(w,stat_line++,1,"TOU  : %.0f",e.tou);
     mvwprintw(w,stat_line++,1,"MAG  : %.0f",e.mag);
     mvwprintw(w,stat_line++,1,"Wait : %d/%d%+.0f",e.wait,e.max_wait,\
