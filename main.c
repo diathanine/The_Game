@@ -54,17 +54,15 @@ void init_skills() {
 }
 
 void draw_sk_bar(WINDOW *w, int xp, int xpn) {
-    int a,b = 10;
+    float a = 1.0;
 
-    a = ((xp * 10) / xpn);
-    while (a > 0) {
-        wprintw(w,"#");
-        --a;
-        --b;
-    }
-    while (b > 0) {
-        wprintw(w," ");
-        --b;
+    while (a <= 10) {
+        if (xp >= xpn * (a / 10) ) {
+            wprintw(w,"#");
+        }
+        else wprintw(w," ");
+
+        a = a + 1.0;
     }
     wprintw(w,"] % 9d/% 9d",xp,xpn);
 }
