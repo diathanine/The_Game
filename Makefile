@@ -1,14 +1,3 @@
-#VERSION numbers:
-#Major.Minor.Release (Date)
-#
-#Release increments for every pre-compiled binary, which
-#aren't being made just yet.
-#
-#Minor increments when savefiles break. In the future,
-#it will be used to check the savefile version.
-#
-#Major will become 1 when The_Game is "complete".
-
 DEFS=""
 OBJS=enemy.o file.o formula.o globals.o item.o magic.o main.o
 
