@@ -1,6 +1,7 @@
 Consider this as more of a wish-list of features than anything else.
 
 Create a pop-up window for errors and debugging.
+ * Also had an idea to use it for random events.
 
 XP gain needs balancing.
 
@@ -13,3 +14,9 @@ Use game version to check savefile version.
 Give the enemy an actual inventory.
  * Add an effect for displaying enemy inventory, with stats.
  * Remove some info from the enemy's window, viewable when scanned. (AP, ATK, etc.)
+
+Skills need to be rewritten to be a part of the character struct.
+ * Fighting skill should be a direct bonus to STR.
+ * Similarly, casting and magic skills should add to MAG. 
+ * I'm not sure about how the crafting skill should be modified, but anything would be better, really.
+
