@@ -13,3 +13,12 @@ Use game version to check savefile version.
 Give the enemy an actual inventory.
  * Add an effect for displaying enemy inventory, with stats.
  * Remove some info from the enemy's window, viewable when scanned. (AP, ATK, etc.)
+ 
+Rewrite message log:
+ Instead of the last 3 turns being summarized, a string will get pushed onto the log.
+ This should make it flow a bit better.
+
+Hunting grounds:
+ Will bound the enemy level to a certain range.
+ Require various things to unlock new ones.
+ Population; slowly replenishes, completely depleting it will lock the grounds for some time.
