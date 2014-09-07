@@ -1110,7 +1110,6 @@ void item_effect(int ti, int effect, int istr) {
     if (effect == EFF_HEALHP) {
         if (ti == 0) {
             p.hp = p.hp + istr;
-            p_dmg_healed = p_dmg_healed + istr;
         }
         else {
             e.hp = e.hp + istr;
@@ -1119,7 +1118,6 @@ void item_effect(int ti, int effect, int istr) {
     else if (effect == EFF_HEALMP) {
         if (ti == 0) {
             p.mp = p.mp + istr;
-            p_mp_healed = p_mp_healed + istr;
         }
         else {
             e.mp = e.mp + istr;
@@ -1127,7 +1125,6 @@ void item_effect(int ti, int effect, int istr) {
     }
     else if (effect == EFF_DAMAGE) {
         e.hp = e.hp - istr;
-        p_dmg_dealt = p_dmg_dealt + istr;
         stat_p_dam_dealt = stat_p_dam_dealt + istr;
     }
     else if (effect == EFF_HPUP) {

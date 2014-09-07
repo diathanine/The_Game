@@ -42,34 +42,10 @@ void init_globals() {
     e_killed = 0;
     e.species = -1;
     e.equip_ap = 0;
-    for (i = 39;i <= 39;++i) {
-        p_buffer[i] = 0;
-        p_msg_one[i] = 0;
-        p_msg_two[i] = 0;
-        p_msg_three[i] = 0;
-        e_buffer[i] = 0;
-        e_buffer_two[i] = 0;
-        e_msg_one[i] = 0;
-        e_msg_two[i] = 0;
-        e_msg_three[i] = 0;
-        if (i <= 20) {
-            e_kill_msg_one[i] = 0;
-            e_kill_msg_two[i] = 0;
-            e_kill_msg_three[i] = 0;
-            e_kill_msg[i] = 0;
-        }
+    for (i = 19;i > 0;--i) {
+        strcpy(msg[i].message,"\0");
+        msg[i].color = GREEN;
     }
-    p_dmg_dealt = 0;
-    p_dmg_healed = 0;
-    p_mp_healed = 0;
-    e_dmg_dealt = 0;
-    e_dmg_healed = 0;
-    p_msg_one_color = 0;
-    p_msg_two_color = 0;
-    p_msg_three_color = 0;
-    e_msg_one_color = 0;
-    e_msg_two_color = 0;
-    e_msg_three_color = 0;
     stat_kills = 0;
     stat_m_casts = 0;
     stat_i_used = 0;
@@ -128,4 +104,14 @@ void print_desc(WINDOW *w, char desc[], int y, int x) {
 
         if (first == 1) first = 0;
     }
+}
+
+void add_msg(char m[], int c) {
+    int i;
+    for (i = 28;i >= 0;--i) {
+        strcpy(msg[i + 1].message,msg[i].message);
+        msg[i + 1].color = msg[i].color;
+    }
+    strcpy(msg[0].message,m);
+    msg[0].color = c;
 }

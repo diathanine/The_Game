@@ -118,14 +118,17 @@ void attack_formula(struct Character *at,struct Character *de) {
         }
     }
 
+    char m[50];
+
     /* Temp kludge to check if enemy is attacking. */
     if (at->species == -1) {
+        sprintf(m,"Enemy attacks! Damage: %.0f",dmg);
+        add_msg(m,RED);
         stat_p_dam_taken = stat_p_dam_taken + dmg; /* stat */
-        e_dmg_dealt = e_dmg_dealt + dmg; /* this turn */
     }
     else {
+        add_msg("You attack!",GREEN);
         stat_p_dam_dealt = stat_p_dam_dealt + dmg;
-        p_dmg_dealt = p_dmg_dealt + dmg;
         award_sk_xp(SKILL_FIGHTING,max(1,dmg / 10));
     }
 }

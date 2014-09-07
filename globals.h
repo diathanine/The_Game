@@ -70,6 +70,14 @@
 #define SIDEBAR_WIDTH 50
 #define SIDEBAR_HEIGHT 33
 
+#define RED 1
+#define CYAN 2
+#define GREEN 3
+#define YELLOW 4
+#define MAGENTA 5
+#define WHITE 6
+#define BLUE 7
+
 #ifndef max
 	#define max( a, b ) ( ((a) > (b)) ? (a) : (b) )
 #endif
@@ -84,6 +92,7 @@ void early_termination(char str[]);
 void award_sk_xp(int id,int amount);
 void clean_sidebar(WINDOW *w);
 void print_desc(WINDOW *w, char desc[], int y, int x);
+void add_msg(char m[],int c);
 
 struct Character {
     char name[21];
@@ -177,13 +186,15 @@ double turn,turns_since_load; /**< turns, 500 wait = 1 turn */
 int e_killed; /**< enemy was killed this turn. used for the turn summary. */
 
 /* message vars */
-char p_buffer[40],p_msg_one[40],p_msg_two[40],p_msg_three[40];
-char e_buffer[40],e_buffer_two[40],e_msg_one[40],e_msg_two[40],e_msg_three[40];
-char e_kill_msg_one[20],e_kill_msg_two[20],e_kill_msg_three[20],e_kill_msg[20];
-double p_dmg_dealt,p_dmg_healed,p_mp_healed;
-double e_dmg_dealt,e_dmg_healed;
-int p_msg_one_color,p_msg_two_color,p_msg_three_color;
-int e_msg_one_color,e_msg_two_color,e_msg_three_color;
+struct msg_log {
+    char message[50];
+    int color;
+};
+
+struct msg_log msg[30];
+
+char p_buffer[50];
+char e_buffer[50];
 
 /* gameplay stats */
 double stat_kills; /**< enemies killed */

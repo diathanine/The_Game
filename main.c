@@ -834,59 +834,15 @@ int main(int argc, char *argv[]) {
             wattron(sidebar,COLOR_PAIR(3));
             mvwprintw(sidebar,1,1,"%s",VERSION);
 
-            mvwprintw(sidebar,3,1,"Turn: %.0f (%03d Wait left)",turn,500 - global_wait);
+            a = 32;
 
-            if (turns_since_load > 0) {
-                mvwprintw(sidebar,5,1,"---Turn %.0f Summary---",turn - 1);
-
-                wattron(sidebar,p_msg_one_color);
-                mvwprintw(sidebar,7,1,"%s",p_msg_one);
-                wattron(sidebar,COLOR_PAIR(3));
-
-                wattron(sidebar,e_msg_one_color);
-                mvwprintw(sidebar,8,1,"%s",e_msg_one);
-                wattron(sidebar,COLOR_PAIR(3));
-
-                wattron(sidebar,COLOR_PAIR(1));
-                mvwprintw(sidebar,9,1,"%s",e_kill_msg_one);
-                wattron(sidebar,COLOR_PAIR(3));
+            for (i = 29;i >= 0;--i) {
+                wattron(sidebar,COLOR_PAIR(msg[i].color));
+                mvwprintw(sidebar,a--,1,msg[i].message);
             }
-            if (turns_since_load > 1) {
-                mvwprintw(sidebar,11,1,"---Turn %.0f Summary---",turn - 2);
+            wattron(sidebar,COLOR_PAIR(GREEN));
 
-                wattron(sidebar,p_msg_two_color);
-                mvwprintw(sidebar,13,1,"%s",p_msg_two);
-                wattron(sidebar,COLOR_PAIR(3));
-
-                wattron(sidebar,e_msg_two_color);
-                mvwprintw(sidebar,14,1,"%s",e_msg_two);
-                wattron(sidebar,COLOR_PAIR(3));
-
-                wattron(sidebar,COLOR_PAIR(1));
-                mvwprintw(sidebar,15,1,"%s",e_kill_msg_two);
-                wattron(sidebar,COLOR_PAIR(3));
-            }
-            if (turns_since_load > 2) {
-                mvwprintw(sidebar,17,1,"---Turn %.0f Summary---",turn - 3);
-
-                wattron(sidebar,p_msg_three_color);
-                mvwprintw(sidebar,19,1,"%s",p_msg_three);
-                wattron(sidebar,COLOR_PAIR(3));
-
-                wattron(sidebar,e_msg_three_color);
-                mvwprintw(sidebar,20,1,"%s",e_msg_three);
-                wattron(sidebar,COLOR_PAIR(3));
-
-                wattron(sidebar,COLOR_PAIR(1));
-                mvwprintw(sidebar,21,1,"%s",e_kill_msg_three);
-                wattron(sidebar,COLOR_PAIR(3));
-            }
-
-            wattron(sidebar,COLOR_PAIR(3));
-
-            for (i = 0;i <= 39;++i) {
-                mvwprintw(choice_win,i,1,"               ");
-            }
+            wclear(choice_win);
 
             attron(COLOR_PAIR(4)); // ?
 
@@ -1511,53 +1467,16 @@ int main(int argc, char *argv[]) {
                 e.status_str = 0;
             }
 
-            p_msg_three_color = p_msg_two_color;
-            e_msg_three_color = e_msg_two_color;
-            p_msg_two_color = p_msg_one_color;
-            e_msg_two_color = e_msg_one_color;
-
             strcpy(p_buffer,"");
 
-            sprintf(p_buffer,"Dealt %.0f damage, healed %.0f/%.0f HP/MP.",p_dmg_dealt,p_dmg_healed,p_mp_healed);
-            if (p_dmg_healed < e_dmg_dealt) e_msg_one_color = COLOR_PAIR(1);
-            else if (p_dmg_healed == e_dmg_dealt) e_msg_one_color = COLOR_PAIR(4);
-            else e_msg_one_color = COLOR_PAIR(3);
-
-            sprintf(e_buffer,"Received %.0f damage, enemy healed %.0f.",e_dmg_dealt,e_dmg_healed);
-            if (e_dmg_healed < p_dmg_dealt) p_msg_one_color = COLOR_PAIR(3);
-            else if (e_dmg_healed == p_dmg_dealt) p_msg_one_color = COLOR_PAIR(4);
-            else p_msg_one_color = COLOR_PAIR(1);
-
             if (e_killed == 1) {
-                wattron(sidebar,COLOR_PAIR(1));
-                sprintf(e_kill_msg,"Enemy killed!");
+                add_msg("Enemy killed!",GREEN);
             }
-            wattron(sidebar,COLOR_PAIR(3));
-
-            strcpy(p_msg_three,p_msg_two); /* start at the "bottom"; */
-            strcpy(e_msg_three,e_msg_two);
-            strcpy(e_kill_msg_three,e_kill_msg_two);
-
-            strcpy(p_msg_two,p_msg_one); /* now that two has been copied, move one down; */
-            strcpy(e_msg_two,e_msg_one);
-            strcpy(e_kill_msg_two,e_kill_msg_one);
-
-            strcpy(p_msg_one,p_buffer); /* bring the buffer in. */
-            strcpy(e_msg_one,e_buffer);
-            strcpy(e_kill_msg_one,e_kill_msg);
 
             strcpy(e_buffer,"");
             strcpy(p_buffer,"");
-            strcpy(e_kill_msg,"");
 
             e_killed = 0;
-
-            e_dmg_dealt = 0;
-            e_dmg_healed = 0;
-            p_dmg_dealt = 0;
-            p_dmg_healed = 0;
-            p_mp_healed = 0;
-
             global_wait = 0;
 		}
 		else if (global_wait > 500) {
