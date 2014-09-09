@@ -1106,6 +1106,16 @@ void item_effect(int ti, int effect, int istr) {
     ti:
      1=throwing item
     */
+    char m[50];
+
+    if (ti == 0) {
+        sprintf(m,"Using item.");
+        add_msg(m,WHITE);
+    }
+    else {
+        sprintf(m,"Throwing item.");
+        add_msg(m,WHITE);
+    }
 
     if (effect == EFF_HEALHP) {
         if (ti == 0) {
@@ -1249,6 +1259,7 @@ void give_item(int id, int typ, double mod, int adj, double atk, double ap, \
                 int part) {
 
     int a,item_given = 0;
+    char m[50];
 
     if (typ == 1) { /* regular item */
         adj = 0;
@@ -1290,6 +1301,10 @@ void give_item(int id, int typ, double mod, int adj, double atk, double ap, \
                 inv[a].type = typ;
                 inv[a].part = part;
                 item_given = 1;
+
+                sprintf(m,"Loot!");
+                add_msg(m,GREEN);
+
                 break;
         }
     } /* No existing stacks of this item, check for empty slot to create one. */
@@ -1309,6 +1324,10 @@ void give_item(int id, int typ, double mod, int adj, double atk, double ap, \
                 inv[a].effect = eff;
                 inv[a].type = typ;
                 inv[a].part = part;
+
+                sprintf(m,"Loot!");
+                add_msg(m,GREEN);
+
                 break;
             }
         }
@@ -1453,6 +1472,7 @@ int item_main(WINDOW *w) {
  */
 int craft_main(WINDOW *w) {
     int i,j,ch,cho = 0,hl = 1,pg;
+    char m[50];
 
     mvwprintw(w,4,1,"->");
     pg = 1;
@@ -1552,6 +1572,9 @@ int craft_main(WINDOW *w) {
             give_item(it.id,it.type,get_craft_mod(it.diff),item_adjval,it.atk + item_atk,\
             it.ap + item_ap,it.wait + item_wait,it.condition * item_con,\
             it.condition * item_con,it.str,it.effect,it.body_part);
+
+            sprintf(m,"Item crafted.");
+            add_msg(m,WHITE);
 
             award_sk_xp(SKILL_CRAFTING_GEN,max(1,(item_db[cho].cost / p.maxmp) * item_db[cho].diff));
             award_sk_xp(item_db[cho].skl,max(1,(item_db[cho].cost / p.maxmp) * item_db[cho].diff));

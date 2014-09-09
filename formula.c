@@ -44,6 +44,7 @@ void attack_formula(struct Character *at,struct Character *de) {
     double ap = de->head_ap + de->body_ap + de->legs_ap + de->feet_ap + de->hands_ap + de->equip_ap;
     int roll = 0,has_armor = 0;
     double rdmg = 0,a = 0;
+    char m[50];
 
     /* Find damage */
     dmg = round((at->str + at->equip_atk) - ((de->tou + ap) / 2));
@@ -118,8 +119,6 @@ void attack_formula(struct Character *at,struct Character *de) {
         }
     }
 
-    char m[50];
-
     /* Temp kludge to check if enemy is attacking. */
     if (at->species == -1) {
         sprintf(m,"Enemy attacks! Damage: %.0f",dmg);
@@ -127,7 +126,8 @@ void attack_formula(struct Character *at,struct Character *de) {
         stat_p_dam_taken = stat_p_dam_taken + dmg; /* stat */
     }
     else {
-        add_msg("You attack!",GREEN);
+        sprintf(m,"You attack! Damage: %.0f",dmg);
+        add_msg(m,GREEN);
         stat_p_dam_dealt = stat_p_dam_dealt + dmg;
         award_sk_xp(SKILL_FIGHTING,max(1,dmg / 10));
     }
@@ -141,12 +141,21 @@ void attack_formula(struct Character *at,struct Character *de) {
  */
 void magic_formula(int sid, int user) {
     double minn,maxx,result;
+    char m[50];
 
     struct Magic stc;
     stc = magic_db[sid];
 
-    if (user == 0) p.mp = p.mp - stc.cost;
-    else e.mp = e.mp - stc.cost;
+    if (user == 0) {
+        p.mp = p.mp - stc.cost;
+        sprintf(m,"Casting %s...",stc.name);
+        add_msg(m,GREEN);
+    }
+    else {
+        e.mp = e.mp - stc.cost;
+        sprintf(m,"Enemy is casting %s...",stc.name);
+        add_msg(m,YELLOW);
+    }
 
     if (p.mp < 0) p.mp = 0;
     if (e.mp < 0) e.mp = 0;
@@ -161,10 +170,14 @@ void magic_formula(int sid, int user) {
             if (stc.invert == 0) {
                 p.hp = p.hp + result;
                 if (p.hp > p.maxhp) p.hp = p.maxhp;
+                sprintf(m,"You heal yourself for %.0f damage.",result);
+                add_msg(m,CYAN);
             }
             else {
                 e.hp = e.hp + result;
                 if (e.hp > e.maxhp) e.hp = e.maxhp;
+                sprintf(m,"The enemy is healed for %.0f damage.",result);
+                add_msg(m,YELLOW);
             }
         }
         else {
@@ -175,10 +188,14 @@ void magic_formula(int sid, int user) {
             if (stc.invert == 0) {
                 e.hp = e.hp + result;
                 if (e.hp > e.maxhp) e.hp = e.maxhp;
+                sprintf(m,"The enemy heals itself for %.0f damage.",result);
+                add_msg(m,YELLOW);
             }
             else {
                 p.hp = p.hp + result;
                 if (p.hp > p.maxhp) p.hp = p.maxhp;
+                sprintf(m,"You are healed for %.0f damage.",result);
+                add_msg(m,GREEN);
             }
         }
     }
@@ -191,9 +208,13 @@ void magic_formula(int sid, int user) {
 
             if (stc.invert == 0) {
                 e.hp = e.hp - result;
+                sprintf(m,"You blast the enemy for %.0f damage.",result);
+                add_msg(m,GREEN);
             }
             else {
                 p.hp = p.hp - result;
+                sprintf(m,"You blast yourself for %.0f damage.",result);
+                add_msg(m,RED);
             }
         }
         else {
@@ -203,9 +224,13 @@ void magic_formula(int sid, int user) {
 
             if (stc.invert == 0) {
                 p.hp = p.hp - result;
+                sprintf(m,"You are blasted for %.0f damage.",result);
+                add_msg(m,GREEN);
             }
             else {
                 e.hp = e.hp - result;
+                sprintf(m,"The enemy blasted itself for %.0f damage.",result);
+                add_msg(m,GREEN);
             }
         }
     }
